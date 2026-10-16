@@ -21,7 +21,7 @@ menolak data yang tidak sesuai dan menyebut field yang salah.
 | caseSize | `mini`, `komprehensif` (hanya `case`) |
 | difficulty | `mudah`, `sedang`, `sulit`, `sangat_sulit` |
 | cognitiveLevel | `C2`, `C3`, `C4`, `C5`, `C6` |
-| ID soal | `<SUBJEK>-<TIPE>-<nomor 3 digit+>`, mis. `MSK-MCQ-001` (prefiks tipe: lihat formulir) |
+| ID soal | `<SUBJEK>-<TIPE>-<nomor 3 digit+>`; TIPE = `MCQ`, `ESA` (esai), `KAS` (kasus), `NUM` (numerik); mis. `MSK-ESA-016` |
 | topicIds / competencyIds | `T01`..`T99` / `K01`..`K99`, harus ada di taksonomi pack |
 | criterionId | `C1`, `C2`, ... |
 | id sub-pertanyaan | `a`, `b`, `c`, ... |

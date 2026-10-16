@@ -1,7 +1,8 @@
 # Keselarasan Prompt B/C/D dengan skema (Fase A0)
 
-Prompt **belum diubah** (sesuai instruksi A0). Kolom "Usulan" menunggu
-persetujuan pemilik; setiap perubahan prompt nanti dicatat di CHANGELOG.md.
+**Status (2026-10-16):** usulan disetujui pemilik (C-2 memakai opsi a) dan
+diterapkan pada B-1 s.d. B-5, C-1, C-2, D-1 s.d. D-4. B-6, B-7, C-3, C-4, D-5
+tidak memerlukan perubahan. Rincian perubahan: CHANGELOG.md.
 
 Catatan umum: Prompt B dan C merujuk ke CONTRACT.md lewat pengetahuan Project,
 sehingga field yang tidak disebut di prompt tetap terlindungi **asalkan

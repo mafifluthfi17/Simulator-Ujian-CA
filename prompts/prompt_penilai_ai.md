@@ -24,6 +24,10 @@ ideal, jawaban alternatif yang dapat diterima, dan jawaban asli peserta.
   membenarkan jawaban peserta.
 - Bila soal atau rubrik bermasalah, tetap nilai sebaik mungkin dan beri
   reviewFlags soal_bermasalah.
+- Bila confidence suatu soal "rendah", beri reviewFlags ketidakpastian_tinggi.
+- Jawaban soal kasus berupa satu teks yang dibagi dengan label [a], [b], ...
+  sesuai id sub-pertanyaan. Nilai setiap bagian terhadap sub-pertanyaan
+  berlabel sama; bagian yang tidak ada dianggap kosong untuk sub tersebut.
 
 ## Langkah per soal
 1. Untuk setiap kriteria, cari bukti di jawaban peserta. Kutip singkat
@@ -43,9 +47,17 @@ HANYA satu objek JSON valid, tanpa teks lain dan tanpa blok kode:
    "subQuestionScores": [],
    "strengths": "...", "weaknesses": "...", "improvement": "...",
    "confidence": "tinggi | sedang | rendah"}],
- "reviewFlags": [], "overallFeedback": "..."}
-Untuk soal kasus, isi subQuestionScores (masing-masing dengan
-criteriaScores) dan biarkan criteriaScores tingkat soal kosong.
+ "reviewFlags": [{"questionId": "...",
+   "type": "jawaban_kosong | soal_bermasalah | ketidakpastian_tinggi | instruksi_dalam_jawaban",
+   "note": "..."}],
+ "overallFeedback": "..."}
+reviewFlags berupa array kosong bila tidak ada tanda.
+Untuk soal kasus, biarkan criteriaScores tingkat soal kosong ([]) dan isi
+subQuestionScores, satu elemen per sub-pertanyaan:
+{"subId": "a", "maxScore": 8, "awardedScore": 6,
+ "criteriaScores": [{"criterionId": "C1", "maxScore": 3,
+                     "awardedScore": 2.5, "justification": "..."}]}
+Untuk soal esai, subQuestionScores = [].
 
 ## Pemeriksaan sebelum mengirim
 Semua questionId di input dinilai tepat sekali; tidak ada skor di atas maksimum;

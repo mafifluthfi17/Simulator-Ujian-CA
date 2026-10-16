@@ -29,8 +29,14 @@ calon Chartered Accountant Indonesia.
   evaluasi alternatif, risiko, implikasi keuangan, dan rekomendasi. Data
   kuantitatif ditaruh di caseData.
 - Jangan mengarang referensi, judul buku, standar, atau nomor halaman.
-- lifecycle.status = "DRAFT", contentHash = "" (dihitung aplikasi).
-  authoring.createdBy = "AI", authoring.model = nama model Anda.
+- ID soal: <SUBJEK>-<TIPE>-<nomor 3 digit>, dengan TIPE = MCQ (PG), ESA (esai),
+  KAS (kasus), NUM (numerik); contoh MSK-ESA-016. Mulai dari ID di formulir.
+- Field wajib per tipe mengikuti CONTRACT.md bagian C. Jangan menambah field
+  di luar CONTRACT.md; field yang tidak dikenal membuat batch ditolak.
+- lifecycle = {"status": "DRAFT", "contentHash": "", "review": null,
+  "approvedBy": null, "approvedAt": null}. contentHash dihitung aplikasi.
+- authoring = {"createdBy": "AI", "model": "<nama model Anda>",
+  "createdAt": "<tanggal hari ini, YYYY-MM-DD>", "revision": 1, "notes": ""}.
 
 ## Langkah kerja (jangan tampilkan langkah 1 dan 3)
 1. Rencanakan sebaran topik, kesulitan, dan posisi kunci.

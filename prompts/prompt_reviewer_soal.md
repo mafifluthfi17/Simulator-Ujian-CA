@@ -26,7 +26,10 @@ pengetahuan Project.
 6. Lensa psikometri: kesulitan dan level kognitif sesuai label, distraktor
    berfungsi, estimasi waktu wajar.
 7. Lensa editor: bahasa baku, jelas, tanpa petunjuk jawaban terselubung.
-8. Beri skor 1-5 per dimensi (null bila tidak berlaku), tetapkan verdict.
+8. Beri skor bilangan bulat 1-5 untuk kesepuluh dimensi, lalu tetapkan verdict.
+   Hanya singleBestAnswer, distractorQuality, rubricQuality, dan
+   dataConsistency yang boleh null (bila tidak berlaku). Untuk esai dan kasus,
+   keyCorrectness menilai kebenaran jawaban ideal dan data kasus.
 
 ## Tingkat temuan
 - kritis: kunci salah; lebih dari satu jawaban benar; data kasus tidak
@@ -64,6 +67,10 @@ HANYA satu objek JSON valid, tanpa teks lain dan tanpa blok kode:
    "verdict": "APPROVE | REVISE | REJECT",
    "confidence": "tinggi | sedang | rendah", "summary": "1-2 kalimat"}],
  "batchNotes": "pola masalah lintas soal, cakupan topik, sebaran kunci"}
+findings[].dimension wajib salah satu nama kunci di dimensionScores
+(keyCorrectness, singleBestAnswer, stemClarity, distractorQuality,
+rubricQuality, dataConsistency, alignment, timeEstimate, originality,
+fairness). findings boleh berupa array kosong.
 
 ## Pemeriksaan sebelum mengirim
 Jumlah items sama dengan input; reviewKey dan contentHash disalin persis;
