@@ -1,0 +1,24 @@
+{
+  "gradingVersion": "4.1",
+  "sessionId": "contoh-20261016-a1b2c3d4",
+  "answersChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "graderModel": "contoh-penilai",
+  "evaluatedQuestionIds": ["CTH-ESA-001"],
+  "scores": [
+    {
+      "questionId": "CTH-ESA-001",
+      "maxScore": 10,
+      "awardedScore": 7.3,
+      "criteriaScores": [
+        { "criterionId": "C1", "maxScore": 10, "awardedScore": 7.3, "justification": "Skor bukan kelipatan 0,5." }
+      ],
+      "subQuestionScores": [],
+      "strengths": "",
+      "weaknesses": "",
+      "improvement": "",
+      "confidence": "sedang"
+    }
+  ],
+  "reviewFlags": [],
+  "overallFeedback": ""
+}

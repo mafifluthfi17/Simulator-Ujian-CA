@@ -1,0 +1,66 @@
+{
+  "id": "CTH-KAS-001",
+  "type": "case",
+  "caseSize": "mini",
+  "topicIds": ["T01", "T03", "T04"],
+  "competencyIds": ["K01", "K02"],
+  "difficulty": "sulit",
+  "cognitiveLevel": "C5",
+  "estimatedMinutes": 25,
+  "maxScore": 20,
+  "stem": "[CONTOH] Bacalah kasus PT Sinar Nusantara Logistik (fiktif) lalu jawab sub-pertanyaan berikut.",
+  "caseNarrative": "PT Sinar Nusantara Logistik (SNL) melayani tiga segmen: pengiriman B2B, pengiriman ritel, dan pergudangan. Pesaing digital menekan tarif pengiriman ritel. Direksi mempertimbangkan dua pilihan: (1) memperbesar armada ritel untuk merebut pangsa, atau (2) mengalihkan investasi ke pergudangan terpadu untuk klien B2B. Anggaran investasi tahun depan Rp300 miliar.",
+  "caseData": [
+    {
+      "title": "Kinerja segmen 2025 (Rp miliar)",
+      "columns": ["Segmen", "Pendapatan", "Laba operasi", "Margin operasi (%)"],
+      "rows": [
+        ["Pengiriman B2B", 820, 98.4, 12.0],
+        ["Pengiriman ritel", 430, 21.5, 5.0],
+        ["Pergudangan", 250, 37.5, 15.0],
+        ["Total", 1500, 157.4, 10.49]
+      ]
+    }
+  ],
+  "subQuestions": [
+    {
+      "id": "a",
+      "prompt": "Analisis posisi ketiga segmen berdasarkan data kinerja dan kondisi persaingan.",
+      "maxScore": 8,
+      "modelAnswer": "Pergudangan memiliki margin tertinggi (15%) dan sinergi dengan B2B; B2B menyumbang laba terbesar (Rp98,4 miliar, margin 12%); ritel bermargin terendah (5%) dan tertekan pesaing digital sehingga daya tariknya rendah.",
+      "rubric": [
+        { "criterionId": "C1", "description": "Membaca data margin dan kontribusi laba dengan benar", "maxScore": 3, "full": "Margin dan kontribusi ketiga segmen dihitung/dikutip benar.", "partial": "Sebagian data benar.", "zero": "Data keliru atau tidak dipakai." },
+        { "criterionId": "C2", "description": "Mengaitkan data dengan kondisi persaingan", "maxScore": 3, "full": "Tekanan pesaing digital dikaitkan dengan margin ritel dan prospek segmen lain.", "partial": "Kaitan disebut tanpa analisis.", "zero": "Tidak ada kaitan." },
+        { "criterionId": "C3", "description": "Kesimpulan posisi segmen", "maxScore": 2, "full": "Kesimpulan jelas untuk ketiga segmen.", "partial": "Kesimpulan untuk sebagian segmen.", "zero": "Tidak ada kesimpulan." }
+      ]
+    },
+    {
+      "id": "b",
+      "prompt": "Evaluasi dua pilihan investasi dan berikan rekomendasi beserta risikonya.",
+      "maxScore": 12,
+      "modelAnswer": "Pilihan (2) lebih tepat: memperkuat keunggulan pada segmen bermargin tinggi, membangun switching cost bagi klien B2B, dan menghindari perang tarif. Risiko: konsentrasi pada klien besar dan utilisasi gudang; mitigasi melalui kontrak jangka panjang dan investasi bertahap.",
+      "rubric": [
+        { "criterionId": "C1", "description": "Evaluasi pilihan (1)", "maxScore": 4, "full": "Menilai daya tarik, posisi kompetitif, dan dampak margin pilihan (1).", "partial": "Evaluasi sebagian.", "zero": "Tidak dievaluasi." },
+        { "criterionId": "C2", "description": "Evaluasi pilihan (2)", "maxScore": 4, "full": "Menilai sinergi B2B-gudang, keunggulan bersaing, dan dampak keuangan pilihan (2).", "partial": "Evaluasi sebagian.", "zero": "Tidak dievaluasi." },
+        { "criterionId": "C3", "description": "Rekomendasi", "maxScore": 2, "full": "Rekomendasi tegas dan konsisten dengan analisis.", "partial": "Rekomendasi ada tetapi kurang didukung analisis.", "zero": "Tidak ada rekomendasi." },
+        { "criterionId": "C4", "description": "Risiko dan mitigasi", "maxScore": 2, "full": "Minimal dua risiko relevan dengan mitigasi.", "partial": "Risiko tanpa mitigasi.", "zero": "Tidak ada risiko." }
+      ]
+    }
+  ],
+  "acceptableAlternatives": "Rekomendasi pilihan (1) tetap dapat nilai penuh pada C3 bila didukung argumen kuat (mis. skala ekonomi dan diferensiasi layanan) dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.",
+  "references": ["Analisis portofolio bisnis", "Keunggulan bersaing Porter"],
+  "lifecycle": {
+    "status": "DRAFT",
+    "contentHash": "",
+    "review": null,
+    "approvedBy": null,
+    "approvedAt": null
+  },
+  "authoring": {
+    "createdBy": "AI",
+    "model": "contoh-penyusun",
+    "createdAt": "2026-10-09",
+    "revision": 1,
+    "notes": ""
+  }
+}

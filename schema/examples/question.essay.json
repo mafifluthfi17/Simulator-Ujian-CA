@@ -1,0 +1,62 @@
+{
+  "id": "CTH-ESA-001",
+  "type": "essay",
+  "topicIds": ["T02"],
+  "competencyIds": ["K01"],
+  "difficulty": "sulit",
+  "cognitiveLevel": "C5",
+  "estimatedMinutes": 15,
+  "maxScore": 10,
+  "stem": "[CONTOH] Direksi PT Bumi Hijau Agro (fiktif) mengukur kinerja hanya dengan laba bersih dan pertumbuhan pendapatan. Evaluasi kelemahan pendekatan tersebut dan jelaskan bagaimana balanced scorecard dapat memperbaikinya. Sertakan satu contoh ukuran untuk setiap perspektif.",
+  "modelAnswer": "Ukuran keuangan bersifat lagging, berorientasi jangka pendek, dan tidak menjelaskan penyebab kinerja. Balanced scorecard menyeimbangkan ukuran lagging dan leading melalui empat perspektif yang terhubung sebab-akibat: keuangan (ROCE), pelanggan (tingkat retensi distributor), proses internal (rendemen pengolahan), serta pembelajaran dan pertumbuhan (jam pelatihan agronomi per karyawan). Strategy map memperlihatkan bagaimana perbaikan kapabilitas mendorong proses, pelanggan, lalu hasil keuangan.",
+  "rubric": [
+    {
+      "criterionId": "C1",
+      "description": "Mengevaluasi kelemahan ukuran keuangan semata",
+      "maxScore": 3,
+      "full": "Menjelaskan minimal tiga kelemahan (lagging, jangka pendek, tidak menjelaskan penyebab) dengan kaitan ke kasus.",
+      "partial": "Menjelaskan satu-dua kelemahan atau tanpa kaitan ke kasus.",
+      "zero": "Tidak ada evaluasi atau evaluasi keliru."
+    },
+    {
+      "criterionId": "C2",
+      "description": "Menjelaskan logika balanced scorecard",
+      "maxScore": 3,
+      "full": "Menjelaskan empat perspektif, keseimbangan leading-lagging, dan hubungan sebab-akibat.",
+      "partial": "Menyebut empat perspektif tanpa hubungan sebab-akibat.",
+      "zero": "Penjelasan tidak ada atau keliru."
+    },
+    {
+      "criterionId": "C3",
+      "description": "Contoh ukuran per perspektif",
+      "maxScore": 2,
+      "full": "Empat ukuran relevan dengan industri agribisnis, satu per perspektif.",
+      "partial": "Dua-tiga ukuran relevan, atau ukuran generik.",
+      "zero": "Tidak ada ukuran yang relevan."
+    },
+    {
+      "criterionId": "C4",
+      "description": "Kualitas argumentasi",
+      "maxScore": 2,
+      "full": "Argumen runtut dan menyimpulkan rekomendasi yang jelas.",
+      "partial": "Argumen ada tetapi kurang runtut.",
+      "zero": "Tidak ada argumen yang dapat dinilai."
+    }
+  ],
+  "acceptableAlternatives": "Ukuran lain yang relevan diterima (mis. NPS distributor, produktivitas lahan, indeks keterlibatan karyawan). Rujukan ke performance prism atau EVA sebagai pelengkap tetap dapat nilai penuh bila dikaitkan dengan kelemahan yang dievaluasi.",
+  "references": ["Balanced scorecard", "Ukuran kinerja leading dan lagging"],
+  "lifecycle": {
+    "status": "NEEDS_REVISION",
+    "contentHash": "1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809",
+    "review": null,
+    "approvedBy": null,
+    "approvedAt": null
+  },
+  "authoring": {
+    "createdBy": "AI",
+    "model": "contoh-penyusun",
+    "createdAt": "2026-10-09",
+    "revision": 2,
+    "notes": ""
+  }
+}

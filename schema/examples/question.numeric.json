@@ -1,0 +1,31 @@
+{
+  "id": "CTH-NUM-001",
+  "type": "numeric",
+  "topicIds": ["T03"],
+  "competencyIds": ["K02"],
+  "difficulty": "sedang",
+  "cognitiveLevel": "C3",
+  "estimatedMinutes": 2,
+  "maxScore": 1,
+  "stem": "[CONTOH] Divisi Logistik PT Arunika Niaga (fiktif) mencatat laba operasi setelah pajak Rp180 miliar, modal yang diinvestasikan Rp1.200 miliar, dan WACC 11%. Berapa Economic Value Added (EVA) divisi tersebut dalam Rp miliar?",
+  "numericAnswer": {
+    "value": 48,
+    "unit": "Rp miliar",
+    "tolerance": { "type": "relative", "value": 0.01 }
+  },
+  "explanation": "EVA = NOPAT - (WACC x modal diinvestasikan) = 180 - (11% x 1.200) = 180 - 132 = 48.",
+  "references": ["Economic Value Added"],
+  "lifecycle": {
+    "status": "DRAFT",
+    "contentHash": "",
+    "review": null,
+    "approvedBy": null,
+    "approvedAt": null
+  },
+  "authoring": {
+    "createdBy": "manusia",
+    "createdAt": "2026-10-09T08:00:00+07:00",
+    "revision": 1,
+    "notes": "Tipe numeric tidak dipakai pack MSK; contoh untuk pengujian mesin."
+  }
+}

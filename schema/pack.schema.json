@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pack.schema.json",
+  "title": "Subject Pack (SPEC 5.1 dan 6)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "subjectId", "subjectName", "packVersion", "language",
+    "passingGrade", "topics", "competencies", "packages", "questions", "changelog"
+  ],
+  "properties": {
+    "schemaVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "subjectId": { "$ref": "common.schema.json#/$defs/subjectId" },
+    "subjectName": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "packVersion": { "$ref": "common.schema.json#/$defs/semver" },
+    "language": { "enum": ["id"] },
+    "passingGrade": { "type": "number", "minimum": 0, "maximum": 100 },
+    "topics": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/topic" }
+    },
+    "competencies": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/competency" }
+    },
+    "packages": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/package" }
+    },
+    "questions": {
+      "type": "array",
+      "items": { "$ref": "question.schema.json" }
+    },
+    "changelog": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/changelogEntry" }
+    }
+  },
+  "$defs": {
+    "topic": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/topicId" },
+        "name": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    },
+    "competency": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/competencyId" },
+        "name": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    },
+    "changelogEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "date", "notes"],
+      "properties": {
+        "version": { "$ref": "common.schema.json#/$defs/semver" },
+        "date": { "$ref": "common.schema.json#/$defs/date" },
+        "notes": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    },
+    "package": {
+      "$comment": "Blueprint paket ujian (SPEC 6). Bobot bagian menjumlah 100 (diperiksa aturan konsistensi).",
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "id", "name", "durationMinutes", "strictMode", "sections",
+        "difficultyTarget", "coverage"
+      ],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/packageId" },
+        "name": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "durationMinutes": { "type": "integer", "minimum": 1, "maximum": 600 },
+        "strictMode": { "type": "boolean" },
+        "sections": {
+          "type": "array", "minItems": 1,
+          "items": { "$ref": "#/$defs/section" }
+        },
+        "suggestedMinutes": {
+          "type": "object",
+          "propertyNames": { "$ref": "common.schema.json#/$defs/questionType" },
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "difficultyTarget": {
+          "type": "object", "additionalProperties": false,
+          "required": ["levels", "minScoreShare"],
+          "properties": {
+            "levels": {
+              "type": "array", "minItems": 1, "uniqueItems": true,
+              "items": { "$ref": "common.schema.json#/$defs/difficulty" }
+            },
+            "minScoreShare": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "coverage": {
+          "type": "object", "additionalProperties": false,
+          "required": ["minTopics", "maxTopicScoreShare"],
+          "properties": {
+            "minTopics": { "type": "integer", "minimum": 1 },
+            "maxTopicScoreShare": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "section": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "count", "weight"],
+      "properties": {
+        "type": { "$ref": "common.schema.json#/$defs/questionType" },
+        "count": { "type": "integer", "minimum": 1 },
+        "caseSize": { "$ref": "common.schema.json#/$defs/caseSize" },
+        "weight": {
+          "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 0.01,
+          "description": "Total skor bagian dalam paket (skala 100)."
+        },
+        "itemScores": {
+          "type": "array",
+          "items": { "type": "number", "exclusiveMinimum": 0, "multipleOf": 0.01 },
+          "description": "Opsional: skor per butir bila tidak dibagi rata (contoh SIM kasus 16 dan 17)."
+        }
+      },
+      "if": { "properties": { "type": { "const": "case" } }, "required": ["type"] },
+      "then": { "required": ["caseSize"] },
+      "else": { "properties": { "caseSize": false } }
+    }
+  }
+}

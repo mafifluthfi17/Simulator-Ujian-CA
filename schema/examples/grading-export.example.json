@@ -1,0 +1,72 @@
+{
+  "gradingVersion": "4.1",
+  "sessionId": "contoh-20261016-a1b2c3d4",
+  "subjectId": "contoh",
+  "packVersion": "1.1.0",
+  "answersChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "items": [
+    {
+      "questionId": "CTH-ESA-001",
+      "type": "essay",
+      "stem": "[CONTOH] Direksi PT Bumi Hijau Agro (fiktif) mengukur kinerja hanya dengan laba bersih dan pertumbuhan pendapatan. Evaluasi kelemahan pendekatan tersebut dan jelaskan bagaimana balanced scorecard dapat memperbaikinya.",
+      "maxScore": 10,
+      "rubric": [
+        { "criterionId": "C1", "description": "Mengevaluasi kelemahan ukuran keuangan semata", "maxScore": 3, "full": "Minimal tiga kelemahan dengan kaitan ke kasus.", "partial": "Satu-dua kelemahan.", "zero": "Tidak ada evaluasi." },
+        { "criterionId": "C2", "description": "Menjelaskan logika balanced scorecard", "maxScore": 3, "full": "Empat perspektif dan hubungan sebab-akibat.", "partial": "Empat perspektif tanpa hubungan.", "zero": "Tidak ada atau keliru." },
+        { "criterionId": "C3", "description": "Contoh ukuran per perspektif", "maxScore": 2, "full": "Empat ukuran relevan.", "partial": "Dua-tiga ukuran relevan.", "zero": "Tidak ada." },
+        { "criterionId": "C4", "description": "Kualitas argumentasi", "maxScore": 2, "full": "Runtut dengan rekomendasi jelas.", "partial": "Kurang runtut.", "zero": "Tidak dapat dinilai." }
+      ],
+      "modelAnswer": "Ukuran keuangan bersifat lagging dan jangka pendek; balanced scorecard menyeimbangkan empat perspektif yang terhubung sebab-akibat.",
+      "acceptableAlternatives": "Ukuran lain yang relevan diterima.",
+      "answer": "Laba bersih hanya menunjukkan hasil masa lalu dan mendorong keputusan jangka pendek. BSC menambah perspektif pelanggan, proses internal, dan pembelajaran. Contoh: ROCE, retensi distributor, rendemen, jam pelatihan.",
+      "isBlank": false
+    },
+    {
+      "questionId": "CTH-KAS-001",
+      "type": "case",
+      "stem": "[CONTOH] Bacalah kasus PT Sinar Nusantara Logistik (fiktif) lalu jawab sub-pertanyaan berikut.",
+      "caseNarrative": "SNL melayani pengiriman B2B, pengiriman ritel, dan pergudangan. Direksi memilih antara memperbesar armada ritel atau pergudangan terpadu untuk klien B2B.",
+      "caseData": [
+        {
+          "title": "Kinerja segmen 2025 (Rp miliar)",
+          "columns": ["Segmen", "Pendapatan", "Laba operasi", "Margin operasi (%)"],
+          "rows": [
+            ["Pengiriman B2B", 820, 98.4, 12.0],
+            ["Pengiriman ritel", 430, 21.5, 5.0],
+            ["Pergudangan", 250, 37.5, 15.0],
+            ["Total", 1500, 157.4, 10.49]
+          ]
+        }
+      ],
+      "subQuestions": [
+        {
+          "id": "a",
+          "prompt": "Analisis posisi ketiga segmen.",
+          "maxScore": 8,
+          "modelAnswer": "Pergudangan margin tertinggi; B2B laba terbesar; ritel margin terendah dan tertekan pesaing.",
+          "rubric": [
+            { "criterionId": "C1", "description": "Membaca data dengan benar", "maxScore": 3, "full": "Benar semua.", "partial": "Sebagian benar.", "zero": "Keliru." },
+            { "criterionId": "C2", "description": "Mengaitkan dengan persaingan", "maxScore": 3, "full": "Terkait dan dianalisis.", "partial": "Disebut saja.", "zero": "Tidak ada." },
+            { "criterionId": "C3", "description": "Kesimpulan posisi segmen", "maxScore": 2, "full": "Ketiga segmen.", "partial": "Sebagian.", "zero": "Tidak ada." }
+          ]
+        },
+        {
+          "id": "b",
+          "prompt": "Evaluasi dua pilihan investasi dan berikan rekomendasi beserta risikonya.",
+          "maxScore": 12,
+          "modelAnswer": "Pilihan pergudangan lebih tepat; risiko konsentrasi klien dimitigasi kontrak jangka panjang.",
+          "rubric": [
+            { "criterionId": "C1", "description": "Evaluasi pilihan (1)", "maxScore": 4, "full": "Lengkap.", "partial": "Sebagian.", "zero": "Tidak ada." },
+            { "criterionId": "C2", "description": "Evaluasi pilihan (2)", "maxScore": 4, "full": "Lengkap.", "partial": "Sebagian.", "zero": "Tidak ada." },
+            { "criterionId": "C3", "description": "Rekomendasi", "maxScore": 2, "full": "Tegas dan konsisten.", "partial": "Kurang didukung.", "zero": "Tidak ada." },
+            { "criterionId": "C4", "description": "Risiko dan mitigasi", "maxScore": 2, "full": "Dua risiko dengan mitigasi.", "partial": "Tanpa mitigasi.", "zero": "Tidak ada." }
+          ]
+        }
+      ],
+      "maxScore": 20,
+      "acceptableAlternatives": "Rekomendasi pilihan (1) dapat nilai penuh bila argumennya kuat.",
+      "answer": "[a] B2B menyumbang laba terbesar, pergudangan paling efisien dengan margin 15%, ritel hanya 5% dan diserang pesaing digital.\n\n[b] Armada ritel berisiko perang tarif. Pergudangan sinergi dengan B2B. Saya merekomendasikan pergudangan. Risikonya utilisasi gudang rendah.",
+      "isBlank": false
+    }
+  ]
+}

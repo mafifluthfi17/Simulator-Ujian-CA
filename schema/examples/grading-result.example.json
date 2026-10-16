@@ -1,0 +1,60 @@
+{
+  "gradingVersion": "4.1",
+  "sessionId": "contoh-20261016-a1b2c3d4",
+  "answersChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "graderModel": "contoh-penilai",
+  "evaluatedQuestionIds": ["CTH-ESA-001", "CTH-KAS-001"],
+  "scores": [
+    {
+      "questionId": "CTH-ESA-001",
+      "maxScore": 10,
+      "awardedScore": 7.5,
+      "criteriaScores": [
+        { "criterionId": "C1", "maxScore": 3, "awardedScore": 2.5, "justification": "\"hanya menunjukkan hasil masa lalu dan mendorong keputusan jangka pendek\"; tanpa poin penyebab kinerja." },
+        { "criterionId": "C2", "maxScore": 3, "awardedScore": 2, "justification": "Menyebut perspektif tetapi tidak menjelaskan hubungan sebab-akibat." },
+        { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "\"ROCE, retensi distributor, rendemen, jam pelatihan\" relevan, tanpa penjelasan." },
+        { "criterionId": "C4", "maxScore": 2, "awardedScore": 1.5, "justification": "Runtut tetapi tanpa rekomendasi eksplisit." }
+      ],
+      "subQuestionScores": [],
+      "strengths": "Mengenali sifat lagging ukuran keuangan dan memberi ukuran relevan.",
+      "weaknesses": "Hubungan sebab-akibat antarperspektif tidak dijelaskan.",
+      "improvement": "Tunjukkan rantai sebab-akibat dari pembelajaran ke keuangan dengan strategy map.",
+      "confidence": "tinggi"
+    },
+    {
+      "questionId": "CTH-KAS-001",
+      "maxScore": 20,
+      "awardedScore": 14,
+      "criteriaScores": [],
+      "subQuestionScores": [
+        {
+          "subId": "a",
+          "maxScore": 8,
+          "awardedScore": 6,
+          "criteriaScores": [
+            { "criterionId": "C1", "maxScore": 3, "awardedScore": 2.5, "justification": "Margin pergudangan dan ritel benar; margin B2B tidak disebut." },
+            { "criterionId": "C2", "maxScore": 3, "awardedScore": 2, "justification": "\"diserang pesaing digital\" disebut tanpa analisis dampak." },
+            { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "Kesimpulan tersirat untuk ketiga segmen." }
+          ]
+        },
+        {
+          "subId": "b",
+          "maxScore": 12,
+          "awardedScore": 8,
+          "criteriaScores": [
+            { "criterionId": "C1", "maxScore": 4, "awardedScore": 3, "justification": "\"berisiko perang tarif\" tepat, dampak margin tidak dihitung." },
+            { "criterionId": "C2", "maxScore": 4, "awardedScore": 2.5, "justification": "Sinergi disebut tanpa dampak keuangan." },
+            { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "Rekomendasi tegas, dukungan analisis terbatas." },
+            { "criterionId": "C4", "maxScore": 2, "awardedScore": 1, "justification": "Satu risiko tanpa mitigasi." }
+          ]
+        }
+      ],
+      "strengths": "Membaca data margin dengan benar dan memberi rekomendasi tegas.",
+      "weaknesses": "Evaluasi pilihan kurang kuantitatif; risiko tanpa mitigasi.",
+      "improvement": "Hitung dampak investasi Rp300 miliar pada laba dan sertakan mitigasi risiko.",
+      "confidence": "sedang"
+    }
+  ],
+  "reviewFlags": [],
+  "overallFeedback": "Pemahaman konsep baik; perkuat analisis kuantitatif dan rantai sebab-akibat."
+}

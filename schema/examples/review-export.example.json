@@ -1,0 +1,64 @@
+{
+  "reviewVersion": "4.1",
+  "batchId": "CTH-B02",
+  "subjectName": "Mata Ujian Contoh",
+  "topics": [
+    { "id": "T02", "name": "Pengukuran kinerja strategis" },
+    { "id": "T04", "name": "Kepemimpinan dan perubahan" }
+  ],
+  "competencies": [
+    { "id": "K01", "name": "Menganalisis dan mengevaluasi strategi" }
+  ],
+  "items": [
+    {
+      "reviewKey": "R01",
+      "contentHash": "5d41402abc4b2a76b9719d911017c5925d41402abc4b2a76b9719d911017c592",
+      "type": "mcq",
+      "topicIds": ["T02"],
+      "competencyIds": ["K01"],
+      "difficulty": "sedang",
+      "cognitiveLevel": "C3",
+      "estimatedMinutes": 1.5,
+      "maxScore": 1,
+      "stem": "[CONTOH KALIBRASI] Ukuran manakah yang termasuk leading indicator bagi sasaran retensi pelanggan?",
+      "options": [
+        { "key": "A", "text": "Tingkat kepuasan pelanggan hasil survei triwulanan" },
+        { "key": "B", "text": "Pendapatan dari pelanggan lama tahun lalu" },
+        { "key": "C", "text": "Jumlah keluhan yang diselesaikan dalam 24 jam" },
+        { "key": "D", "text": "Laba bersih tahunan" }
+      ],
+      "answerKey": "A",
+      "distractorRationale": {
+        "B": "Pendapatan tahun lalu adalah ukuran lagging.",
+        "C": "Penyelesaian keluhan adalah ukuran proses.",
+        "D": "Laba bersih adalah ukuran lagging keuangan."
+      },
+      "explanation": "Kepuasan pelanggan mendahului keputusan pelanggan untuk bertahan."
+    },
+    {
+      "reviewKey": "R02",
+      "contentHash": "7c211433f02071597741e6ff5a8ea34789abcdef7c211433f02071597741e6ff",
+      "type": "mcq",
+      "topicIds": ["T04"],
+      "competencyIds": ["K01"],
+      "difficulty": "sulit",
+      "cognitiveLevel": "C4",
+      "estimatedMinutes": 2,
+      "maxScore": 1,
+      "stem": "[CONTOH] Setelah merger, dua tim penjualan PT Pelita Daya (fiktif) menolak sistem insentif baru karena khawatir kehilangan pelanggan lama. Menurut model perubahan Kotter, langkah apa yang paling tepat dilakukan pimpinan lebih dahulu?",
+      "options": [
+        { "key": "A", "text": "Segera memberlakukan sanksi bagi tenaga penjual yang menolak" },
+        { "key": "B", "text": "Membangun rasa urgensi dengan data hilangnya pangsa pasar bila tidak berubah" },
+        { "key": "C", "text": "Merayakan keberhasilan jangka pendek tim yang sudah memakai sistem baru" },
+        { "key": "D", "text": "Melembagakan sistem baru dalam budaya perusahaan" }
+      ],
+      "answerKey": "B",
+      "distractorRationale": {
+        "A": "Paksaan bukan langkah Kotter dan memperkuat resistensi.",
+        "C": "Quick wins adalah langkah lanjutan setelah visi dikomunikasikan.",
+        "D": "Pelembagaan adalah langkah terakhir model Kotter."
+      },
+      "explanation": "Langkah pertama Kotter adalah membangun rasa urgensi agar pihak yang resisten melihat alasan perubahan."
+    }
+  ]
+}

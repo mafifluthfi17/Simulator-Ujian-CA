@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grading-result.schema.json",
+  "title": "Hasil penilaian dari AI penilai (SPEC 5.5, Prompt D)",
+  "$comment": "Skema memeriksa bentuk. Batas skor <= maks, kelengkapan, dan jumlah kriteria diperiksa saat impor (SPEC 10).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gradingVersion", "sessionId", "answersChecksum", "graderModel",
+    "evaluatedQuestionIds", "scores", "reviewFlags", "overallFeedback"
+  ],
+  "properties": {
+    "gradingVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "sessionId": { "$ref": "common.schema.json#/$defs/sessionId" },
+    "answersChecksum": { "$ref": "common.schema.json#/$defs/sha256" },
+    "graderModel": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "evaluatedQuestionIds": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/questionId" }
+    },
+    "scores": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/questionScore" }
+    },
+    "reviewFlags": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reviewFlag" }
+    },
+    "overallFeedback": { "type": "string" }
+  },
+  "$defs": {
+    "criterionScore": {
+      "type": "object", "additionalProperties": false,
+      "required": ["criterionId", "maxScore", "awardedScore", "justification"],
+      "properties": {
+        "criterionId": { "$ref": "common.schema.json#/$defs/criterionId" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "awardedScore": { "$ref": "common.schema.json#/$defs/score" },
+        "justification": { "type": "string" }
+      }
+    },
+    "subQuestionScore": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subId", "maxScore", "awardedScore", "criteriaScores"],
+      "properties": {
+        "subId": { "$ref": "common.schema.json#/$defs/subQuestionId" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "awardedScore": { "$ref": "common.schema.json#/$defs/score" },
+        "criteriaScores": {
+          "type": "array", "minItems": 1,
+          "items": { "$ref": "#/$defs/criterionScore" }
+        }
+      }
+    },
+    "questionScore": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "questionId", "maxScore", "awardedScore", "criteriaScores", "subQuestionScores",
+        "strengths", "weaknesses", "improvement", "confidence"
+      ],
+      "properties": {
+        "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "awardedScore": { "$ref": "common.schema.json#/$defs/score" },
+        "criteriaScores": { "type": "array", "items": { "$ref": "#/$defs/criterionScore" } },
+        "subQuestionScores": { "type": "array", "items": { "$ref": "#/$defs/subQuestionScore" } },
+        "strengths": { "type": "string" },
+        "weaknesses": { "type": "string" },
+        "improvement": { "type": "string" },
+        "confidence": { "$ref": "common.schema.json#/$defs/confidence" }
+      }
+    },
+    "reviewFlag": {
+      "type": "object", "additionalProperties": false,
+      "required": ["questionId", "type", "note"],
+      "properties": {
+        "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "type": {
+          "enum": [
+            "jawaban_kosong", "soal_bermasalah",
+            "ketidakpastian_tinggi", "instruksi_dalam_jawaban"
+          ]
+        },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

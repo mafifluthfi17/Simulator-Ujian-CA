@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review-result.schema.json",
+  "title": "Hasil review dari AI reviewer (SPEC 5.4, Prompt C)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reviewVersion", "batchId", "reviewerModel", "reviewedAt", "items", "batchNotes"],
+  "properties": {
+    "reviewVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "batchId": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "reviewerModel": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "reviewedAt": { "$ref": "common.schema.json#/$defs/dateTime" },
+    "items": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/reviewItem" }
+    },
+    "batchNotes": { "type": "string" }
+  },
+  "$defs": {
+    "score1to5": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "score1to5OrNull": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
+    "dimensionScores": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "keyCorrectness", "singleBestAnswer", "stemClarity", "distractorQuality",
+        "rubricQuality", "dataConsistency", "alignment", "timeEstimate",
+        "originality", "fairness"
+      ],
+      "properties": {
+        "keyCorrectness": { "$ref": "#/$defs/score1to5" },
+        "singleBestAnswer": { "$ref": "#/$defs/score1to5OrNull" },
+        "stemClarity": { "$ref": "#/$defs/score1to5" },
+        "distractorQuality": { "$ref": "#/$defs/score1to5OrNull" },
+        "rubricQuality": { "$ref": "#/$defs/score1to5OrNull" },
+        "dataConsistency": { "$ref": "#/$defs/score1to5OrNull" },
+        "alignment": { "$ref": "#/$defs/score1to5" },
+        "timeEstimate": { "$ref": "#/$defs/score1to5" },
+        "originality": { "$ref": "#/$defs/score1to5" },
+        "fairness": { "$ref": "#/$defs/score1to5" }
+      }
+    },
+    "finding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["severity", "dimension", "issue", "suggestedFix"],
+      "properties": {
+        "severity": { "enum": ["kritis", "mayor", "minor"] },
+        "dimension": { "$ref": "common.schema.json#/$defs/dimensionName" },
+        "issue": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "suggestedFix": { "type": "string" }
+      }
+    },
+    "reviewItem": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "reviewKey", "contentHash", "independentAnswer", "keyAgreement",
+        "dimensionScores", "findings", "suggestedDifficulty", "verdict",
+        "confidence", "summary"
+      ],
+      "properties": {
+        "reviewKey": { "type": "string", "pattern": "^R[0-9]{2,}$" },
+        "contentHash": { "$ref": "common.schema.json#/$defs/sha256" },
+        "independentAnswer": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "keyAgreement": { "enum": ["setuju", "tidak_setuju", "sebagian"] },
+        "dimensionScores": { "$ref": "#/$defs/dimensionScores" },
+        "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+        "suggestedDifficulty": { "$ref": "common.schema.json#/$defs/difficulty" },
+        "verdict": { "$ref": "common.schema.json#/$defs/verdict" },
+        "confidence": { "$ref": "common.schema.json#/$defs/confidence" },
+        "summary": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}

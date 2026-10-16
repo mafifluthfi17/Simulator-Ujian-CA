@@ -1,0 +1,15 @@
+{
+  "name": "simulator-ujian-ca",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Simulator latihan ujian CA Indonesia (PWA statis). Tidak berafiliasi dengan IAI.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node tools/validate.mjs"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "question.schema.json",
+  "title": "Soal (SPEC 5.2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "type", "topicIds", "competencyIds", "difficulty", "cognitiveLevel",
+    "estimatedMinutes", "maxScore", "stem", "lifecycle", "authoring"
+  ],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/questionId" },
+    "type": { "$ref": "common.schema.json#/$defs/questionType" },
+    "caseSize": { "$ref": "common.schema.json#/$defs/caseSize" },
+    "topicIds": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/topicId" }
+    },
+    "competencyIds": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/competencyId" }
+    },
+    "difficulty": { "$ref": "common.schema.json#/$defs/difficulty" },
+    "cognitiveLevel": { "$ref": "common.schema.json#/$defs/cognitiveLevel" },
+    "estimatedMinutes": { "type": "number", "exclusiveMinimum": 0, "maximum": 240 },
+    "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+    "stem": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "options": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": { "$ref": "#/$defs/option" }
+    },
+    "answerKey": { "$ref": "common.schema.json#/$defs/optionKey" },
+    "distractorRationale": {
+      "type": "object", "minProperties": 3, "maxProperties": 3,
+      "propertyNames": { "$ref": "common.schema.json#/$defs/optionKey" },
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+    },
+    "numericAnswer": { "$ref": "#/$defs/numericAnswer" },
+    "caseNarrative": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "caseData": { "type": "array", "items": { "$ref": "#/$defs/caseTable" } },
+    "subQuestions": {
+      "type": "array", "minItems": 1, "maxItems": 8,
+      "items": { "$ref": "#/$defs/subQuestion" }
+    },
+    "explanation": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "modelAnswer": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "rubric": { "$ref": "#/$defs/rubric" },
+    "acceptableAlternatives": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+    },
+    "lifecycle": { "$ref": "#/$defs/lifecycle" },
+    "authoring": { "$ref": "#/$defs/authoring" },
+    "calibration": { "$ref": "#/$defs/calibration" }
+  },
+  "allOf": [{ "$ref": "#/$defs/typeRules" }],
+  "$defs": {
+    "option": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "text"],
+      "properties": {
+        "key": { "$ref": "common.schema.json#/$defs/optionKey" },
+        "text": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    },
+    "numericAnswer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["value", "unit", "tolerance"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string" },
+        "tolerance": {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "enum": ["absolute", "relative"] },
+            "value": {
+              "type": "number", "minimum": 0,
+              "description": "absolute: selisih maksimum dalam satuan jawaban; relative: pecahan (0.01 = 1%)."
+            }
+          }
+        }
+      }
+    },
+    "rubricCriterion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["criterionId", "description", "maxScore", "full", "partial", "zero"],
+      "properties": {
+        "criterionId": { "$ref": "common.schema.json#/$defs/criterionId" },
+        "description": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "full": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "partial": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "zero": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+      }
+    },
+    "rubric": {
+      "type": "array", "minItems": 3, "maxItems": 6,
+      "items": { "$ref": "#/$defs/rubricCriterion" }
+    },
+    "caseTable": {
+      "type": "object", "additionalProperties": false,
+      "required": ["title", "columns", "rows"],
+      "properties": {
+        "title": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "columns": {
+          "type": "array", "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/nonEmptyString" }
+        },
+        "rows": {
+          "type": "array", "minItems": 1,
+          "items": { "type": "array", "items": { "type": ["string", "number"] } }
+        }
+      }
+    },
+    "subQuestion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "prompt", "maxScore", "modelAnswer", "rubric"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/subQuestionId" },
+        "prompt": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "modelAnswer": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "rubric": { "$ref": "#/$defs/rubric" }
+      }
+    },
+    "lifecycle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "contentHash", "review", "approvedBy", "approvedAt"],
+      "properties": {
+        "status": { "$ref": "common.schema.json#/$defs/lifecycleStatus" },
+        "contentHash": {
+          "type": "string", "pattern": "^([0-9a-f]{64})?$",
+          "description": "Kosong dari AI; diisi aplikasi (SHA-256 heksadesimal huruf kecil)."
+        },
+        "review": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/reviewRecord" }]
+        },
+        "approvedBy": {
+          "anyOf": [{ "type": "null" }, { "$ref": "common.schema.json#/$defs/nonEmptyString" }]
+        },
+        "approvedAt": { "$ref": "common.schema.json#/$defs/nullableDateTime" },
+        "history": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/statusTransition" }
+        }
+      }
+    },
+    "statusTransition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["from", "to", "at"],
+      "properties": {
+        "from": { "$ref": "common.schema.json#/$defs/lifecycleStatus" },
+        "to": { "$ref": "common.schema.json#/$defs/lifecycleStatus" },
+        "at": { "$ref": "common.schema.json#/$defs/dateTime" },
+        "by": { "type": "string" },
+        "reason": { "type": "string" }
+      }
+    },
+    "reviewRecord": {
+      "type": "object", "additionalProperties": false,
+      "required": ["batchId", "reviewerModel", "reviewedAt", "result"],
+      "properties": {
+        "batchId": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "reviewerModel": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "reviewedAt": { "$ref": "common.schema.json#/$defs/dateTime" },
+        "result": { "$ref": "review-result.schema.json#/$defs/reviewItem" }
+      }
+    },
+    "authoring": {
+      "type": "object", "additionalProperties": false,
+      "required": ["createdBy", "createdAt", "revision"],
+      "properties": {
+        "createdBy": { "enum": ["AI", "manusia"] },
+        "model": { "type": "string" },
+        "createdAt": {
+          "anyOf": [
+            { "$ref": "common.schema.json#/$defs/date" },
+            { "$ref": "common.schema.json#/$defs/dateTime" }
+          ]
+        },
+        "revision": { "type": "integer", "minimum": 1 },
+        "notes": { "type": "string" }
+      },
+      "if": { "properties": { "createdBy": { "const": "AI" } }, "required": ["createdBy"] },
+      "then": { "required": ["model"], "properties": { "model": { "minLength": 1 } } }
+    },
+    "calibration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["defectDimension", "defectDescription", "expectedVerdict"],
+      "properties": {
+        "defectDimension": { "$ref": "common.schema.json#/$defs/dimensionName" },
+        "defectDescription": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+        "expectedVerdict": { "enum": ["REVISE", "REJECT"] }
+      }
+    },
+    "typeRules": {
+      "$comment": "Field wajib dan terlarang per tipe soal. Dipakai juga oleh review-export.",
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "mcq" } }, "required": ["type"] },
+          "then": {
+            "required": ["options", "answerKey", "distractorRationale", "explanation"],
+            "properties": {
+              "maxScore": { "const": 1 },
+              "caseSize": false, "numericAnswer": false, "caseNarrative": false,
+              "caseData": false, "subQuestions": false, "rubric": false
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "numeric" } }, "required": ["type"] },
+          "then": {
+            "required": ["numericAnswer", "explanation"],
+            "properties": {
+              "maxScore": { "const": 1 },
+              "caseSize": false, "options": false, "answerKey": false,
+              "distractorRationale": false, "caseNarrative": false, "caseData": false,
+              "subQuestions": false, "rubric": false
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "essay" } }, "required": ["type"] },
+          "then": {
+            "required": ["rubric", "modelAnswer", "acceptableAlternatives"],
+            "properties": {
+              "maxScore": { "const": 10 },
+              "caseSize": false, "options": false, "answerKey": false,
+              "distractorRationale": false, "numericAnswer": false,
+              "caseNarrative": false, "caseData": false, "subQuestions": false
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "case" } }, "required": ["type"] },
+          "then": {
+            "required": ["caseSize", "caseNarrative", "subQuestions", "acceptableAlternatives"],
+            "properties": {
+              "maxScore": { "const": 20 },
+              "options": false, "answerKey": false, "distractorRationale": false,
+              "numericAnswer": false, "rubric": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

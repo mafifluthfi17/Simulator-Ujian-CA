@@ -1,0 +1,27 @@
+{
+  "id": "CTH-MCQ-901",
+  "type": "mcq",
+  "topicIds": ["T01"],
+  "competencyIds": ["K01"],
+  "difficulty": "mudah",
+  "cognitiveLevel": "C2",
+  "estimatedMinutes": 1,
+  "maxScore": 1,
+  "stem": "[CONTOH TIDAK VALID] Soal PG yang memuat rubrik (field terlarang untuk mcq).",
+  "options": [
+    { "key": "A", "text": "Satu" },
+    { "key": "B", "text": "Dua" },
+    { "key": "C", "text": "Tiga" },
+    { "key": "D", "text": "Empat" }
+  ],
+  "answerKey": "A",
+  "distractorRationale": { "B": "Salah.", "C": "Salah.", "D": "Salah." },
+  "explanation": "Penjelasan.",
+  "rubric": [
+    { "criterionId": "C1", "description": "x", "maxScore": 1, "full": "x", "partial": "x", "zero": "x" },
+    { "criterionId": "C2", "description": "x", "maxScore": 0.5, "full": "x", "partial": "x", "zero": "x" },
+    { "criterionId": "C3", "description": "x", "maxScore": 0.5, "full": "x", "partial": "x", "zero": "x" }
+  ],
+  "lifecycle": { "status": "DRAFT", "contentHash": "", "review": null, "approvedBy": null, "approvedAt": null },
+  "authoring": { "createdBy": "manusia", "createdAt": "2026-10-16", "revision": 1 }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review-export.schema.json",
+  "title": "Paket review yang diekspor aplikasi untuk AI reviewer (SPEC 5.4)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reviewVersion", "batchId", "subjectName", "topics", "competencies", "items"],
+  "properties": {
+    "reviewVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "batchId": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "subjectName": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "topics": { "$ref": "pack.schema.json#/properties/topics" },
+    "competencies": { "$ref": "pack.schema.json#/properties/competencies" },
+    "items": {
+      "type": "array", "minItems": 1, "maxItems": 11,
+      "$comment": "Maks 10 soal PG (5 esai, 2 kasus) + 1 soal kalibrasi.",
+      "items": { "$ref": "#/$defs/reviewItem" }
+    }
+  },
+  "$defs": {
+    "reviewItem": {
+      "$comment": "Soal tanpa id, lifecycle, authoring, calibration; diganti reviewKey + contentHash.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewKey", "contentHash", "type", "topicIds", "competencyIds", "difficulty",
+        "cognitiveLevel", "estimatedMinutes", "maxScore", "stem"
+      ],
+      "properties": {
+        "reviewKey": { "type": "string", "pattern": "^R[0-9]{2,}$" },
+        "contentHash": { "$ref": "common.schema.json#/$defs/sha256" },
+        "type": { "$ref": "question.schema.json#/properties/type" },
+        "caseSize": { "$ref": "question.schema.json#/properties/caseSize" },
+        "topicIds": { "$ref": "question.schema.json#/properties/topicIds" },
+        "competencyIds": { "$ref": "question.schema.json#/properties/competencyIds" },
+        "difficulty": { "$ref": "question.schema.json#/properties/difficulty" },
+        "cognitiveLevel": { "$ref": "question.schema.json#/properties/cognitiveLevel" },
+        "estimatedMinutes": { "$ref": "question.schema.json#/properties/estimatedMinutes" },
+        "maxScore": { "$ref": "question.schema.json#/properties/maxScore" },
+        "stem": { "$ref": "question.schema.json#/properties/stem" },
+        "options": { "$ref": "question.schema.json#/properties/options" },
+        "answerKey": { "$ref": "question.schema.json#/properties/answerKey" },
+        "distractorRationale": { "$ref": "question.schema.json#/properties/distractorRationale" },
+        "numericAnswer": { "$ref": "question.schema.json#/properties/numericAnswer" },
+        "caseNarrative": { "$ref": "question.schema.json#/properties/caseNarrative" },
+        "caseData": { "$ref": "question.schema.json#/properties/caseData" },
+        "subQuestions": { "$ref": "question.schema.json#/properties/subQuestions" },
+        "explanation": { "$ref": "question.schema.json#/properties/explanation" },
+        "modelAnswer": { "$ref": "question.schema.json#/properties/modelAnswer" },
+        "rubric": { "$ref": "question.schema.json#/properties/rubric" },
+        "acceptableAlternatives": { "$ref": "question.schema.json#/properties/acceptableAlternatives" },
+        "references": { "$ref": "question.schema.json#/properties/references" }
+      },
+      "allOf": [{ "$ref": "question.schema.json#/$defs/typeRules" }]
+    }
+  }
+}

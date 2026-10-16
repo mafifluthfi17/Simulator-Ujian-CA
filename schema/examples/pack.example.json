@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "4.1",
+  "subjectId": "contoh",
+  "subjectName": "Mata Ujian Contoh",
+  "packVersion": "1.1.0",
+  "language": "id",
+  "passingGrade": 70,
+  "topics": [
+    { "id": "T01", "name": "Analisis lingkungan dan portofolio" },
+    { "id": "T02", "name": "Pengukuran kinerja strategis" },
+    { "id": "T03", "name": "Keuangan stratejik" },
+    { "id": "T04", "name": "Kepemimpinan dan perubahan" }
+  ],
+  "competencies": [
+    { "id": "K01", "name": "Menganalisis dan mengevaluasi strategi" },
+    { "id": "K02", "name": "Menilai dampak keuangan keputusan strategis" }
+  ],
+  "packages": [
+    {
+      "id": "T1",
+      "name": "Latihan Dasar",
+      "durationMinutes": 60,
+      "strictMode": false,
+      "sections": [
+        { "type": "mcq", "count": 10, "weight": 20 },
+        { "type": "essay", "count": 4, "weight": 40 },
+        { "type": "case", "count": 2, "caseSize": "mini", "weight": 40 }
+      ],
+      "suggestedMinutes": { "mcq": 15, "essay": 20, "case": 25 },
+      "difficultyTarget": { "levels": ["mudah", "sedang"], "minScoreShare": 0.6 },
+      "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.25 }
+    },
+    {
+      "id": "SIM",
+      "name": "Simulasi Ujian",
+      "durationMinutes": 180,
+      "strictMode": true,
+      "sections": [
+        { "type": "mcq", "count": 17, "weight": 17 },
+        { "type": "essay", "count": 5, "weight": 50 },
+        { "type": "case", "count": 2, "caseSize": "komprehensif", "weight": 33, "itemScores": [16, 17] }
+      ],
+      "suggestedMinutes": { "mcq": 25, "essay": 90, "case": 65 },
+      "difficultyTarget": { "levels": ["sulit", "sangat_sulit"], "minScoreShare": 0.7 },
+      "coverage": { "minTopics": 9, "maxTopicScoreShare": 0.25 }
+    }
+  ],
+  "questions": [
+    {
+      "id": "CTH-MCQ-002",
+      "type": "mcq",
+      "topicIds": ["T01"],
+      "competencyIds": ["K01"],
+      "difficulty": "mudah",
+      "cognitiveLevel": "C3",
+      "estimatedMinutes": 1,
+      "maxScore": 1,
+      "stem": "[CONTOH] Kekuatan kompetitif manakah yang paling meningkat ketika biaya beralih pelanggan menjadi sangat rendah?",
+      "options": [
+        { "key": "A", "text": "Daya tawar pemasok" },
+        { "key": "B", "text": "Daya tawar pembeli" },
+        { "key": "C", "text": "Hambatan masuk" },
+        { "key": "D", "text": "Intensitas kebutuhan modal" }
+      ],
+      "answerKey": "B",
+      "distractorRationale": {
+        "A": "Biaya beralih pelanggan tidak memengaruhi posisi pemasok.",
+        "C": "Biaya beralih rendah justru menurunkan hambatan masuk.",
+        "D": "Kebutuhan modal tidak berkaitan dengan biaya beralih pelanggan."
+      },
+      "explanation": "Biaya beralih yang rendah memudahkan pembeli berpindah sehingga daya tawarnya naik.",
+      "lifecycle": {
+        "status": "LIVE",
+        "contentHash": "0b1c2d3e4f5061728394a5b6c7d8e9f00b1c2d3e4f5061728394a5b6c7d8e9f0",
+        "review": null,
+        "approvedBy": "LMA",
+        "approvedAt": "2026-10-11T10:00:00+07:00"
+      },
+      "authoring": {
+        "createdBy": "manusia",
+        "createdAt": "2026-10-09",
+        "revision": 1
+      }
+    }
+  ],
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-10-01", "notes": "Rilis awal contoh." },
+    { "version": "1.1.0", "date": "2026-10-11", "notes": "Menambah CTH-MCQ-002." }
+  ]
+}

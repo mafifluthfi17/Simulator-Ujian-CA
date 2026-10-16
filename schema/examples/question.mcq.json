@@ -1,0 +1,64 @@
+{
+  "id": "CTH-MCQ-001",
+  "type": "mcq",
+  "topicIds": ["T02"],
+  "competencyIds": ["K01"],
+  "difficulty": "sedang",
+  "cognitiveLevel": "C4",
+  "estimatedMinutes": 1.5,
+  "maxScore": 1,
+  "stem": "[CONTOH] PT Rasa Laut Lestari (fiktif), produsen ikan kaleng, menetapkan sasaran \"meningkatkan loyalitas pelanggan ritel modern\". Dalam strategy map balanced scorecard, sasaran manakah yang paling tepat ditempatkan sebagai penggerak langsung sasaran tersebut?",
+  "options": [
+    { "key": "A", "text": "Menurunkan biaya produksi per kaleng sebesar 5%" },
+    { "key": "B", "text": "Meningkatkan kompetensi digital tenaga penjual" },
+    { "key": "C", "text": "Meningkatkan ketepatan waktu pengiriman ke gerai ritel modern" },
+    { "key": "D", "text": "Meningkatkan laba bersih per saham" }
+  ],
+  "answerKey": "C",
+  "distractorRationale": {
+    "A": "Efisiensi biaya berada di perspektif keuangan/proses dan tidak langsung dirasakan pelanggan ritel.",
+    "B": "Kompetensi karyawan adalah penggerak di perspektif pembelajaran dan pertumbuhan, dua tingkat di bawah sasaran pelanggan.",
+    "D": "Laba per saham adalah hasil akhir perspektif keuangan, bukan penggerak loyalitas pelanggan."
+  },
+  "explanation": "Dalam strategy map, sasaran pelanggan digerakkan langsung oleh sasaran proses bisnis internal. Ketepatan pengiriman adalah proses internal yang langsung memengaruhi pengalaman gerai ritel.",
+  "references": ["Balanced scorecard dan strategy map"],
+  "lifecycle": {
+    "status": "LIVE",
+    "contentHash": "9f2c4e1b7a6d3c8e5f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6",
+    "review": {
+      "batchId": "CTH-B01",
+      "reviewerModel": "contoh-reviewer",
+      "reviewedAt": "2026-10-10T09:00:00+07:00",
+      "result": {
+        "reviewKey": "R01",
+        "contentHash": "9f2c4e1b7a6d3c8e5f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6",
+        "independentAnswer": "C",
+        "keyAgreement": "setuju",
+        "dimensionScores": {
+          "keyCorrectness": 5, "singleBestAnswer": 5, "stemClarity": 4,
+          "distractorQuality": 4, "rubricQuality": null, "dataConsistency": null,
+          "alignment": 5, "timeEstimate": 4, "originality": 5, "fairness": 5
+        },
+        "findings": [],
+        "suggestedDifficulty": "sedang",
+        "verdict": "APPROVE",
+        "confidence": "tinggi",
+        "summary": "Kunci tepat dan distraktor mewakili miskonsepsi perspektif BSC."
+      }
+    },
+    "approvedBy": "LMA",
+    "approvedAt": "2026-10-11T10:00:00+07:00",
+    "history": [
+      { "from": "DRAFT", "to": "AI_REVIEWED", "at": "2026-10-10T09:05:00+07:00", "by": "aplikasi" },
+      { "from": "AI_REVIEWED", "to": "APPROVED", "at": "2026-10-11T10:00:00+07:00", "by": "LMA" },
+      { "from": "APPROVED", "to": "LIVE", "at": "2026-10-11T10:05:00+07:00", "by": "LMA" }
+    ]
+  },
+  "authoring": {
+    "createdBy": "AI",
+    "model": "contoh-penyusun",
+    "createdAt": "2026-10-09",
+    "revision": 1,
+    "notes": ""
+  }
+}

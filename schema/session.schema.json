@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session.schema.json",
+  "title": "Sesi ujian tersimpan dan cadangan sesi (SPEC 9 dan 10)",
+  "$comment": "Struktur ini tidak dirinci di SPEC 5; dirancang pada fase A0 (lihat DECISIONS.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "sessionId", "appVersion", "subjectId", "packVersion",
+    "packageId", "packageName", "mode", "config", "status", "startedAt", "deadline",
+    "pauses", "totalPausedMs", "items", "answers", "events"
+  ],
+  "properties": {
+    "schemaVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "sessionId": { "$ref": "common.schema.json#/$defs/sessionId" },
+    "appVersion": { "$ref": "common.schema.json#/$defs/semver" },
+    "subjectId": { "$ref": "common.schema.json#/$defs/subjectId" },
+    "packVersion": { "$ref": "common.schema.json#/$defs/semver" },
+    "packageId": {
+      "$ref": "common.schema.json#/$defs/packageId",
+      "description": "ID paket dari pack (T1, T2, SIM) atau KUSTOM."
+    },
+    "packageName": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+    "mode": { "enum": ["ketat", "latihan"] },
+    "config": { "$ref": "#/$defs/config" },
+    "status": { "enum": ["ACTIVE", "PAUSED", "SUBMITTED"] },
+    "startedAt": { "$ref": "common.schema.json#/$defs/dateTime" },
+    "deadline": {
+      "$ref": "common.schema.json#/$defs/dateTime",
+      "description": "Tenggat aktif. Mode latihan: diperbarui setiap lanjut dari jeda."
+    },
+    "remainingMsAtPause": {
+      "anyOf": [{ "type": "null" }, { "type": "integer", "minimum": 0 }]
+    },
+    "pauses": { "type": "array", "items": { "$ref": "#/$defs/pause" } },
+    "totalPausedMs": { "type": "integer", "minimum": 0 },
+    "items": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/sessionItem" }
+    },
+    "answers": {
+      "type": "object",
+      "propertyNames": { "$ref": "common.schema.json#/$defs/questionId" },
+      "additionalProperties": { "$ref": "#/$defs/answer" }
+    },
+    "events": { "type": "array", "items": { "$ref": "#/$defs/event" } },
+    "submittedAt": { "$ref": "common.schema.json#/$defs/nullableDateTime" },
+    "submittedReason": {
+      "anyOf": [{ "type": "null" }, { "enum": ["MANUAL", "TIME_UP", "EXPIRED_ON_REOPEN"] }]
+    },
+    "grading": { "$ref": "#/$defs/grading" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "SUBMITTED" } }, "required": ["status"] },
+      "then": {
+        "required": ["submittedAt", "submittedReason", "grading"],
+        "properties": {
+          "submittedAt": { "type": "string" },
+          "submittedReason": { "type": "string" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "PAUSED" } }, "required": ["status"] },
+      "then": {
+        "required": ["remainingMsAtPause"],
+        "properties": { "remainingMsAtPause": { "type": "integer" } }
+      }
+    }
+  ],
+  "$defs": {
+    "config": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "durationMinutes", "passingGrade", "shuffleQuestions", "shuffleOptions", "sectionWeights"
+      ],
+      "properties": {
+        "durationMinutes": { "type": "integer", "minimum": 1, "maximum": 600 },
+        "passingGrade": { "type": "number", "minimum": 0, "maximum": 100 },
+        "shuffleQuestions": { "type": "boolean" },
+        "shuffleOptions": { "type": "boolean" },
+        "sectionWeights": {
+          "type": "object",
+          "propertyNames": { "$ref": "common.schema.json#/$defs/questionType" },
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 100 }
+        },
+        "filters": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "difficulty": {
+              "type": "array", "uniqueItems": true,
+              "items": { "$ref": "common.schema.json#/$defs/difficulty" }
+            },
+            "topicIds": {
+              "type": "array", "uniqueItems": true,
+              "items": { "$ref": "common.schema.json#/$defs/topicId" }
+            }
+          }
+        }
+      }
+    },
+    "pause": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pausedAt", "resumedAt", "remainingMs"],
+      "properties": {
+        "pausedAt": { "$ref": "common.schema.json#/$defs/dateTime" },
+        "resumedAt": { "$ref": "common.schema.json#/$defs/nullableDateTime" },
+        "remainingMs": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sessionItem": {
+      "$comment": "Urutan elemen = urutan soal yang ditampilkan.",
+      "type": "object", "additionalProperties": false,
+      "required": ["questionId", "type", "contentHash", "originalMaxScore", "points", "scaleFactor"],
+      "properties": {
+        "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "type": { "$ref": "common.schema.json#/$defs/questionType" },
+        "contentHash": { "$ref": "common.schema.json#/$defs/sha256" },
+        "originalMaxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "points": {
+          "type": "number", "minimum": 0, "multipleOf": 0.01,
+          "description": "Skor maksimum soal di paket ini (skala 100)."
+        },
+        "scaleFactor": {
+          "type": "number", "minimum": 0,
+          "description": "points / originalMaxScore."
+        },
+        "optionOrder": {
+          "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true,
+          "items": { "$ref": "common.schema.json#/$defs/optionKey" },
+          "description": "Kunci asli menurut posisi tampil: optionOrder[0] tampil sebagai A."
+        }
+      },
+      "if": { "properties": { "type": { "const": "mcq" } }, "required": ["type"] },
+      "then": { "required": ["optionOrder"] },
+      "else": { "properties": { "optionOrder": false } }
+    },
+    "answer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["value", "flagged", "updatedAt"],
+      "properties": {
+        "value": {
+          "type": ["null", "string", "number", "object"],
+          "propertyNames": { "$ref": "common.schema.json#/$defs/subQuestionId" },
+          "additionalProperties": { "type": "string" },
+          "description": "mcq: kunci ASLI (A-D); numeric: angka; essay: teks; case: objek {a: teks, b: teks}; null bila kosong."
+        },
+        "flagged": { "type": "boolean" },
+        "updatedAt": { "$ref": "common.schema.json#/$defs/nullableDateTime" }
+      }
+    },
+    "event": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "at"],
+      "properties": {
+        "type": {
+          "enum": [
+            "start", "answer_changed", "flag", "pause", "resume", "warning",
+            "focus_lost", "clock_anomaly", "submit"
+          ]
+        },
+        "at": { "$ref": "common.schema.json#/$defs/dateTime" },
+        "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "detail": { "type": "string" }
+      }
+    },
+    "grading": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "status", "answersChecksum", "autoScores", "aiImports", "essayScores",
+        "manualCorrections", "finalScore", "passed"
+      ],
+      "properties": {
+        "status": { "enum": ["MENUNGGU_PENILAIAN_URAIAN", "PENILAIAN_SEBAGIAN", "FINAL"] },
+        "answersChecksum": {
+          "anyOf": [{ "type": "null" }, { "$ref": "common.schema.json#/$defs/sha256" }]
+        },
+        "autoScores": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["questionId", "rawScore", "scaledScore"],
+            "properties": {
+              "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+              "rawScore": { "type": "number", "minimum": 0 },
+              "scaledScore": { "type": "number", "minimum": 0 }
+            }
+          }
+        },
+        "aiImports": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["importedAt", "result"],
+            "properties": {
+              "importedAt": { "$ref": "common.schema.json#/$defs/dateTime" },
+              "result": { "$ref": "grading-result.schema.json" },
+              "warnings": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "essayScores": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["questionId", "rawScore", "scaledScore", "sumMismatch", "manuallyCorrected"],
+            "properties": {
+              "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+              "rawScore": { "$ref": "common.schema.json#/$defs/score" },
+              "scaledScore": { "type": "number", "minimum": 0 },
+              "sumMismatch": { "type": "boolean" },
+              "manuallyCorrected": { "type": "boolean" }
+            }
+          }
+        },
+        "manualCorrections": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["questionId", "subId", "criterionId", "before", "after", "reason", "at"],
+            "properties": {
+              "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+              "subId": {
+                "anyOf": [{ "type": "null" }, { "$ref": "common.schema.json#/$defs/subQuestionId" }]
+              },
+              "criterionId": { "$ref": "common.schema.json#/$defs/criterionId" },
+              "before": { "$ref": "common.schema.json#/$defs/score" },
+              "after": { "$ref": "common.schema.json#/$defs/score" },
+              "reason": { "$ref": "common.schema.json#/$defs/nonEmptyString" },
+              "at": { "$ref": "common.schema.json#/$defs/dateTime" }
+            }
+          }
+        },
+        "finalScore": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "passed": { "type": ["boolean", "null"] }
+      }
+    }
+  }
+}

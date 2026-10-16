@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grading-export.schema.json",
+  "title": "Paket penilaian yang diekspor aplikasi untuk AI penilai (SPEC 5.5)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gradingVersion", "sessionId", "subjectId", "packVersion", "answersChecksum", "items"],
+  "properties": {
+    "gradingVersion": { "$ref": "common.schema.json#/$defs/schemaVersion" },
+    "sessionId": { "$ref": "common.schema.json#/$defs/sessionId" },
+    "subjectId": { "$ref": "common.schema.json#/$defs/subjectId" },
+    "packVersion": { "$ref": "common.schema.json#/$defs/semver" },
+    "answersChecksum": {
+      "$ref": "common.schema.json#/$defs/sha256",
+      "description": "SHA-256 atas JSON array [questionId, answer] terurut questionId (lihat CONTRACT.md)."
+    },
+    "items": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/$defs/gradingItem" }
+    }
+  },
+  "$defs": {
+    "gradingItem": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "questionId", "type", "stem", "maxScore", "acceptableAlternatives", "answer", "isBlank"
+      ],
+      "properties": {
+        "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "type": { "enum": ["essay", "case"] },
+        "stem": { "$ref": "question.schema.json#/properties/stem" },
+        "caseNarrative": { "$ref": "question.schema.json#/properties/caseNarrative" },
+        "caseData": { "$ref": "question.schema.json#/properties/caseData" },
+        "subQuestions": { "$ref": "question.schema.json#/properties/subQuestions" },
+        "maxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },
+        "rubric": { "$ref": "question.schema.json#/properties/rubric" },
+        "modelAnswer": { "$ref": "question.schema.json#/properties/modelAnswer" },
+        "acceptableAlternatives": { "$ref": "question.schema.json#/properties/acceptableAlternatives" },
+        "answer": {
+          "type": "string",
+          "description": "Teks asli peserta. Kasus: jawaban tiap sub-pertanyaan digabung dengan label [a], [b], ..."
+        },
+        "isBlank": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "essay" } }, "required": ["type"] },
+          "then": {
+            "required": ["rubric", "modelAnswer"],
+            "properties": {
+              "maxScore": { "const": 10 },
+              "caseNarrative": false, "caseData": false, "subQuestions": false
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "case" } }, "required": ["type"] },
+          "then": {
+            "required": ["caseNarrative", "subQuestions"],
+            "properties": { "maxScore": { "const": 20 }, "rubric": false }
+          }
+        }
+      ]
+    }
+  }
+}

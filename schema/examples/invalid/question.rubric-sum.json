@@ -1,0 +1,20 @@
+{
+  "id": "CTH-ESA-901",
+  "type": "essay",
+  "topicIds": ["T02"],
+  "competencyIds": ["K01"],
+  "difficulty": "sedang",
+  "cognitiveLevel": "C4",
+  "estimatedMinutes": 10,
+  "maxScore": 10,
+  "stem": "[CONTOH TIDAK VALID] Jumlah skor rubrik 9, bukan 10 (TS-02).",
+  "modelAnswer": "Jawaban ideal.",
+  "rubric": [
+    { "criterionId": "C1", "description": "Kriteria 1", "maxScore": 3, "full": "Penuh.", "partial": "Sebagian.", "zero": "Nol." },
+    { "criterionId": "C2", "description": "Kriteria 2", "maxScore": 3, "full": "Penuh.", "partial": "Sebagian.", "zero": "Nol." },
+    { "criterionId": "C3", "description": "Kriteria 3", "maxScore": 3, "full": "Penuh.", "partial": "Sebagian.", "zero": "Nol." }
+  ],
+  "acceptableAlternatives": "Tidak ada.",
+  "lifecycle": { "status": "DRAFT", "contentHash": "", "review": null, "approvedBy": null, "approvedAt": null },
+  "authoring": { "createdBy": "manusia", "createdAt": "2026-10-16", "revision": 1 }
+}

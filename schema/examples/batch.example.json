@@ -1,0 +1,89 @@
+{
+  "batchType": "soal",
+  "schemaVersion": "4.1",
+  "subjectId": "contoh",
+  "batchId": "CTH-B02",
+  "items": [
+    {
+      "id": "CTH-MCQ-003",
+      "type": "mcq",
+      "topicIds": ["T04"],
+      "competencyIds": ["K01"],
+      "difficulty": "sulit",
+      "cognitiveLevel": "C4",
+      "estimatedMinutes": 2,
+      "maxScore": 1,
+      "stem": "[CONTOH] Setelah merger, dua tim penjualan PT Pelita Daya (fiktif) menolak sistem insentif baru karena khawatir kehilangan pelanggan lama. Menurut model perubahan Kotter, langkah apa yang paling tepat dilakukan pimpinan lebih dahulu?",
+      "options": [
+        { "key": "A", "text": "Segera memberlakukan sanksi bagi tenaga penjual yang menolak" },
+        { "key": "B", "text": "Membangun rasa urgensi dengan data hilangnya pangsa pasar bila tidak berubah" },
+        { "key": "C", "text": "Merayakan keberhasilan jangka pendek tim yang sudah memakai sistem baru" },
+        { "key": "D", "text": "Melembagakan sistem baru dalam budaya perusahaan" }
+      ],
+      "answerKey": "B",
+      "distractorRationale": {
+        "A": "Paksaan bukan langkah Kotter dan memperkuat resistensi.",
+        "C": "Quick wins adalah langkah lanjutan setelah visi dikomunikasikan.",
+        "D": "Pelembagaan adalah langkah terakhir model Kotter."
+      },
+      "explanation": "Langkah pertama Kotter adalah membangun rasa urgensi agar pihak yang resisten melihat alasan perubahan.",
+      "lifecycle": {
+        "status": "DRAFT",
+        "contentHash": "",
+        "review": null,
+        "approvedBy": null,
+        "approvedAt": null
+      },
+      "authoring": {
+        "createdBy": "AI",
+        "model": "contoh-penyusun",
+        "createdAt": "2026-10-16",
+        "revision": 1,
+        "notes": ""
+      }
+    },
+    {
+      "id": "CTH-MCQ-004",
+      "type": "mcq",
+      "topicIds": ["T02"],
+      "competencyIds": ["K01"],
+      "difficulty": "sedang",
+      "cognitiveLevel": "C3",
+      "estimatedMinutes": 1.5,
+      "maxScore": 1,
+      "stem": "[CONTOH KALIBRASI] Ukuran manakah yang termasuk leading indicator bagi sasaran retensi pelanggan?",
+      "options": [
+        { "key": "A", "text": "Tingkat kepuasan pelanggan hasil survei triwulanan" },
+        { "key": "B", "text": "Pendapatan dari pelanggan lama tahun lalu" },
+        { "key": "C", "text": "Jumlah keluhan yang diselesaikan dalam 24 jam" },
+        { "key": "D", "text": "Laba bersih tahunan" }
+      ],
+      "answerKey": "A",
+      "distractorRationale": {
+        "B": "Pendapatan tahun lalu adalah ukuran lagging.",
+        "C": "Penyelesaian keluhan adalah ukuran proses.",
+        "D": "Laba bersih adalah ukuran lagging keuangan."
+      },
+      "explanation": "Kepuasan pelanggan mendahului keputusan pelanggan untuk bertahan.",
+      "lifecycle": {
+        "status": "CALIBRATION",
+        "contentHash": "",
+        "review": null,
+        "approvedBy": null,
+        "approvedAt": null
+      },
+      "authoring": {
+        "createdBy": "AI",
+        "model": "contoh-penyusun",
+        "createdAt": "2026-10-16",
+        "revision": 1,
+        "notes": ""
+      },
+      "calibration": {
+        "defectDimension": "singleBestAnswer",
+        "defectDescription": "Opsi C juga merupakan leading indicator retensi yang sah, sehingga ada dua jawaban yang dapat dibenarkan.",
+        "expectedVerdict": "REVISE"
+      }
+    }
+  ]
+}

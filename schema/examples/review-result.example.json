@@ -1,0 +1,55 @@
+{
+  "reviewVersion": "4.1",
+  "batchId": "CTH-B02",
+  "reviewerModel": "contoh-reviewer",
+  "reviewedAt": "2026-10-16T14:30:00+07:00",
+  "items": [
+    {
+      "reviewKey": "R01",
+      "contentHash": "5d41402abc4b2a76b9719d911017c5925d41402abc4b2a76b9719d911017c592",
+      "independentAnswer": "A atau C; penyelesaian keluhan cepat juga mendahului retensi.",
+      "keyAgreement": "sebagian",
+      "dimensionScores": {
+        "keyCorrectness": 3, "singleBestAnswer": 2, "stemClarity": 3,
+        "distractorQuality": 3, "rubricQuality": null, "dataConsistency": null,
+        "alignment": 4, "timeEstimate": 4, "originality": 5, "fairness": 4
+      },
+      "findings": [
+        {
+          "severity": "kritis",
+          "dimension": "singleBestAnswer",
+          "issue": "Opsi C (keluhan diselesaikan dalam 24 jam) juga leading indicator retensi.",
+          "suggestedFix": "Ganti opsi C dengan ukuran lagging, mis. jumlah pelanggan yang berhenti tahun lalu."
+        }
+      ],
+      "suggestedDifficulty": "sedang",
+      "verdict": "REVISE",
+      "confidence": "tinggi",
+      "summary": "Dua opsi dapat dibenarkan; perlu revisi opsi C."
+    },
+    {
+      "reviewKey": "R02",
+      "contentHash": "7c211433f02071597741e6ff5a8ea34789abcdef7c211433f02071597741e6ff",
+      "independentAnswer": "B",
+      "keyAgreement": "setuju",
+      "dimensionScores": {
+        "keyCorrectness": 5, "singleBestAnswer": 5, "stemClarity": 4,
+        "distractorQuality": 4, "rubricQuality": null, "dataConsistency": null,
+        "alignment": 5, "timeEstimate": 4, "originality": 5, "fairness": 5
+      },
+      "findings": [
+        {
+          "severity": "minor",
+          "dimension": "stemClarity",
+          "issue": "Frasa \"lebih dahulu\" dapat diperjelas menjadi \"pertama kali\".",
+          "suggestedFix": "Ubah menjadi \"langkah pertama yang paling tepat\"."
+        }
+      ],
+      "suggestedDifficulty": "sedang",
+      "verdict": "APPROVE",
+      "confidence": "tinggi",
+      "summary": "Kunci tepat; distraktor mewakili urutan langkah Kotter yang keliru."
+    }
+  ],
+  "batchNotes": "Kunci tersebar A dan B; cakupan topik T02 dan T04."
+}

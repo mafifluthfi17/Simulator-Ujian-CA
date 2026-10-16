@@ -1,0 +1,27 @@
+{
+  "reviewVersion": "4.1",
+  "batchId": "CTH-B02",
+  "reviewerModel": "contoh-reviewer",
+  "reviewedAt": "2026-10-16T14:30:00+07:00",
+  "items": [
+    {
+      "reviewKey": "R01",
+      "contentHash": "5d41402abc4b2a76b9719d911017c5925d41402abc4b2a76b9719d911017c592",
+      "independentAnswer": "A",
+      "keyAgreement": "setuju",
+      "dimensionScores": {
+        "keyCorrectness": 5, "singleBestAnswer": 5, "stemClarity": 4,
+        "distractorQuality": 4, "rubricQuality": null, "dataConsistency": null,
+        "alignment": 5, "timeEstimate": 4, "originality": 5, "fairness": 5
+      },
+      "findings": [
+        { "severity": "minor", "dimension": "kejelasan bahasa", "issue": "Dimensi bukan nama di dimensionScores.", "suggestedFix": "" }
+      ],
+      "suggestedDifficulty": "sedang",
+      "verdict": "APPROVE",
+      "confidence": "tinggi",
+      "summary": "Contoh tidak valid."
+    }
+  ],
+  "batchNotes": ""
+}
