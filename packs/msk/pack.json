@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "4.1",
+  "subjectId": "msk",
+  "subjectName": "Manajemen Stratejik dan Kepemimpinan",
+  "packVersion": "1.0.0",
+  "language": "id",
+  "passingGrade": 70,
+  "topics": [
+    { "id": "T01", "name": "Konsep manajemen stratejik dan arah perusahaan: visi, misi, tujuan, strategi" },
+    { "id": "T02", "name": "Evaluasi lingkungan eksternal perusahaan" },
+    { "id": "T03", "name": "Evaluasi sumber daya, kapabilitas, dan daya saing" },
+    { "id": "T04", "name": "Strategi kompetitif generik dan penguatan posisi kompetitif" },
+    { "id": "T05", "name": "Perencanaan bisnis dan strategi fungsional" },
+    { "id": "T06", "name": "Strategi bersaing di pasar internasional" },
+    { "id": "T07", "name": "Strategi korporat, diversifikasi, dan multibisnis" },
+    { "id": "T08", "name": "Etika, tanggung jawab sosial perusahaan, dan keberlanjutan" },
+    { "id": "T09", "name": "Implementasi strategi: kapabilitas organisasi, SDM, struktur, dan operasi internal" },
+    { "id": "T10", "name": "Budaya perusahaan dan kepemimpinan stratejik" },
+    { "id": "T11", "name": "Perubahan stratejik dan organisasi" },
+    { "id": "T12", "name": "Strategi untuk informasi, analisis data, dan strategi informasi" }
+  ],
+  "competencies": [
+    { "id": "K01", "name": "Mengidentifikasi struktur dan proses bisnis dalam implementasi strategi serta mengevaluasi akibat tujuan bisnis, posisi pasar, dan sasarannya (CPMK1)" },
+    { "id": "K02", "name": "Menganalisis lingkungan eksternal dan internal untuk mengidentifikasi tantangan dan peluang bisnis korporat (CPMK2)" },
+    { "id": "K03", "name": "Mengevaluasi akibat strategi yang dipilih dan menyarankan strategi untuk memenuhi tujuan bisnis korporat (CPMK3)" },
+    { "id": "K04", "name": "Mengevaluasi strategi dan keputusan bisnis serta implementasinya, memantau kinerja stratejik, mengelola risiko bisnis, dan menentukan tata kelola korporat (CPMK4)" },
+    { "id": "K05", "name": "Memahami konsep kepemimpinan dan perannya dalam formulasi dan implementasi strategi (CPMK5)" },
+    { "id": "K06", "name": "Mengidentifikasi dan menjelaskan isu etis dalam implementasi strategi (CPMK6)" }
+  ],
+  "packages": [
+    {
+      "id": "T1",
+      "name": "Training 1 — Latihan Dasar",
+      "durationMinutes": 60,
+      "strictMode": false,
+      "sections": [
+        { "type": "mcq", "count": 10, "weight": 20 },
+        { "type": "essay", "count": 4, "weight": 40 },
+        { "type": "case", "count": 2, "caseSize": "mini", "weight": 40 }
+      ],
+      "suggestedMinutes": { "mcq": 15, "essay": 20, "case": 25 },
+      "difficultyTarget": { "levels": ["mudah", "sedang"], "minScoreShare": 0.6 },
+      "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.25 }
+    },
+    {
+      "id": "T2",
+      "name": "Training 2 — Latihan Lanjutan",
+      "durationMinutes": 120,
+      "strictMode": false,
+      "sections": [
+        { "type": "mcq", "count": 10, "weight": 20 },
+        { "type": "essay", "count": 4, "weight": 40 },
+        { "type": "case", "count": 2, "caseSize": "komprehensif", "weight": 40 }
+      ],
+      "suggestedMinutes": { "mcq": 20, "essay": 40, "case": 60 },
+      "difficultyTarget": { "levels": ["sedang", "sulit"], "minScoreShare": 0.5 },
+      "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.25 }
+    },
+    {
+      "id": "SIM",
+      "name": "Simulasi Ujian",
+      "durationMinutes": 180,
+      "strictMode": true,
+      "sections": [
+        { "type": "mcq", "count": 17, "weight": 17 },
+        { "type": "essay", "count": 5, "weight": 50 },
+        { "type": "case", "count": 2, "caseSize": "komprehensif", "weight": 33, "itemScores": [16, 17] }
+      ],
+      "suggestedMinutes": { "mcq": 25, "essay": 90, "case": 65 },
+      "difficultyTarget": { "levels": ["sulit", "sangat_sulit"], "minScoreShare": 0.7 },
+      "coverage": { "minTopics": 9, "maxTopicScoreShare": 0.25 }
+    }
+  ],
+  "questions": [],
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-10-17", "notes": "Kerangka pack MSK: 12 topik dari 16 bahan kajian RPS PPAk Untar 2026-2027, 6 kompetensi dari CPMK, blueprint T1/T2/SIM sesuai SPEC 6. Belum ada soal." }
+  ]
+}

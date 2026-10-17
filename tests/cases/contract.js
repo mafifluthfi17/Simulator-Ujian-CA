@@ -116,11 +116,32 @@ export default {
       },
     },
     {
-      name: 'packs/demo/pack.js dan packs/index.json sinkron dengan pack.json',
+      name: 'packs/*/pack.js dan packs/index.json sinkron dengan pack.json',
       run: async () => {
-        const pack = await loadJson('packs/demo/pack.json');
-        assert.equal(await loadText('packs/demo/pack.js'), packScript(pack), 'pack.js usang; jalankan node tools/build-pack.mjs');
-        assert.equal(await loadText('packs/index.json'), packIndexJson(['demo']));
+        const ids = ['demo', 'msk'];
+        assert.equal(await loadText('packs/index.json'), packIndexJson(ids), 'packs/index.json usang; jalankan node tools/build-pack.mjs');
+        for (const id of ids) {
+          const pack = await loadJson(`packs/${id}/pack.json`);
+          assert.equal(await loadText(`packs/${id}/pack.js`), packScript(pack), `packs/${id}/pack.js usang; jalankan node tools/build-pack.mjs`);
+        }
+      },
+    },
+    {
+      name: 'kerangka pack MSK: valid, 12 topik, 6 kompetensi, blueprint SPEC 6, belum ada soal',
+      run: async () => {
+        const pack = await loadJson('packs/msk/pack.json');
+        const result = validatePack(pack);
+        assert.ok(result.ok, result.errors && result.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
+        assert.equal(pack.topics.length, 12);
+        assert.equal(pack.competencies.length, 6);
+        assert.deepEqual(pack.packages.map((p) => [p.id, p.durationMinutes, p.sections.map((s) => `${s.type}${s.count}:${s.weight}`).join(' ')]), [
+          ['T1', 60, 'mcq10:20 essay4:40 case2:40'],
+          ['T2', 120, 'mcq10:20 essay4:40 case2:40'],
+          ['SIM', 180, 'mcq17:17 essay5:50 case2:33'],
+        ]);
+        assert.equal(pack.questions.length, 0, 'soal MSK tidak ditulis oleh Claude Code');
+        const built = buildFromPackage(pack, pack.packages[0], createRng(1));
+        assert.ok(!built.ok && built.problems.includes('butuh 10 PG, tersedia 0 yang sesuai'), built.problems && built.problems.join('; '));
       },
     },
     {

@@ -114,3 +114,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 |---|---|---|---|
 | D-76 | Label layar Hasil tanpa istilah teknis: "Unduh berkas data", "Halaman web", "Berkas data sesi"; Panduan tidak lagi menyebut "pack.json". Pesan error impor tetap menyebut path field (mis. `$.scores[0]…`) karena diwajibkan SPEC 10. | SPEC 3 dan CLAUDE.md: antarmuka peserta tanpa istilah teknis. | TEKNIS |
 | D-77 | Prompt C: `batchId` wajib disalin persis dari paket review (C-5). | Aplikasi mencocokkan hasil review dengan paket lewat batchId (D-59). | TEKNIS |
+
+## Pack MSK
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-78 | Kerangka `packs/msk/pack.json` 1.0.0 dari RPS PPAk Untar 2026-2027: 16 bahan kajian dikelompokkan menjadi 12 topik (T01 = bahan 1+4, T04 = 5+7, T09 = 11+12, T10 = 13+14, lainnya satu-satu); 6 CPMK menjadi kompetensi K01-K06; blueprint T1/T2/SIM persis SPEC 6; `questions` kosong. Pemetaan dan catatan cakupan K04 (kinerja, risiko, tata kelola) di `docs/msk_taksonomi.md`. | SPEC 7 menetapkan 12 topik; kode topik akan dipakai semua soal sehingga perlu ditetapkan sebelum batch pertama. | USULAN |
