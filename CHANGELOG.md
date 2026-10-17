@@ -74,3 +74,30 @@ Hanya bagian format data yang diubah.
 
 ### Tindakan di luar repositori
 - Unggah ulang Prompt C ke Project ChatGPT.
+
+## 2026-10-17 — Prompt B v4.2 (disetujui pemilik)
+Isi `prompts/prompt_penyusun_soal.md` diganti seluruhnya dengan v4.2 yang
+disusun dan disetujui pemilik. Kontrak data tidak berubah (`schemaVersion` tetap
+"4.1"); keselarasan dengan `schema/` diperiksa (B-10).
+
+### prompts/prompt_penyusun_soal.md (Prompt B)
+- Bagian baru "Pemeriksaan formulir": prefiks ID vs tipe, batas jumlah
+  (mcq/numeric 10, essay 5, case 2), sebaran topik/kesulitan, ukuran kasus,
+  batch/ID yang sudah dipakai; bila bermasalah AI bertanya dan tidak
+  mengeluarkan JSON.
+- topicIds/competencyIds hanya dari taksonomi pack (atau pemetaan formulir).
+- cognitiveLevel C3-C6 (C2 hanya bila diminta formulir).
+- Sebaran kunci PG per batch: maks ceil(jumlah soal / 4) per huruf.
+- Aturan numerik: value, unit, tolerance absolute/relative, satuan dan
+  pembulatan di stem, langkah perhitungan di explanation.
+- Rubrik esai menjumlah 10; rubrik kasus per sub dan total 20 ditegaskan;
+  skor ditulis dengan titik desimal.
+- Konsistensi caseData (jumlah sel = jumlah kolom; total/rasio/persentase).
+- Bentuk baku field yang tidak dirinci CONTRACT.md (options,
+  distractorRationale, acceptableAlternatives sebagai SATU teks).
+- Revisi: batchId sama dengan batch asal, createdAt tetap, revision +1,
+  ringkasan perubahan di authoring.notes.
+
+### Tindakan di luar repositori
+- Ganti instruksi Project Claude (penyusun) dengan Prompt B v4.2; unggah
+  `schema/CONTRACT.md` dan `schema/examples/batch.example.json`.

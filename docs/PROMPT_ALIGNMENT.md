@@ -42,3 +42,12 @@ data), jadi bentuk keluarannya harus lengkap di dalam prompt itu sendiri.
 | C-5 | Reviewer | `batchId` | Format output menulis `"batchId": "..."` tanpa perintah menyalin; aplikasi mencocokkan batchId dengan paket review yang diekspor (`<SUBJEK>-RVnnn`) | `"batchId": "salin persis dari input"` dan disebut di pemeriksaan akhir |
 | B-9 | Penyusun | seluruh format batch | Sesuai `batch.schema.json` + aturan konsistensi 1-6 | — |
 | D-6 | Penilai | seluruh format hasil | Sesuai `grading-result.schema.json` dan validasi impor SPEC 10 | — |
+
+## Prompt B v4.2 (2026-10-17, disetujui pemilik)
+
+| No | Prompt | Field / bagian | Pemeriksaan terhadap skema | Hasil |
+|---|---|---|---|---|
+| B-10 | Penyusun | `acceptableAlternatives` | `question.schema.json`: string tidak kosong | Bentuk baku v4.2 = satu teks; selaras |
+| B-11 | Penyusun | ID, tipe, skala, rubrik, kasus | Pola ID, maxScore per tipe, aturan konsistensi 1-6 | Selaras |
+| B-12 | Penyusun | `lifecycle`, `authoring`, format batch | `batch.schema.json` (DRAFT/CALIBRATION, contentHash "", revision >= 1) | Selaras |
+| B-13 | Penyusun | Contoh `distractorRationale = {"B","C","D"}` | Konsistensi: tepat tiga opsi selain kunci | Contoh hanya berlaku bila kunci A; bila AI keliru, impor menolak dengan pesan ber-ID. Tidak diubah (isi disetujui pemilik apa adanya) |
