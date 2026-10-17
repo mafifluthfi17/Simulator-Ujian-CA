@@ -3,6 +3,8 @@
 
 const SUM_EPSILON = 1e-9;
 const OPTION_KEYS = ['A', 'B', 'C', 'D'];
+// Status yang hanya dicapai setelah aplikasi menghitung contentHash.
+const HASHED_STATUSES = ['AI_REVIEWED', 'APPROVED', 'LIVE'];
 
 export function checkConsistency(kind, data) {
   switch (kind) {
@@ -50,6 +52,9 @@ export function checkQuestion(q, path) {
   }
 
   const status = q.lifecycle && q.lifecycle.status;
+  if (HASHED_STATUSES.includes(status) && !q.lifecycle.contentHash) {
+    add('lifecycle.contentHash', `wajib diisi aplikasi untuk soal berstatus ${status}`);
+  }
   if (status === 'CALIBRATION' && !q.calibration) add('calibration', 'wajib diisi untuk soal berstatus CALIBRATION');
   if (q.calibration && status !== undefined && status !== 'CALIBRATION') {
     add('calibration', `hanya boleh ada pada soal berstatus CALIBRATION (status: ${status})`);

@@ -47,16 +47,20 @@ docs/                      SPEC, ARCHITECTURE, DECISIONS, PROMPT_ALIGNMENT,
 | Modul | Tanggung jawab | Fase |
 |---|---|---|
 | jsonschema.js | Validator subset JSON Schema 2020-12, pesan error ber-path | A0 |
-| consistency.js | Aturan yang tak dapat diungkap skema: jumlah rubrik, opsi A-D, referensi topik, bobot paket, changelog | A0 |
-| schemas.js | Skema tertanam sebagai modul JS (dibangun dari schema/ agar jalan di file://) | A1 |
-| pack-loader.js | Muat pack (fetch, packs/*/pack.js, atau impor FileReader), validasi, migrasi | A1 |
+| consistency.js | Aturan yang tak dapat diungkap skema: jumlah rubrik, opsi A-D, referensi topik, bobot paket, changelog, contentHash wajib untuk LIVE | A0/A1 |
+| schemas.js | Skema tertanam (dibuat `tools/build-schemas.mjs`) agar validasi jalan tanpa fetch | A1 |
+| contract.js | `validateDocument`/`loadDocument`: migrasi + skema + konsistensi | A1 |
+| pack-loader.js | Muat pack (fetch pack.json, cadangan packs/*/pack.js, pack impor), validasi | A1 |
 | migrate.js | Migrasi/penolakan data dengan schemaVersion berbeda; tidak menghapus data lama | A1 |
-| storage.js | localStorage ber-namespace `caSim:<subjectId>:...`, QuotaExceededError, cadangan | A1 |
-| blueprint.js | Bangun paket T1/T2/SIM/Kustom dari soal LIVE; cek kekurangan; acak soal dan opsi | A1 |
-| scoring.js | Largest remainder (0,01), faktor skala, skor mcq/numeric, nilai akhir, LULUS/TIDAK LULUS | A1/A2 |
-| session.js | Status sesi, jawaban, flag, log event, kumpul, EXPIRED_ON_REOPEN | A1 |
-| timer.js | Sisa waktu dari deadline, jeda/lanjut, deteksi clock_anomaly, peringatan 15/5/1 | A1 |
-| hash.js | Serialisasi kanonik + SHA-256 (contentHash, answersChecksum) via crypto.subtle | A1 |
+| storage.js | localStorage ber-namespace `caSim:<subjectId>:...`, StorageFullError, backend memori untuk tes | A1 |
+| session-store.js | Simpan/muat sesi, satu sesi aktif, riwayat, cadangan sesi | A1 |
+| blueprint.js | Bangun paket T1/T2/SIM/Kustom dari soal LIVE; largest remainder; aturan kesulitan/cakupan; validasi Kustom | A1 |
+| scoring.js | Skor mcq/numeric × faktor skala, status penilaian, LULUS/TIDAK LULUS | A1/A2 |
+| session.js | Buat sesi, jawaban, flag, jeda/lanjut, kumpul, EXPIRED_ON_REOPEN, log event | A1 |
+| timer.js | Peringatan 15/5/1 menit, deteksi clock_anomaly (ClockWatch) | A1 |
+| hash.js | Serialisasi kanonik + SHA-256 (crypto.subtle, cadangan JS murni) | A1 |
+| random.js | RNG ber-seed (tes) dan pengacakan | A1 |
+| version.js | APP_VERSION, SCHEMA_VERSION | A1 |
 | grading-io.js | Ekspor paket penilaian, validasi impor hasil AI (SPEC 10), koreksi manual | A2 |
 | report.js | Model data laporan: rekap, analisis kompetensi/topik, remedial | A2 |
 | bank.js | Mesin status DRAFT→…→LIVE, lint, impor batch, publikasi, versi pack | A3 |
@@ -73,7 +77,9 @@ render memakai `js/ui/dom.js`.
 ### js/ui/
 | Modul | Layar | Fase |
 |---|---|---|
-| dom.js | Pembuat elemen aman (textContent), dialog konfirmasi | A1 |
+| app.js | Pengendali: muat pack dan sesi, pemulihan, pindah layar, simpan, unduh | A1 |
+| layout.js | Kepala layar, menu ⋯, disclaimer | A1 |
+| dom.js | Pembuat elemen aman (textContent), dialog konfirmasi, toast | A1 |
 | home.js | Beranda: pemilih mata ujian, 4 kartu paket, Lanjutkan Ujian, menu ⋯ | A1 |
 | custom.js | Pengaturan Mode Kustom dan validasi bobot | A1 |
 | exam-room.js | Ruang ujian gaya SEB: bilah atas, daftar soal, mode fokus, autosave | A1 |
