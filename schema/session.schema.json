@@ -110,11 +110,12 @@
       }
     },
     "sessionItem": {
-      "$comment": "Urutan elemen = urutan soal yang ditampilkan.",
+      "$comment": "Urutan elemen = urutan soal yang ditampilkan. question = salinan isi soal saat sesi dimulai (DECISIONS D-31).",
       "type": "object", "additionalProperties": false,
-      "required": ["questionId", "type", "contentHash", "originalMaxScore", "points", "scaleFactor"],
+      "required": ["questionId", "type", "contentHash", "originalMaxScore", "points", "scaleFactor", "question"],
       "properties": {
         "questionId": { "$ref": "common.schema.json#/$defs/questionId" },
+        "question": { "$ref": "question.schema.json" },
         "type": { "$ref": "common.schema.json#/$defs/questionType" },
         "contentHash": { "$ref": "common.schema.json#/$defs/sha256" },
         "originalMaxScore": { "$ref": "common.schema.json#/$defs/positiveScore" },

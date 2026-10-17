@@ -15,7 +15,9 @@ import { isPass } from '../../js/core/scoring.js';
 import { getType } from '../../js/types/registry.js';
 import { originalKeyForDisplay, displayLetterForKey } from '../../js/types/mcq.js';
 import { Store, StorageFullError, memoryBackend, keys } from '../../js/core/storage.js';
-import { listSessions, loadSession, saveSession, planBackupImport, makeBackup } from '../../js/core/session-store.js';
+import {
+  formatErrors, listSessions, loadSession, makeBackup, planBackupImport, releaseActive, saveSession,
+} from '../../js/core/session-store.js';
 import { validateDocument } from '../../js/core/contract.js';
 import { makeSyntheticPack } from '../fixtures/make-pack.js';
 
@@ -167,9 +169,9 @@ export default {
         const session = demoSession(pack);
         const qid = session.items[0].questionId;
         setAnswer(session, qid, session.items[0].type === 'mcq' ? 'A' : 'x', T0 + MIN);
-        const notYet = recoverOnOpen(session, T0 + 29 * MIN, byId(pack), 70);
+        const notYet = recoverOnOpen(session, T0 + 29 * MIN);
         assert.ok(!notYet.expired);
-        const r = recoverOnOpen(session, T0 + 31 * MIN, byId(pack), 70);
+        const r = recoverOnOpen(session, T0 + 31 * MIN);
         assert.ok(r.expired);
         assert.equal(session.status, 'SUBMITTED');
         assert.equal(session.submittedReason, 'EXPIRED_ON_REOPEN');
@@ -192,7 +194,7 @@ export default {
         resume(session, t + 2 * MIN);
         assert.equal(remainingMs(session, t + 2 * MIN), before);
         assert.equal(session.totalPausedMs, 2 * MIN);
-        assert.ok(!recoverOnOpen(session, T0 + 31 * MIN, byId(pack), 70).expired, 'deadline harus bergeser 2 menit');
+        assert.ok(!recoverOnOpen(session, T0 + 31 * MIN).expired, 'deadline harus bergeser 2 menit');
         assert.ok(validateDocument('session', session).length === 0);
       },
     },
@@ -203,7 +205,7 @@ export default {
         await assert.rejects(() => pause(demoSession(pack, { mode: 'ketat' }), T0), /mode latihan/);
         const s = demoSession(pack);
         pause(s, T0 + MIN);
-        assert.ok(!recoverOnOpen(s, T0 + 999 * MIN, byId(pack), 70).expired);
+        assert.ok(!recoverOnOpen(s, T0 + 999 * MIN).expired);
       },
     },
     {
@@ -266,7 +268,7 @@ export default {
           if (item.type === 'mcq') setAnswer(session, item.questionId, q.answerKey, T0 + MIN);
           if (item.type === 'numeric') setAnswer(session, item.questionId, 47.8, T0 + MIN);
         }
-        submit(session, 'MANUAL', T0 + 5 * MIN, byId(pack), 70);
+        submit(session, 'MANUAL', T0 + 5 * MIN);
         const g = session.grading;
         assert.equal(g.status, 'MENUNGGU_PENILAIAN_URAIAN');
         assert.equal(g.finalScore, null);
@@ -277,7 +279,7 @@ export default {
         const built = buildCustom(mcqOnly, { durationMinutes: 30, counts: { mcq: 3 }, weights: { mcq: 100 }, difficulty: [], topicIds: [] }, rng);
         const s2 = createSession({ pack: mcqOnly, packageId: 'KUSTOM', packageName: 'Kustom', mode: 'latihan', config: { durationMinutes: 30, passingGrade: 70, shuffleQuestions: false, shuffleOptions: false, sectionWeights: { mcq: 100 } }, items: built.items, rng, now: T0 });
         s2.items.slice(0, 2).forEach((it) => setAnswer(s2, it.questionId, byId(mcqOnly).get(it.questionId).answerKey, T0));
-        submit(s2, 'MANUAL', T0 + MIN, byId(mcqOnly), 70);
+        submit(s2, 'MANUAL', T0 + MIN);
         assert.equal(s2.grading.status, 'FINAL');
         assert.equal(s2.grading.finalScore, 66.67);
         assert.equal(s2.grading.passed, false);
@@ -350,6 +352,13 @@ export default {
         assert.ok(/versi "4\.0"/.test(r.errors[0].message) && /tidak dimuat/.test(r.errors[0].message), r.errors[0].message);
         assert.ok(store.getJson(keys.session('demo', old.sessionId)), 'data lama harus tetap ada');
         assert.equal(listSessions(store, 'demo').failures.length, 1);
+        // Sesi aktif yang tidak terbaca dapat dilepas tanpa menghapus datanya.
+        store.setJson(keys.active('demo'), old.sessionId);
+        releaseActive(store, 'demo');
+        assert.equal(store.getJson(keys.active('demo')), null);
+        assert.ok(store.getJson(keys.session('demo', old.sessionId)), 'data sesi harus tetap ada setelah dilepas');
+        assert.equal(makeBackup(store, 'demo', T0).sessions.length, 1, 'sesi yang dilepas tetap ikut cadangan');
+        assert.ok(formatErrors([{ path: '$.items[0].question', message: 'field wajib tidak ada' }])[0].startsWith('$.items[0].question'));
         const plan = planBackupImport(store, 'demo', { backupVersion: '4.0', subjectId: 'demo', sessions: [old] });
         assert.equal(plan.rejected.length, 1);
       },
@@ -362,7 +371,7 @@ export default {
         const a = demoSession(pack, { seed: 1 });
         saveSession(store, a);
         assert.equal(store.getJson(keys.active('demo')), a.sessionId);
-        submit(a, 'MANUAL', T0 + MIN, byId(pack), 70);
+        submit(a, 'MANUAL', T0 + MIN);
         saveSession(store, a);
         assert.equal(store.getJson(keys.active('demo')), null);
         const backup = makeBackup(store, 'demo', T0);
@@ -375,11 +384,33 @@ export default {
       },
     },
     {
+      name: 'D-31: sesi menyimpan salinan soal; penilaian tidak bergantung pada pack',
+      run: async () => {
+        const pack = await loadJson('packs/demo/pack.json');
+        const s = demoSession(pack);
+        for (const item of s.items) {
+          const original = byId(pack).get(item.questionId);
+          assert.equal(item.question.id, item.questionId);
+          assert.equal(item.question.stem, original.stem);
+          assert.equal(item.question.lifecycle.review, null);
+          assert.ok(!('history' in item.question.lifecycle));
+          if (item.type === 'mcq') setAnswer(s, item.questionId, original.answerKey, T0 + MIN);
+        }
+        // Pack berubah setelah sesi dimulai: soal dihapus dan kunci diubah.
+        pack.questions.forEach((q) => { q.stem = 'DIUBAH'; if (q.answerKey) q.answerKey = 'D'; });
+        pack.questions.length = 0;
+        assert.ok(s.items.every((it) => it.question.stem !== 'DIUBAH'));
+        submit(s, 'MANUAL', T0 + 2 * MIN);
+        assert.equal(s.grading.autoScores.filter((a) => a.rawScore === 1).length, 2, 'kedua PG tetap dinilai benar dari salinan');
+        assert.equal(validateDocument('session', s).length, 0);
+      },
+    },
+    {
       name: 'sesi terkunci menolak perubahan',
       run: async () => {
         const pack = await loadJson('packs/demo/pack.json');
         const s = demoSession(pack);
-        submit(s, 'MANUAL', T0, byId(pack), 70);
+        submit(s, 'MANUAL', T0);
         await assert.rejects(() => toggleFlag(s, s.items[0].questionId, T0), /terkunci/);
         assert.ok(new SessionLockedError().message.includes('terkunci'));
       },

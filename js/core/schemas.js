@@ -2044,7 +2044,7 @@ export const SCHEMAS = {
         }
       },
       "sessionItem": {
-        "$comment": "Urutan elemen = urutan soal yang ditampilkan.",
+        "$comment": "Urutan elemen = urutan soal yang ditampilkan. question = salinan isi soal saat sesi dimulai (DECISIONS D-31).",
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -2053,11 +2053,15 @@ export const SCHEMAS = {
           "contentHash",
           "originalMaxScore",
           "points",
-          "scaleFactor"
+          "scaleFactor",
+          "question"
         ],
         "properties": {
           "questionId": {
             "$ref": "common.schema.json#/$defs/questionId"
+          },
+          "question": {
+            "$ref": "question.schema.json"
           },
           "type": {
             "$ref": "common.schema.json#/$defs/questionType"

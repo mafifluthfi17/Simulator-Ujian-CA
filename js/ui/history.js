@@ -2,7 +2,7 @@
 
 import { h } from './dom.js';
 import { disclaimer, header } from './layout.js';
-import { listSessions } from '../core/session-store.js';
+import { formatErrors, listSessions } from '../core/session-store.js';
 import { isOpen } from '../core/session.js';
 import { formatDateTime, formatScore } from '../core/format.js';
 
@@ -24,7 +24,7 @@ export function renderHistory(app) {
     }, h('strong', { text: `${s.packageName} · ${formatDateTime(s.startedAt)}` }), h('span', { class: 'hint', text: status }));
   })));
   for (const f of failures) {
-    el.append(h('p', { class: 'notice', text: `Sesi ${f.sessionId} tidak dapat dimuat: ${f.errors.map((e) => e.message).join(' ')}` }));
+    el.append(h('p', { class: 'notice', text: `Sesi ${f.sessionId} tidak dapat dimuat (${formatErrors(f.errors, 3).join('; ')}). Datanya tetap tersimpan dan ikut ekspor cadangan.` }));
   }
   el.append(disclaimer());
   return { el };

@@ -12,64 +12,451 @@
     "passingGrade": 70,
     "shuffleQuestions": true,
     "shuffleOptions": true,
-    "sectionWeights": { "mcq": 30, "numeric": 20, "essay": 30, "case": 20 },
-    "filters": { "difficulty": ["sedang", "sulit"], "topicIds": [] }
+    "sectionWeights": {
+      "mcq": 30,
+      "numeric": 20,
+      "essay": 30,
+      "case": 20
+    },
+    "filters": {
+      "difficulty": [
+        "sedang",
+        "sulit"
+      ],
+      "topicIds": []
+    }
   },
   "status": "SUBMITTED",
   "startedAt": "2026-10-16T08:00:00+07:00",
   "deadline": "2026-10-16T09:02:00+07:00",
   "remainingMsAtPause": null,
   "pauses": [
-    { "pausedAt": "2026-10-16T08:20:00+07:00", "resumedAt": "2026-10-16T08:22:00+07:00", "remainingMs": 2400000 }
+    {
+      "pausedAt": "2026-10-16T08:20:00+07:00",
+      "resumedAt": "2026-10-16T08:22:00+07:00",
+      "remainingMs": 2400000
+    }
   ],
   "totalPausedMs": 120000,
   "items": [
     {
-      "questionId": "CTH-MCQ-001", "type": "mcq",
+      "questionId": "CTH-MCQ-001",
+      "type": "mcq",
       "contentHash": "9f2c4e1b7a6d3c8e5f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6",
-      "originalMaxScore": 1, "points": 30, "scaleFactor": 30,
-      "optionOrder": ["B", "D", "C", "A"]
+      "originalMaxScore": 1,
+      "points": 30,
+      "scaleFactor": 30,
+      "optionOrder": [
+        "B",
+        "D",
+        "C",
+        "A"
+      ],
+      "question": {
+        "id": "CTH-MCQ-001",
+        "type": "mcq",
+        "topicIds": [
+          "T02"
+        ],
+        "competencyIds": [
+          "K01"
+        ],
+        "difficulty": "sedang",
+        "cognitiveLevel": "C4",
+        "estimatedMinutes": 1.5,
+        "maxScore": 1,
+        "stem": "[CONTOH] PT Rasa Laut Lestari (fiktif), produsen ikan kaleng, menetapkan sasaran \"meningkatkan loyalitas pelanggan ritel modern\". Dalam strategy map balanced scorecard, sasaran manakah yang paling tepat ditempatkan sebagai penggerak langsung sasaran tersebut?",
+        "options": [
+          {
+            "key": "A",
+            "text": "Menurunkan biaya produksi per kaleng sebesar 5%"
+          },
+          {
+            "key": "B",
+            "text": "Meningkatkan kompetensi digital tenaga penjual"
+          },
+          {
+            "key": "C",
+            "text": "Meningkatkan ketepatan waktu pengiriman ke gerai ritel modern"
+          },
+          {
+            "key": "D",
+            "text": "Meningkatkan laba bersih per saham"
+          }
+        ],
+        "answerKey": "C",
+        "distractorRationale": {
+          "A": "Efisiensi biaya berada di perspektif keuangan/proses dan tidak langsung dirasakan pelanggan ritel.",
+          "B": "Kompetensi karyawan adalah penggerak di perspektif pembelajaran dan pertumbuhan, dua tingkat di bawah sasaran pelanggan.",
+          "D": "Laba per saham adalah hasil akhir perspektif keuangan, bukan penggerak loyalitas pelanggan."
+        },
+        "explanation": "Dalam strategy map, sasaran pelanggan digerakkan langsung oleh sasaran proses bisnis internal. Ketepatan pengiriman adalah proses internal yang langsung memengaruhi pengalaman gerai ritel.",
+        "references": [
+          "Balanced scorecard dan strategy map"
+        ],
+        "lifecycle": {
+          "status": "LIVE",
+          "contentHash": "9f2c4e1b7a6d3c8e5f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6",
+          "review": null,
+          "approvedBy": "LMA",
+          "approvedAt": "2026-10-11T10:00:00+07:00"
+        },
+        "authoring": {
+          "createdBy": "AI",
+          "model": "contoh-penyusun",
+          "createdAt": "2026-10-09",
+          "revision": 1,
+          "notes": ""
+        }
+      }
     },
     {
-      "questionId": "CTH-NUM-001", "type": "numeric",
+      "questionId": "CTH-NUM-001",
+      "type": "numeric",
       "contentHash": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
-      "originalMaxScore": 1, "points": 20, "scaleFactor": 20
+      "originalMaxScore": 1,
+      "points": 20,
+      "scaleFactor": 20,
+      "question": {
+        "id": "CTH-NUM-001",
+        "type": "numeric",
+        "topicIds": [
+          "T03"
+        ],
+        "competencyIds": [
+          "K02"
+        ],
+        "difficulty": "sedang",
+        "cognitiveLevel": "C3",
+        "estimatedMinutes": 2,
+        "maxScore": 1,
+        "stem": "[CONTOH] Divisi Logistik PT Arunika Niaga (fiktif) mencatat laba operasi setelah pajak Rp180 miliar, modal yang diinvestasikan Rp1.200 miliar, dan WACC 11%. Berapa Economic Value Added (EVA) divisi tersebut dalam Rp miliar?",
+        "numericAnswer": {
+          "value": 48,
+          "unit": "Rp miliar",
+          "tolerance": {
+            "type": "relative",
+            "value": 0.01
+          }
+        },
+        "explanation": "EVA = NOPAT - (WACC x modal diinvestasikan) = 180 - (11% x 1.200) = 180 - 132 = 48.",
+        "references": [
+          "Economic Value Added"
+        ],
+        "lifecycle": {
+          "status": "LIVE",
+          "contentHash": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+          "review": null,
+          "approvedBy": "LMA",
+          "approvedAt": "2026-10-11T10:00:00+07:00"
+        },
+        "authoring": {
+          "createdBy": "manusia",
+          "createdAt": "2026-10-09T08:00:00+07:00",
+          "revision": 1,
+          "notes": "Tipe numeric tidak dipakai pack MSK; contoh untuk pengujian mesin."
+        }
+      }
     },
     {
-      "questionId": "CTH-ESA-001", "type": "essay",
+      "questionId": "CTH-ESA-001",
+      "type": "essay",
       "contentHash": "1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809",
-      "originalMaxScore": 10, "points": 30, "scaleFactor": 3
+      "originalMaxScore": 10,
+      "points": 30,
+      "scaleFactor": 3,
+      "question": {
+        "id": "CTH-ESA-001",
+        "type": "essay",
+        "topicIds": [
+          "T02"
+        ],
+        "competencyIds": [
+          "K01"
+        ],
+        "difficulty": "sulit",
+        "cognitiveLevel": "C5",
+        "estimatedMinutes": 15,
+        "maxScore": 10,
+        "stem": "[CONTOH] Direksi PT Bumi Hijau Agro (fiktif) mengukur kinerja hanya dengan laba bersih dan pertumbuhan pendapatan. Evaluasi kelemahan pendekatan tersebut dan jelaskan bagaimana balanced scorecard dapat memperbaikinya. Sertakan satu contoh ukuran untuk setiap perspektif.",
+        "modelAnswer": "Ukuran keuangan bersifat lagging, berorientasi jangka pendek, dan tidak menjelaskan penyebab kinerja. Balanced scorecard menyeimbangkan ukuran lagging dan leading melalui empat perspektif yang terhubung sebab-akibat: keuangan (ROCE), pelanggan (tingkat retensi distributor), proses internal (rendemen pengolahan), serta pembelajaran dan pertumbuhan (jam pelatihan agronomi per karyawan). Strategy map memperlihatkan bagaimana perbaikan kapabilitas mendorong proses, pelanggan, lalu hasil keuangan.",
+        "rubric": [
+          {
+            "criterionId": "C1",
+            "description": "Mengevaluasi kelemahan ukuran keuangan semata",
+            "maxScore": 3,
+            "full": "Menjelaskan minimal tiga kelemahan (lagging, jangka pendek, tidak menjelaskan penyebab) dengan kaitan ke kasus.",
+            "partial": "Menjelaskan satu-dua kelemahan atau tanpa kaitan ke kasus.",
+            "zero": "Tidak ada evaluasi atau evaluasi keliru."
+          },
+          {
+            "criterionId": "C2",
+            "description": "Menjelaskan logika balanced scorecard",
+            "maxScore": 3,
+            "full": "Menjelaskan empat perspektif, keseimbangan leading-lagging, dan hubungan sebab-akibat.",
+            "partial": "Menyebut empat perspektif tanpa hubungan sebab-akibat.",
+            "zero": "Penjelasan tidak ada atau keliru."
+          },
+          {
+            "criterionId": "C3",
+            "description": "Contoh ukuran per perspektif",
+            "maxScore": 2,
+            "full": "Empat ukuran relevan dengan industri agribisnis, satu per perspektif.",
+            "partial": "Dua-tiga ukuran relevan, atau ukuran generik.",
+            "zero": "Tidak ada ukuran yang relevan."
+          },
+          {
+            "criterionId": "C4",
+            "description": "Kualitas argumentasi",
+            "maxScore": 2,
+            "full": "Argumen runtut dan menyimpulkan rekomendasi yang jelas.",
+            "partial": "Argumen ada tetapi kurang runtut.",
+            "zero": "Tidak ada argumen yang dapat dinilai."
+          }
+        ],
+        "acceptableAlternatives": "Ukuran lain yang relevan diterima (mis. NPS distributor, produktivitas lahan, indeks keterlibatan karyawan). Rujukan ke performance prism atau EVA sebagai pelengkap tetap dapat nilai penuh bila dikaitkan dengan kelemahan yang dievaluasi.",
+        "references": [
+          "Balanced scorecard",
+          "Ukuran kinerja leading dan lagging"
+        ],
+        "lifecycle": {
+          "status": "LIVE",
+          "contentHash": "1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809",
+          "review": null,
+          "approvedBy": "LMA",
+          "approvedAt": "2026-10-11T10:00:00+07:00"
+        },
+        "authoring": {
+          "createdBy": "AI",
+          "model": "contoh-penyusun",
+          "createdAt": "2026-10-09",
+          "revision": 2,
+          "notes": ""
+        }
+      }
     },
     {
-      "questionId": "CTH-KAS-001", "type": "case",
+      "questionId": "CTH-KAS-001",
+      "type": "case",
       "contentHash": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
-      "originalMaxScore": 20, "points": 20, "scaleFactor": 1
+      "originalMaxScore": 20,
+      "points": 20,
+      "scaleFactor": 1,
+      "question": {
+        "id": "CTH-KAS-001",
+        "type": "case",
+        "caseSize": "mini",
+        "topicIds": [
+          "T01",
+          "T03",
+          "T04"
+        ],
+        "competencyIds": [
+          "K01",
+          "K02"
+        ],
+        "difficulty": "sulit",
+        "cognitiveLevel": "C5",
+        "estimatedMinutes": 25,
+        "maxScore": 20,
+        "stem": "[CONTOH] Bacalah kasus PT Sinar Nusantara Logistik (fiktif) lalu jawab sub-pertanyaan berikut.",
+        "caseNarrative": "PT Sinar Nusantara Logistik (SNL) melayani tiga segmen: pengiriman B2B, pengiriman ritel, dan pergudangan. Pesaing digital menekan tarif pengiriman ritel. Direksi mempertimbangkan dua pilihan: (1) memperbesar armada ritel untuk merebut pangsa, atau (2) mengalihkan investasi ke pergudangan terpadu untuk klien B2B. Anggaran investasi tahun depan Rp300 miliar.",
+        "caseData": [
+          {
+            "title": "Kinerja segmen 2025 (Rp miliar)",
+            "columns": [
+              "Segmen",
+              "Pendapatan",
+              "Laba operasi",
+              "Margin operasi (%)"
+            ],
+            "rows": [
+              [
+                "Pengiriman B2B",
+                820,
+                98.4,
+                12
+              ],
+              [
+                "Pengiriman ritel",
+                430,
+                21.5,
+                5
+              ],
+              [
+                "Pergudangan",
+                250,
+                37.5,
+                15
+              ],
+              [
+                "Total",
+                1500,
+                157.4,
+                10.49
+              ]
+            ]
+          }
+        ],
+        "subQuestions": [
+          {
+            "id": "a",
+            "prompt": "Analisis posisi ketiga segmen berdasarkan data kinerja dan kondisi persaingan.",
+            "maxScore": 8,
+            "modelAnswer": "Pergudangan memiliki margin tertinggi (15%) dan sinergi dengan B2B; B2B menyumbang laba terbesar (Rp98,4 miliar, margin 12%); ritel bermargin terendah (5%) dan tertekan pesaing digital sehingga daya tariknya rendah.",
+            "rubric": [
+              {
+                "criterionId": "C1",
+                "description": "Membaca data margin dan kontribusi laba dengan benar",
+                "maxScore": 3,
+                "full": "Margin dan kontribusi ketiga segmen dihitung/dikutip benar.",
+                "partial": "Sebagian data benar.",
+                "zero": "Data keliru atau tidak dipakai."
+              },
+              {
+                "criterionId": "C2",
+                "description": "Mengaitkan data dengan kondisi persaingan",
+                "maxScore": 3,
+                "full": "Tekanan pesaing digital dikaitkan dengan margin ritel dan prospek segmen lain.",
+                "partial": "Kaitan disebut tanpa analisis.",
+                "zero": "Tidak ada kaitan."
+              },
+              {
+                "criterionId": "C3",
+                "description": "Kesimpulan posisi segmen",
+                "maxScore": 2,
+                "full": "Kesimpulan jelas untuk ketiga segmen.",
+                "partial": "Kesimpulan untuk sebagian segmen.",
+                "zero": "Tidak ada kesimpulan."
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "prompt": "Evaluasi dua pilihan investasi dan berikan rekomendasi beserta risikonya.",
+            "maxScore": 12,
+            "modelAnswer": "Pilihan (2) lebih tepat: memperkuat keunggulan pada segmen bermargin tinggi, membangun switching cost bagi klien B2B, dan menghindari perang tarif. Risiko: konsentrasi pada klien besar dan utilisasi gudang; mitigasi melalui kontrak jangka panjang dan investasi bertahap.",
+            "rubric": [
+              {
+                "criterionId": "C1",
+                "description": "Evaluasi pilihan (1)",
+                "maxScore": 4,
+                "full": "Menilai daya tarik, posisi kompetitif, dan dampak margin pilihan (1).",
+                "partial": "Evaluasi sebagian.",
+                "zero": "Tidak dievaluasi."
+              },
+              {
+                "criterionId": "C2",
+                "description": "Evaluasi pilihan (2)",
+                "maxScore": 4,
+                "full": "Menilai sinergi B2B-gudang, keunggulan bersaing, dan dampak keuangan pilihan (2).",
+                "partial": "Evaluasi sebagian.",
+                "zero": "Tidak dievaluasi."
+              },
+              {
+                "criterionId": "C3",
+                "description": "Rekomendasi",
+                "maxScore": 2,
+                "full": "Rekomendasi tegas dan konsisten dengan analisis.",
+                "partial": "Rekomendasi ada tetapi kurang didukung analisis.",
+                "zero": "Tidak ada rekomendasi."
+              },
+              {
+                "criterionId": "C4",
+                "description": "Risiko dan mitigasi",
+                "maxScore": 2,
+                "full": "Minimal dua risiko relevan dengan mitigasi.",
+                "partial": "Risiko tanpa mitigasi.",
+                "zero": "Tidak ada risiko."
+              }
+            ]
+          }
+        ],
+        "acceptableAlternatives": "Rekomendasi pilihan (1) tetap dapat nilai penuh pada C3 bila didukung argumen kuat (mis. skala ekonomi dan diferensiasi layanan) dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.",
+        "references": [
+          "Analisis portofolio bisnis",
+          "Keunggulan bersaing Porter"
+        ],
+        "lifecycle": {
+          "status": "LIVE",
+          "contentHash": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
+          "review": null,
+          "approvedBy": "LMA",
+          "approvedAt": "2026-10-11T10:00:00+07:00"
+        },
+        "authoring": {
+          "createdBy": "AI",
+          "model": "contoh-penyusun",
+          "createdAt": "2026-10-09",
+          "revision": 1,
+          "notes": ""
+        }
+      }
     }
   ],
   "answers": {
-    "CTH-MCQ-001": { "value": "C", "flagged": false, "updatedAt": "2026-10-16T08:03:10+07:00" },
-    "CTH-NUM-001": { "value": 47.8, "flagged": true, "updatedAt": "2026-10-16T08:06:45+07:00" },
+    "CTH-MCQ-001": {
+      "value": "C",
+      "flagged": false,
+      "updatedAt": "2026-10-16T08:03:10+07:00"
+    },
+    "CTH-NUM-001": {
+      "value": 47.8,
+      "flagged": true,
+      "updatedAt": "2026-10-16T08:06:45+07:00"
+    },
     "CTH-ESA-001": {
       "value": "Laba bersih hanya menunjukkan hasil masa lalu dan mendorong keputusan jangka pendek. BSC menambah perspektif pelanggan, proses internal, dan pembelajaran. Contoh: ROCE, retensi distributor, rendemen, jam pelatihan.",
-      "flagged": false, "updatedAt": "2026-10-16T08:35:00+07:00"
+      "flagged": false,
+      "updatedAt": "2026-10-16T08:35:00+07:00"
     },
     "CTH-KAS-001": {
       "value": {
         "a": "B2B menyumbang laba terbesar, pergudangan paling efisien dengan margin 15%, ritel hanya 5% dan diserang pesaing digital.",
         "b": "Armada ritel berisiko perang tarif. Pergudangan sinergi dengan B2B. Saya merekomendasikan pergudangan. Risikonya utilisasi gudang rendah."
       },
-      "flagged": false, "updatedAt": "2026-10-16T08:58:30+07:00"
+      "flagged": false,
+      "updatedAt": "2026-10-16T08:58:30+07:00"
     }
   },
   "events": [
-    { "type": "start", "at": "2026-10-16T08:00:00+07:00" },
-    { "type": "answer_changed", "at": "2026-10-16T08:03:10+07:00", "questionId": "CTH-MCQ-001" },
-    { "type": "flag", "at": "2026-10-16T08:06:50+07:00", "questionId": "CTH-NUM-001" },
-    { "type": "focus_lost", "at": "2026-10-16T08:10:00+07:00", "durationMs": 15000 },
-    { "type": "pause", "at": "2026-10-16T08:20:00+07:00" },
-    { "type": "resume", "at": "2026-10-16T08:22:00+07:00" },
-    { "type": "warning", "at": "2026-10-16T08:47:00+07:00", "detail": "15 menit" },
-    { "type": "submit", "at": "2026-10-16T08:59:00+07:00", "detail": "MANUAL" }
+    {
+      "type": "start",
+      "at": "2026-10-16T08:00:00+07:00"
+    },
+    {
+      "type": "answer_changed",
+      "at": "2026-10-16T08:03:10+07:00",
+      "questionId": "CTH-MCQ-001"
+    },
+    {
+      "type": "flag",
+      "at": "2026-10-16T08:06:50+07:00",
+      "questionId": "CTH-NUM-001"
+    },
+    {
+      "type": "focus_lost",
+      "at": "2026-10-16T08:10:00+07:00",
+      "durationMs": 15000
+    },
+    {
+      "type": "pause",
+      "at": "2026-10-16T08:20:00+07:00"
+    },
+    {
+      "type": "resume",
+      "at": "2026-10-16T08:22:00+07:00"
+    },
+    {
+      "type": "warning",
+      "at": "2026-10-16T08:47:00+07:00",
+      "detail": "15 menit"
+    },
+    {
+      "type": "submit",
+      "at": "2026-10-16T08:59:00+07:00",
+      "detail": "MANUAL"
+    }
   ],
   "submittedAt": "2026-10-16T08:59:00+07:00",
   "submittedReason": "MANUAL",
@@ -77,8 +464,16 @@
     "status": "FINAL",
     "answersChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "autoScores": [
-      { "questionId": "CTH-MCQ-001", "rawScore": 1, "scaledScore": 30 },
-      { "questionId": "CTH-NUM-001", "rawScore": 1, "scaledScore": 20 }
+      {
+        "questionId": "CTH-MCQ-001",
+        "rawScore": 1,
+        "scaledScore": 30
+      },
+      {
+        "questionId": "CTH-NUM-001",
+        "rawScore": 1,
+        "scaledScore": 20
+      }
     ],
     "aiImports": [
       {
@@ -89,44 +484,114 @@
           "sessionId": "contoh-20261016-a1b2c3d4",
           "answersChecksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "graderModel": "contoh-penilai",
-          "evaluatedQuestionIds": ["CTH-ESA-001", "CTH-KAS-001"],
+          "evaluatedQuestionIds": [
+            "CTH-ESA-001",
+            "CTH-KAS-001"
+          ],
           "scores": [
             {
-              "questionId": "CTH-ESA-001", "maxScore": 10, "awardedScore": 7.5,
+              "questionId": "CTH-ESA-001",
+              "maxScore": 10,
+              "awardedScore": 7.5,
               "criteriaScores": [
-                { "criterionId": "C1", "maxScore": 3, "awardedScore": 2.5, "justification": "Kelemahan jangka pendek disebut." },
-                { "criterionId": "C2", "maxScore": 3, "awardedScore": 2, "justification": "Tanpa sebab-akibat." },
-                { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "Ukuran relevan." },
-                { "criterionId": "C4", "maxScore": 2, "awardedScore": 1.5, "justification": "Tanpa rekomendasi." }
+                {
+                  "criterionId": "C1",
+                  "maxScore": 3,
+                  "awardedScore": 2.5,
+                  "justification": "Kelemahan jangka pendek disebut."
+                },
+                {
+                  "criterionId": "C2",
+                  "maxScore": 3,
+                  "awardedScore": 2,
+                  "justification": "Tanpa sebab-akibat."
+                },
+                {
+                  "criterionId": "C3",
+                  "maxScore": 2,
+                  "awardedScore": 1.5,
+                  "justification": "Ukuran relevan."
+                },
+                {
+                  "criterionId": "C4",
+                  "maxScore": 2,
+                  "awardedScore": 1.5,
+                  "justification": "Tanpa rekomendasi."
+                }
               ],
               "subQuestionScores": [],
-              "strengths": "Konsep lagging tepat.", "weaknesses": "Sebab-akibat kurang.",
-              "improvement": "Gunakan strategy map.", "confidence": "tinggi"
+              "strengths": "Konsep lagging tepat.",
+              "weaknesses": "Sebab-akibat kurang.",
+              "improvement": "Gunakan strategy map.",
+              "confidence": "tinggi"
             },
             {
-              "questionId": "CTH-KAS-001", "maxScore": 20, "awardedScore": 14,
+              "questionId": "CTH-KAS-001",
+              "maxScore": 20,
+              "awardedScore": 14,
               "criteriaScores": [],
               "subQuestionScores": [
                 {
-                  "subId": "a", "maxScore": 8, "awardedScore": 6,
+                  "subId": "a",
+                  "maxScore": 8,
+                  "awardedScore": 6,
                   "criteriaScores": [
-                    { "criterionId": "C1", "maxScore": 3, "awardedScore": 2.5, "justification": "Data sebagian." },
-                    { "criterionId": "C2", "maxScore": 3, "awardedScore": 2, "justification": "Analisis terbatas." },
-                    { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "Kesimpulan tersirat." }
+                    {
+                      "criterionId": "C1",
+                      "maxScore": 3,
+                      "awardedScore": 2.5,
+                      "justification": "Data sebagian."
+                    },
+                    {
+                      "criterionId": "C2",
+                      "maxScore": 3,
+                      "awardedScore": 2,
+                      "justification": "Analisis terbatas."
+                    },
+                    {
+                      "criterionId": "C3",
+                      "maxScore": 2,
+                      "awardedScore": 1.5,
+                      "justification": "Kesimpulan tersirat."
+                    }
                   ]
                 },
                 {
-                  "subId": "b", "maxScore": 12, "awardedScore": 8,
+                  "subId": "b",
+                  "maxScore": 12,
+                  "awardedScore": 8,
                   "criteriaScores": [
-                    { "criterionId": "C1", "maxScore": 4, "awardedScore": 3, "justification": "Perang tarif disebut." },
-                    { "criterionId": "C2", "maxScore": 4, "awardedScore": 2.5, "justification": "Sinergi tanpa angka." },
-                    { "criterionId": "C3", "maxScore": 2, "awardedScore": 1.5, "justification": "Rekomendasi tegas." },
-                    { "criterionId": "C4", "maxScore": 2, "awardedScore": 1, "justification": "Tanpa mitigasi." }
+                    {
+                      "criterionId": "C1",
+                      "maxScore": 4,
+                      "awardedScore": 3,
+                      "justification": "Perang tarif disebut."
+                    },
+                    {
+                      "criterionId": "C2",
+                      "maxScore": 4,
+                      "awardedScore": 2.5,
+                      "justification": "Sinergi tanpa angka."
+                    },
+                    {
+                      "criterionId": "C3",
+                      "maxScore": 2,
+                      "awardedScore": 1.5,
+                      "justification": "Rekomendasi tegas."
+                    },
+                    {
+                      "criterionId": "C4",
+                      "maxScore": 2,
+                      "awardedScore": 1,
+                      "justification": "Tanpa mitigasi."
+                    }
                   ]
                 }
               ],
-              "strengths": "Rekomendasi tegas.", "weaknesses": "Kurang kuantitatif.",
-              "improvement": "Hitung dampak investasi.", "confidence": "sedang"
+              "strengths": "Rekomendasi tegas.",
+              "weaknesses": "Kurang kuantitatif.",
+              "improvement": "Hitung dampak investasi.",
+              "confidence": "sedang"
             }
           ],
           "reviewFlags": [],
@@ -135,8 +600,20 @@
       }
     ],
     "essayScores": [
-      { "questionId": "CTH-ESA-001", "rawScore": 7.5, "scaledScore": 22.5, "sumMismatch": false, "manuallyCorrected": false },
-      { "questionId": "CTH-KAS-001", "rawScore": 14, "scaledScore": 14, "sumMismatch": false, "manuallyCorrected": false }
+      {
+        "questionId": "CTH-ESA-001",
+        "rawScore": 7.5,
+        "scaledScore": 22.5,
+        "sumMismatch": false,
+        "manuallyCorrected": false
+      },
+      {
+        "questionId": "CTH-KAS-001",
+        "rawScore": 14,
+        "scaledScore": 14,
+        "sumMismatch": false,
+        "manuallyCorrected": false
+      }
     ],
     "manualCorrections": [],
     "finalScore": 86.5,

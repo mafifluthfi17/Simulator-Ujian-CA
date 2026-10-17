@@ -3,7 +3,7 @@
 import { clear, confirmDialog, alertDialog, toast } from './dom.js';
 import { Store, StorageFullError, keys, memoryBackend } from '../core/storage.js';
 import { loadAllPacks } from '../core/pack-loader.js';
-import { loadActiveSession, saveSession } from '../core/session-store.js';
+import { formatErrors, loadActiveSession, releaseActive, saveSession } from '../core/session-store.js';
 import { createSession, recoverOnOpen, submit } from '../core/session.js';
 import { createRng, randomSeed } from '../core/random.js';
 import { orderItems } from '../core/blueprint.js';
@@ -71,7 +71,7 @@ export class App {
         this.problems.push({ source: `sesi aktif ${active.sessionId}`, errors: active.errors });
         continue;
       }
-      const { session, expired } = recoverOnOpen(active.session, Date.now(), this.questionsById(pack.subjectId), pack.passingGrade);
+      const { session, expired } = recoverOnOpen(active.session, Date.now());
       if (expired) {
         this.persist(session);
         if (pack.subjectId === this.subjectId) shown = session;
@@ -88,11 +88,6 @@ export class App {
   packFor(subjectId) {
     const entry = this.packs.find((p) => p.pack.subjectId === subjectId);
     return entry ? entry.pack : null;
-  }
-
-  questionsById(subjectId = this.subjectId) {
-    const pack = this.packFor(subjectId);
-    return new Map(pack ? pack.questions.map((q) => [q.id, q]) : []);
   }
 
   selectSubject(subjectId) {
@@ -150,14 +145,19 @@ export class App {
     }
     const active = loadActiveSession(this.store, pack.subjectId);
     if (active && !active.ok) {
-      await alertDialog('Sesi aktif tidak dapat dimuat', [
-        'Ada sesi aktif yang tidak dapat dibaca aplikasi versi ini, sehingga sesi baru belum dapat dimulai.',
-        ...active.errors.map((e) => e.message),
-        'Buka Pengaturan untuk mengekspor cadangan data.',
-      ]);
-      return;
+      const release = await confirmDialog({
+        title: 'Sesi aktif tidak dapat dimuat',
+        body: [
+          'Ada sesi aktif yang tidak dapat dibaca aplikasi versi ini:',
+          ...formatErrors(active.errors, 5),
+          'Lepaskan sesi tersebut untuk memulai ujian baru. Datanya tidak dihapus: tetap tercatat di Riwayat dan ikut dalam ekspor cadangan di Pengaturan.',
+        ],
+        confirmLabel: 'Lepaskan & mulai baru',
+      });
+      if (!release) return;
+      releaseActive(this.store, pack.subjectId);
     }
-    if (active) {
+    if (active && active.ok) {
       const ok = await confirmDialog({
         title: 'Masih ada ujian yang belum selesai',
         body: [`Paket "${active.session.packageName}" masih berjalan.`, 'Memulai ujian baru akan MENGUMPULKAN ujian tersebut apa adanya.'],
@@ -165,7 +165,7 @@ export class App {
         danger: true,
       });
       if (!ok) return;
-      submit(active.session, 'MANUAL', Date.now(), this.questionsById(), pack.passingGrade);
+      submit(active.session, 'MANUAL', Date.now());
       if (!this.persist(active.session)) return;
     }
     const items = orderItems(built.items, config.shuffleQuestions, rng);

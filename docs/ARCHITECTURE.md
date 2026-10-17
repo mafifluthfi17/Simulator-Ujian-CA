@@ -105,7 +105,7 @@ packs/<id>/pack.json ──(fetch | pack.js | impor file)──► pack-loader
    Pack di memori ──► blueprint: pilih soal LIVE, acak, hitung points/scaleFactor
         │
         ▼
-   Sesi (session.schema.json) disimpan SEBELUM timer berjalan
+   Sesi (session.schema.json, + salinan isi soal per item, D-31) disimpan SEBELUM timer berjalan
         │  jawaban (autosave ≤1 dtk), event log, jeda, focus_lost
         ▼
    KUMPULKAN / waktu habis / EXPIRED_ON_REOPEN

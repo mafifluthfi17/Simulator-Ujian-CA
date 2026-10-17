@@ -24,6 +24,15 @@ export function makeSessionId(subjectId, now, rng) {
   return `${subjectId}-${stamp}-${randomHex(8, rng)}`;
 }
 
+// Salinan isi soal untuk sesi (D-31): laporan tetap lengkap walau pack berubah.
+// Riwayat review dan transisi status tidak disalin agar sesi tetap ringkas.
+export function snapshotQuestion(question) {
+  const copy = JSON.parse(JSON.stringify(question));
+  copy.lifecycle.review = null;
+  delete copy.lifecycle.history;
+  return copy;
+}
+
 // items: [{ question, points }] dalam urutan tampil.
 // config: { durationMinutes, passingGrade, shuffleQuestions, shuffleOptions, sectionWeights, filters? }
 export function createSession({ pack, packageId, packageName, mode, config, items, rng, now }) {
@@ -51,6 +60,7 @@ export function createSession({ pack, packageId, packageName, mode, config, item
         originalMaxScore: question.maxScore,
         points,
         scaleFactor: points / question.maxScore,
+        question: snapshotQuestion(question),
       };
       if (question.type === 'mcq') {
         item.optionOrder = config.shuffleOptions ? shuffle(OPTION_KEYS, rng) : OPTION_KEYS.slice();
@@ -130,8 +140,8 @@ export function resume(session, now) {
   logEvent(session, 'resume', now);
 }
 
-// reason: MANUAL | TIME_UP | EXPIRED_ON_REOPEN
-export function submit(session, reason, now, questionsById, passingGrade) {
+// reason: MANUAL | TIME_UP | EXPIRED_ON_REOPEN. Dinilai dari salinan soal di sesi.
+export function submit(session, reason, now) {
   assertOpen(session);
   if (session.status === 'PAUSED') {
     const last = session.pauses[session.pauses.length - 1];
@@ -143,15 +153,15 @@ export function submit(session, reason, now, questionsById, passingGrade) {
   session.submittedAt = iso(now);
   session.submittedReason = reason;
   logEvent(session, 'submit', now, { detail: reason });
-  session.grading = scoreSubmission(session, questionsById, passingGrade);
+  session.grading = scoreSubmission(session);
   return session;
 }
 
 // Dipanggil saat aplikasi dibuka: sesi aktif yang tenggatnya lewat dikunci
 // dan dikumpulkan (SPEC 9, TS-06). Sesi yang dijeda tidak kedaluwarsa.
-export function recoverOnOpen(session, now, questionsById, passingGrade) {
+export function recoverOnOpen(session, now) {
   if (session.status === 'ACTIVE' && now >= Date.parse(session.deadline)) {
-    submit(session, 'EXPIRED_ON_REOPEN', now, questionsById, passingGrade);
+    submit(session, 'EXPIRED_ON_REOPEN', now);
     return { session, expired: true };
   }
   return { session, expired: false };

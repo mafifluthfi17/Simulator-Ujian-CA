@@ -33,6 +33,18 @@ export function loadActiveSession(store, subjectId) {
   return { sessionId: id, ...loadSession(store, subjectId, id) };
 }
 
+// Melepas penanda sesi aktif yang tidak dapat dimuat agar sesi baru dapat dimulai.
+// Data sesinya TIDAK dihapus: tetap di riwayat (sebagai gagal dimuat) dan ikut cadangan.
+export function releaseActive(store, subjectId) {
+  store.remove(keys.active(subjectId));
+}
+
+export function formatErrors(errors, limit = 10) {
+  const lines = errors.slice(0, limit).map((e) => (e.path && e.path !== '$' ? `${e.path}: ${e.message}` : e.message));
+  if (errors.length > limit) lines.push(`… dan ${errors.length - limit} masalah lain`);
+  return lines;
+}
+
 // Semua sesi mata ujian, terbaru dulu. Sesi yang gagal dimuat ikut dilaporkan.
 export function listSessions(store, subjectId) {
   const ids = store.getJson(keys.sessionList(subjectId)) || [];

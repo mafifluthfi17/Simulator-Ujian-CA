@@ -3,7 +3,7 @@
 
 import { h } from './dom.js';
 import { disclaimer, header } from './layout.js';
-import { loadActiveSession } from '../core/session-store.js';
+import { formatErrors, loadActiveSession } from '../core/session-store.js';
 import { remainingMs } from '../core/session.js';
 import { buildFromPackage, packageQuestionCount } from '../core/blueprint.js';
 import { formatDuration, formatMinutes } from '../core/format.js';
@@ -43,7 +43,7 @@ export function renderHome(app) {
       h('p', { text: `${s.packageName} · ${status} · sisa waktu ${formatDuration(remainingMs(s, Date.now()))}` }),
       h('button', { type: 'button', class: 'btn btn-primary', onclick: () => app.show('exam', { session: s }) }, 'LANJUTKAN')));
   } else if (active && !active.ok) {
-    el.append(h('p', { class: 'notice', text: `Sesi aktif tidak dapat dimuat: ${active.errors.map((e) => e.message).join(' ')}` }));
+    el.append(h('p', { class: 'notice', text: `Sesi aktif tidak dapat dimuat (${formatErrors(active.errors, 3).join('; ')}). Ketuk MULAI untuk melepasnya dan memulai ujian baru; datanya tetap tersimpan.` }));
   }
 
   const pack = app.pack;

@@ -10,13 +10,13 @@ export function needsAiGrading(session) {
   return session.items.some((it) => AI_GRADED.has(it.type));
 }
 
-export function scoreSubmission(session, questionsById, passingGrade) {
+export function scoreSubmission(session) {
+  const passingGrade = session.config.passingGrade;
   const autoScores = [];
   for (const item of session.items) {
     const type = getType(item.type);
     if (!type.autoScore) continue;
-    const question = questionsById.get(item.questionId);
-    const raw = question ? type.autoScore(question, session.answers[item.questionId].value) : 0;
+    const raw = type.autoScore(item.question, session.answers[item.questionId].value);
     autoScores.push({ questionId: item.questionId, rawScore: raw, scaledScore: roundScore(raw * item.scaleFactor) });
   }
   const pending = needsAiGrading(session);

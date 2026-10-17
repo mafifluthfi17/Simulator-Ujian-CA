@@ -16,8 +16,6 @@ const FOCUS_LOST_MIN_MS = 1000;
 const LOW_TIME_MS = 5 * 60000;
 
 export function renderExam(app, { session }) {
-  const pack = app.packFor(session.subjectId);
-  const questions = app.questionsById(session.subjectId);
   const firstOpen = session.items.findIndex((it) => !isItemAnswered(it, session.answers[it.questionId].value));
   let index = firstOpen >= 0 ? firstOpen : 0;
   let saveTimer = null;
@@ -58,7 +56,6 @@ export function renderExam(app, { session }) {
 
   function renderQuestion() {
     const item = session.items[index];
-    const question = questions.get(item.questionId);
     const answer = session.answers[item.questionId];
     const type = getType(item.type);
     const flagBtn = h('button', {
@@ -74,18 +71,14 @@ export function renderExam(app, { session }) {
       h('span', { class: 'q-no', text: `Soal ${index + 1} dari ${session.items.length}` }),
       h('span', { class: 'q-meta', text: `${type.label} · bobot ${formatScore(item.points)}` }),
       flagBtn);
-    if (!question) {
-      host.replaceChildren(h('p', { class: 'notice', text: `Soal ${item.questionId} tidak ada di pack versi ini. Lanjutkan ke soal lain.` }));
-    } else {
-      host.replaceChildren(type.render(question, {
-        item,
-        value: answer.value,
-        readOnly: false,
-        onChange: (value) => {
-          if (setAnswer(session, item.questionId, value, Date.now())) scheduleSave();
-        },
-      }));
-    }
+    host.replaceChildren(type.render(item.question, {
+      item,
+      value: answer.value,
+      readOnly: false,
+      onChange: (value) => {
+        if (setAnswer(session, item.questionId, value, Date.now())) scheduleSave();
+      },
+    }));
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === session.items.length - 1;
   }
@@ -146,7 +139,7 @@ export function renderExam(app, { session }) {
     if (finished) return;
     finished = true;
     endAway();
-    submit(session, reason, Date.now(), questions, pack.passingGrade);
+    submit(session, reason, Date.now());
     dirty = true;
     flushSave();
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
