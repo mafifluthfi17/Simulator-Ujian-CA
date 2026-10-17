@@ -34,3 +34,11 @@ data), jadi bentuk keluarannya harus lengkap di dalam prompt itu sendiri.
 | No | Prompt | Field / bagian | Isi prompt sebelumnya | Kontrak (skema) | Dampak | Perubahan (disetujui pemilik) |
 |---|---|---|---|---|---|---|
 | B-8 | Penyusun | Rujukan kriteria pada soal kasus | Tidak diatur | CONTRACT.md aturan konsistensi 6: rujukan C1, C2, ... di `acceptableAlternatives`/`modelAnswer` kasus wajib berlabel bagian, mis. `(b) C3` | Batch dengan "C3" saja ditolak saat impor (A3) | Tambah satu butir di "Aturan wajib" |
+
+## Pemeriksaan Fase A5 (2026-10-17)
+
+| No | Prompt | Field / bagian | Temuan | Perubahan |
+|---|---|---|---|---|
+| C-5 | Reviewer | `batchId` | Format output menulis `"batchId": "..."` tanpa perintah menyalin; aplikasi mencocokkan batchId dengan paket review yang diekspor (`<SUBJEK>-RVnnn`) | `"batchId": "salin persis dari input"` dan disebut di pemeriksaan akhir |
+| B-9 | Penyusun | seluruh format batch | Sesuai `batch.schema.json` + aturan konsistensi 1-6 | — |
+| D-6 | Penilai | seluruh format hasil | Sesuai `grading-result.schema.json` dan validasi impor SPEC 10 | — |

@@ -3,6 +3,10 @@
 Aplikasi latihan ujian CA (PWA statis, tanpa backend). Simulator belajar, bukan
 ujian resmi, dan tidak berafiliasi dengan IAI. Spesifikasi: `docs/SPEC.md`.
 
+Panduan: `docs/panduan_penggunaan.md` (pengguna), `docs/panduan_menambah_mata_ujian.md`
+(mata ujian baru), `docs/seb/panduan_seb.md` (Safe Exam Browser). Hasil uji:
+`docs/TEST_REPORT.md`.
+
 ## Menjalankan di komputer (pengembangan)
 
 Aplikasi memakai modul JavaScript, sehingga harus dibuka lewat server lokal

@@ -53,7 +53,7 @@ pengetahuan Project.
 
 ## Format output
 HANYA satu objek JSON valid, tanpa teks lain dan tanpa blok kode:
-{"reviewVersion": "4.1", "batchId": "...", "reviewerModel": "...",
+{"reviewVersion": "4.1", "batchId": "salin persis dari input", "reviewerModel": "...",
  "reviewedAt": "ISO 8601",
  "items": [{"reviewKey": "R01", "contentHash": "...",
    "independentAnswer": "...", "keyAgreement": "setuju | tidak_setuju | sebagian",
@@ -73,5 +73,5 @@ rubricQuality, dataConsistency, alignment, timeEstimate, originality,
 fairness). findings boleh berupa array kosong.
 
 ## Pemeriksaan sebelum mengirim
-Jumlah items sama dengan input; reviewKey dan contentHash disalin persis;
+Jumlah items sama dengan input; batchId, reviewKey, dan contentHash disalin persis;
 verdict konsisten dengan temuan; JSON dapat di-parse.

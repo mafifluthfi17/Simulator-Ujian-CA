@@ -59,3 +59,18 @@ Disetujui pemilik. Hanya bagian format data yang diubah.
 ### Tindakan di luar repositori
 - Unggah ulang `schema/CONTRACT.md` ke Project Claude dan ChatGPT, serta Prompt B
   ke Project Claude.
+
+## 2026-10-17 — Pemeriksaan keselarasan prompt (Fase A5)
+Hanya bagian format data yang diubah.
+
+### prompts/prompt_reviewer_soal.md (Prompt C)
+- Format output: `"batchId": "salin persis dari input"`, dan pemeriksaan sebelum
+  mengirim menyebut batchId (C-5). Aplikasi menolak hasil review yang batchId-nya
+  tidak cocok dengan paket review (D-59).
+
+### Tanpa perubahan
+- Prompt B (batch) dan Prompt D (hasil penilaian) diperiksa terhadap
+  `batch.schema.json` dan `grading-result.schema.json`; tidak ada selisih.
+
+### Tindakan di luar repositori
+- Unggah ulang Prompt C ke Project ChatGPT.

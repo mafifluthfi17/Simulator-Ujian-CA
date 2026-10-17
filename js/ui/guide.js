@@ -20,7 +20,7 @@ const BANK_STEPS = [
   'Impor Batch: tempel keluaran AI penyusun. Soal yang lolos pemeriksaan masuk sebagai Draf.',
   'Review: pilih soal Draf, buat paket review (boleh sisipkan soal kalibrasi), salin ke AI reviewer, lalu tempel hasilnya. Bila soal kalibrasi tidak tertangkap, seluruh hasil ditolak.',
   'Periksa soal yang Lolos review AI di pratinjau, lalu Setujui dengan inisial Anda.',
-  'Publikasi: soal Disetujui menjadi tayang (LIVE) dan dapat muncul di paket ujian. Ekspor Pack untuk menyimpan pack.json ke repositori.',
+  'Publikasi: soal Disetujui menjadi tayang (LIVE) dan dapat muncul di paket ujian. Ekspor Pack untuk menyimpan berkas bank soal lengkap.',
 ];
 
 // SPEC 12: daftar yang sama dipakai di laporan (js/core/report.js).

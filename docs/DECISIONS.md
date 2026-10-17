@@ -107,3 +107,10 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | D-73 | iOS: kartu "Pasang ke Layar Utama" (dengan pengingat cadangan) di beranda bila iOS/iPadOS dan belum berjalan dari Layar Utama, dapat ditunda 14 hari; status penyimpanan permanen ditampilkan di Pengaturan; tombol **Fokus** di ruang ujian bila Fullscreen API tidak ada (iPhone) menyembunyikan unsur sekunder; padding safe-area untuk notch dan home indicator. | SPEC 2a-e. | TEKNIS |
 | D-74 | SEB terdeteksi bila user agent memuat `SEB/<angka>` atau `SafeExamBrowser`; lencana "Berjalan di SEB" di kepala layar dan bilah ujian. Contoh pengaturan berupa plist XML (`docs/seb/contoh-pengaturan-seb.xml`); disarankan mengisi nilai yang sama lewat SEB Configuration Tool. BELUM DIVERIFIKASI di SEB nyata. | SPEC 3. | TEKNIS |
 | D-75 | Uji PWA nyata memakai Microsoft Edge headless lewat DevTools Protocol (profil sementara), karena browser bawaan aplikasi menolak registrasi service worker. Lighthouse tidak dijalankan (butuh Node.js); diganti `Page.getInstallabilityErrors` dan `Page.getAppManifest` Chromium. | Keterbatasan lingkungan. | TEKNIS |
+
+## Fase A5
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-76 | Label layar Hasil tanpa istilah teknis: "Unduh berkas data", "Halaman web", "Berkas data sesi"; Panduan tidak lagi menyebut "pack.json". Pesan error impor tetap menyebut path field (mis. `$.scores[0]…`) karena diwajibkan SPEC 10. | SPEC 3 dan CLAUDE.md: antarmuka peserta tanpa istilah teknis. | TEKNIS |
+| D-77 | Prompt C: `batchId` wajib disalin persis dari paket review (C-5). | Aplikasi mencocokkan hasil review dengan paket lewat batchId (D-59). | TEKNIS |
