@@ -4,8 +4,7 @@ Simulator ini untuk **latihan** ujian CA Indonesia (awalnya mata ujian Manajemen
 Stratejik dan Kepemimpinan). Ini **bukan ujian resmi** dan **tidak berafiliasi
 dengan IAI**. Passing grade 70 adalah standar latihan, bukan ketentuan resmi.
 
-Alamat aplikasi: **https://AKUN.github.io/NAMA-REPOSITORI/** (diisi setelah
-aplikasi tayang di GitHub Pages).
+Alamat aplikasi: **https://mafifluthfi17.github.io/Simulator-Ujian-CA/**
 
 ---
 

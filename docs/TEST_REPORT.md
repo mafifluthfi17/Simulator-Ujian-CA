@@ -56,6 +56,7 @@ lingkungan ini. Tidak ada klaim lulus tanpa uji yang benar-benar dijalankan.
 | UT-08 | Perbaikan QA ekspor pemilik (15 butir) | Suite "Ekspor (QA A2)" + Word/Excel (A4 lanskap, judul berulang, tanggal Excel, footer, tabel tidak terbelah) | Semua butir lulus; lihat `docs/qa/qa-ekspor-a2.md` | DIUJI-LULUS |
 | UT-09 | Sinkronisasi berkas turunan | Self-test: schemas.js, prompts.js, pack.js, ikon (piksel), service-worker.js, dist | Semua sinkron | DIUJI-LULUS |
 | UT-10 | Keselarasan prompt dengan skema | Pemeriksaan manual Prompt B/C/D terhadap batch/review-result/grading-result | Prompt C diperbaiki (batchId disalin persis); B dan D selaras | DIUJI-LULUS |
+| UT-11 | Situs publik GitHub Pages | Edge headless ke https://mafifluthfi17.github.io/Simulator-Ujian-CA/ : service worker, installability, jaringan diputus, self-test, alur penuh UT-01 | Service worker aktif (scope `/Simulator-Ujian-CA/`, 65 aset); 0 error installability/manifest; terbuka saat offline; self-test 87/87 PASS; alur penuh dengan 12 unduhan, 0 error konsol | DIUJI-LULUS |
 
 ## Uji manual SPEC 13 dan hal yang belum diverifikasi
 
@@ -72,9 +73,9 @@ lingkungan ini. Tidak ada klaim lulus tanpa uji yang benar-benar dijalankan.
 | UM-09 | `node --test` dan `node tools/validate.mjs` | BELUM DIVERIFIKASI | Node.js tidak terpasang |
 | UM-10 | Playwright webkit (pendekatan Safari) | BELUM DIVERIFIKASI | Tidak tersedia |
 | UM-11 | Lighthouse PWA | BELUM DIVERIFIKASI | Diganti UT-05 |
-| UM-12 | Aplikasi tayang di GitHub Pages (HTTPS) | BELUM DIVERIFIKASI | Menunggu repositori GitHub dibuat pemilik |
+| UM-12 | Aplikasi tayang di GitHub Pages (HTTPS) | DIUJI-LULUS | https://mafifluthfi17.github.io/Simulator-Ujian-CA/ — lihat UT-11 |
 | UM-13 | Cetak PDF dari aplikasi (`window.print`) | BELUM DIVERIFIKASI | CSS cetak ada; dialog cetak tidak dapat diuji otomatis |
-| UM-14 | Salin otomatis ke papan klip | BELUM DIVERIFIKASI | Ditolak di browser uji (klik sintetis); jalur "Salin secara manual" lulus |
+| UM-14 | Salin otomatis ke papan klip | DIUJI-LULUS | Di situs HTTPS (Edge): Salin Prompt + Data tersalin otomatis (10.732 karakter, dibaca ulang dari papan klip). Jalur "Salin secara manual" juga lulus. Safari iOS belum diuji |
 
 Tidak ada skenario berstatus DIUJI-GAGAL pada akhir Fase A5.
 

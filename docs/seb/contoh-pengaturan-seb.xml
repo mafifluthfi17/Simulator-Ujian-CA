@@ -10,7 +10,7 @@
 <dict>
   <!-- Halaman awal: alamat https aplikasi (GitHub Pages). -->
   <key>startURL</key>
-  <string>https://AKUN-ANDA.github.io/NAMA-REPOSITORI/</string>
+  <string>https://mafifluthfi17.github.io/Simulator-Ujian-CA/</string>
 
   <!-- Peserta boleh keluar SEB setelah ujian (isi hashedQuitPassword bila perlu sandi). -->
   <key>allowQuit</key>
