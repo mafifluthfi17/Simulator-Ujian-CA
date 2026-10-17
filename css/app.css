@@ -41,6 +41,8 @@
 }
 
 * { box-sizing: border-box; }
+/* Atribut hidden selalu menang atas display komponen (mis. .menu { display: grid }). */
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -278,3 +280,21 @@ dialog select, dialog input[type=text] { width: 100%; }
 .trend-dot-fail { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
 .trend-point { cursor: pointer; outline: none; }
 .trend-point:focus-visible .trend-hit, .trend-point:hover .trend-hit { fill: var(--accent-soft); }
+
+/* Pengelola Bank Soal (A3) */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 2px solid var(--border); margin: 12px 0; }
+.tab { min-height: var(--tap); padding: 8px 14px; border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; background: none; font: inherit; color: var(--text); cursor: pointer; }
+.tab.active { background: var(--surface); border-color: var(--border); font-weight: 700; margin-bottom: -2px; border-bottom: 2px solid var(--surface); }
+.bank-table td { vertical-align: middle; }
+.bank-table input[type=checkbox] { width: 22px; height: 22px; }
+.selected-row { background: var(--accent-soft); }
+.warn-row td { background: var(--warn-soft); }
+.status-live { background: var(--ok); color: #fff; }
+.status-approved, .status-ai_reviewed { background: var(--accent-soft); color: var(--text); }
+.status-needs_revision, .status-calibration { background: var(--warn-soft); color: var(--text); }
+.status-rejected, .status-retired { background: var(--surface-2); color: var(--muted); }
+.preview-view { border: 1px dashed var(--border); border-radius: 8px; padding: 12px; margin: 10px 0; background: var(--bg); }
+.pending-list { list-style: none; padding: 0; display: grid; gap: 10px; }
+.pending-list li { border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.log-list { padding-left: 1.2rem; font-size: .92rem; }
+.pin-card { max-width: 420px; }

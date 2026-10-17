@@ -14,6 +14,7 @@ import { renderResults } from './results.js';
 import { renderHistory } from './history.js';
 import { renderSettings } from './settings.js';
 import { renderGuide } from './guide.js';
+import { renderBank } from './bank-manager.js';
 import { saveFile } from '../export/download.js';
 
 const SCREENS = {
@@ -24,6 +25,7 @@ const SCREENS = {
   history: renderHistory,
   settings: renderSettings,
   guide: renderGuide,
+  bank: renderBank,
 };
 
 export class App {

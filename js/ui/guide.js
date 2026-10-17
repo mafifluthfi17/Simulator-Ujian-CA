@@ -15,6 +15,14 @@ const STEPS = [
   'Laporan dapat diunduh sebagai Word, Excel, PDF (cetak), halaman web, atau berkas data sesi. Lembar Belajar berisi soal, kunci, dan pembahasan tanpa jawaban Anda.',
 ];
 
+const BANK_STEPS = [
+  'Buka menu ⋯ › Pengelola Bank Soal dan masukkan PIN.',
+  'Impor Batch: tempel keluaran AI penyusun. Soal yang lolos pemeriksaan masuk sebagai Draf.',
+  'Review: pilih soal Draf, buat paket review (boleh sisipkan soal kalibrasi), salin ke AI reviewer, lalu tempel hasilnya. Bila soal kalibrasi tidak tertangkap, seluruh hasil ditolak.',
+  'Periksa soal yang Lolos review AI di pratinjau, lalu Setujui dengan inisial Anda.',
+  'Publikasi: soal Disetujui menjadi tayang (LIVE) dan dapat muncul di paket ujian. Ekspor Pack untuk menyimpan pack.json ke repositori.',
+];
+
 // SPEC 12: daftar yang sama dipakai di laporan (js/core/report.js).
 const LIMITS = LIMITATIONS;
 
@@ -24,6 +32,10 @@ export function renderGuide(app) {
     h('div', { class: 'card' },
       h('h2', { style: 'margin-top:0', text: 'Cara memakai' }),
       h('ol', {}, STEPS.map((s) => h('li', { text: s })))),
+    h('div', { class: 'card' },
+      h('h2', { style: 'margin-top:0', text: 'Pengelola Bank Soal' }),
+      h('ol', {}, BANK_STEPS.map((s) => h('li', { text: s }))),
+      h('p', { class: 'notice', text: 'PIN Pengelola Bank Soal hanya mencegah salah tekan oleh peserta. PIN ini BUKAN fitur keamanan: siapa pun yang membuka kode sumber atau data browser tetap dapat melihat kunci jawaban.' })),
     h('div', { class: 'card' },
       h('h2', { style: 'margin-top:0', text: 'Tentang dan keterbatasan' }),
       h('ul', {}, LIMITS.map((s) => h('li', { text: s }))),

@@ -17,10 +17,11 @@ export function header(app, { title, back = true, menu = false }) {
     menu ? secondaryMenu(app) : null);
 }
 
-// Menu ⋯ (SPEC 3). Pengelola Bank Soal ditambahkan pada fase A3.
+// Menu ⋯ (SPEC 3): Riwayat, Pengelola Bank Soal (PIN lokal), Pengaturan, Panduan.
 function secondaryMenu(app) {
   const items = [
     ['Riwayat', 'history'],
+    ['Pengelola Bank Soal', 'bank'],
     ['Pengaturan', 'settings'],
     ['Panduan', 'guide'],
   ];

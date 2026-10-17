@@ -14,6 +14,7 @@ export const keys = {
   sessionList: (subjectId) => `caSim:${subjectId}:sessions`,
   active: (subjectId) => `caSim:${subjectId}:active`,
   importedPack: (subjectId) => `caSim:${subjectId}:pack`,
+  bank: (subjectId) => `caSim:${subjectId}:bank`,
   settings: 'caSim:_app:settings',
 };
 

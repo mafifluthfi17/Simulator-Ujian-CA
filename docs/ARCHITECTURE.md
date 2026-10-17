@@ -89,7 +89,7 @@ render memakai `js/ui/dom.js`.
 | results.js | Hasil, status penilaian, salin/impor penilaian, koreksi manual, ekspor | A2 |
 | report-view.js | Merender blok laporan ke DOM (bagian yang dapat dibuka-tutup) | A2 |
 | history.js | Riwayat dan grafik tren SVG | A2 |
-| bank-manager.js | Pengelola Bank Soal (PIN lokal) | A3 |
+| bank-manager.js | Pengelola Bank Soal: PIN lokal, daftar/filter/pratinjau, impor batch, paket dan hasil review, review ganda, setujui, publikasi, ekspor pack, statistik | A3 |
 | settings.js, guide.js | Pengaturan, Panduan, Tentang (keterbatasan SPEC 12) | A1/A5 |
 
 ### js/export/
