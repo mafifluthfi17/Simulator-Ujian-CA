@@ -18,6 +18,15 @@ export function packIndexScript(ids) {
     + `window.CA_SIM_PACK_INDEX = ${JSON.stringify(ids)};\n`;
 }
 
+// prompts: { "<nama>.md": teks }. Prompt ditanam agar tombol Salin Prompt + Data
+// berjalan tanpa fetch (termasuk file://).
+export function promptsModule(prompts) {
+  const sorted = {};
+  for (const name of Object.keys(prompts).sort()) sorted[name] = prompts[name].replace(/^﻿/, '').replace(/\r\n/g, '\n');
+  return `// ${BANNER} tools/build-prompts.mjs dari prompts/*.md. Jangan diedit langsung.\n`
+    + `export const PROMPTS = ${JSON.stringify(sorted, null, 2)};\n`;
+}
+
 // schemas: { "<nama>.schema.json": objek skema }
 export function schemasModule(schemas) {
   const sorted = {};

@@ -9,7 +9,10 @@ import { contentHash } from '../../js/core/hash.js';
 import { buildFromPackage } from '../../js/core/blueprint.js';
 import { createRng } from '../../js/core/random.js';
 import { makeSyntheticPack } from '../fixtures/make-pack.js';
-import { packScript, packIndexJson } from '../../tools/generate.mjs';
+import { packScript, packIndexJson, promptsModule } from '../../tools/generate.mjs';
+import { PROMPTS } from '../../js/core/prompts.js';
+
+const PROMPT_FILES = ['prompt_penilai_ai.md', 'prompt_penyusun_soal.md', 'prompt_reviewer_soal.md'];
 
 const EXAMPLES = [
   'batch.example.json', 'grading-export.example.json', 'grading-result.example.json', 'pack.example.json',
@@ -24,6 +27,21 @@ const INVALID = [
 export default {
   name: 'Kontrak',
   cases: [
+    {
+      name: 'js/core/prompts.js sinkron dengan prompts/*.md',
+      run: async () => {
+        let files = PROMPT_FILES;
+        if (isNode) {
+          const { readdir } = await import('node:fs/promises');
+          const { fileURLToPath } = await import('node:url');
+          files = (await readdir(fileURLToPath(new URL('../../prompts/', import.meta.url)))).filter((n) => n.endsWith('.md'));
+        }
+        assert.deepEqual(Object.keys(PROMPTS).sort(), files.slice().sort(), 'daftar prompt berbeda; jalankan node tools/build-prompts.mjs');
+        const texts = {};
+        for (const name of files) texts[name] = await loadText(`prompts/${name}`);
+        assert.equal(await loadText('js/core/prompts.js'), promptsModule(texts), 'prompts.js tidak sinkron; jalankan node tools/build-prompts.mjs');
+      },
+    },
     {
       name: 'js/core/schemas.js sinkron dengan schema/*.schema.json',
       run: async () => {

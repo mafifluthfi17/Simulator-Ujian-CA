@@ -2,6 +2,8 @@
 // dan oleh index.html?selftest (js/selftest.js).
 import contract from './contract.js';
 import core from './core.js';
+import grading from './grading.js';
+import exportSuite from './export.js';
 import ui from './ui.js';
 
-export default [contract, core, ui];
+export default [contract, core, grading, exportSuite, ui];

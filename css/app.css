@@ -245,3 +245,36 @@ select, input[type=number], input[type=text] {
 @media (prefers-reduced-motion: reduce) {
   .toast { transition: none; }
 }
+
+/* Hasil dan laporan (A2) */
+.small { font-size: .88rem; }
+.btn-small { min-height: 36px; padding: 4px 12px; font-size: .92rem; }
+.report-section > summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; font-weight: 700; font-size: 1.1rem; }
+.report-section > summary .summary-title { flex: 1; }
+.section-body { margin-top: 8px; }
+.section-body h3 { margin-top: 1.4rem; padding-top: .8rem; border-top: 1px solid var(--border); }
+.prose-list { margin: .3rem 0 .8rem; padding-left: 1.3rem; white-space: pre-wrap; }
+.report-table { min-width: 0; width: 100%; }
+.report-table td, .report-table th { white-space: pre-wrap; overflow-wrap: anywhere; vertical-align: top; text-align: left; }
+.fill-dcf2e3 { background: color-mix(in srgb, var(--ok) 18%, var(--surface)); }
+.fill-fdecd3 { background: var(--warn-soft); }
+.grade-status { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
+.grade-status li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--border); padding: 4px 0; }
+.paste-area { min-height: 140px; font-family: ui-monospace, Consolas, monospace; font-size: .9rem; }
+.import-errors .error-list { overflow-wrap: anywhere; }
+details > summary { cursor: pointer; }
+dialog .field { margin: 10px 0; }
+dialog select, dialog input[type=text] { width: 100%; }
+
+/* Grafik tren (Riwayat) */
+.trend-chart { width: 100%; height: auto; display: block; }
+.trend-grid { stroke: var(--border); stroke-width: 1; }
+.trend-pass { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.trend-axis { fill: var(--muted); font-size: 12px; }
+.trend-value { fill: var(--text); font-size: 13px; font-weight: 700; }
+.trend-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.trend-hit { fill: transparent; }
+.trend-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.trend-dot-fail { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.trend-point { cursor: pointer; outline: none; }
+.trend-point:focus-visible .trend-hit, .trend-point:hover .trend-hit { fill: var(--accent-soft); }

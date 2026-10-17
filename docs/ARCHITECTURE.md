@@ -34,8 +34,10 @@ packs/
   msk/                     bank MSK v1.0 (diisi di luar Claude Code)
 schema/                    JSON Schema, CONTRACT.md, examples/
 prompts/                   Prompt B, C, D (disalin oleh aplikasi)
-tools/                     validate.mjs, build-pack.mjs (A1), build-offline.mjs (A4)
-tests/                     *.test.mjs untuk node --test
+tools/                     validate.mjs, build-pack.mjs (A1), build-prompts.mjs,
+                           sample-report.mjs (A2), build-offline.mjs (A4)
+tests/                     run.test.mjs + cases/ (node --test dan ?selftest),
+                           fixtures/, output/ (contoh laporan demo, A2)
 dist/simulator-offline.html  satu berkas untuk file:// (A4)
 docs/                      SPEC, ARCHITECTURE, DECISIONS, PROMPT_ALIGNMENT,
                            TEST_REPORT (A5), seb/panduan_seb.md (A4)
@@ -61,8 +63,9 @@ docs/                      SPEC, ARCHITECTURE, DECISIONS, PROMPT_ALIGNMENT,
 | hash.js | Serialisasi kanonik + SHA-256 (crypto.subtle, cadangan JS murni) | A1 |
 | random.js | RNG ber-seed (tes) dan pengacakan | A1 |
 | version.js | APP_VERSION, SCHEMA_VERSION | A1 |
-| grading-io.js | Ekspor paket penilaian, validasi impor hasil AI (SPEC 10), koreksi manual | A2 |
-| report.js | Model data laporan: rekap, analisis kompetensi/topik, remedial | A2 |
+| grading-io.js | Ekspor paket penilaian, checksum, validasi impor hasil AI (SPEC 10), koreksi manual | A2 |
+| report.js | Model data laporan: rekap, PG, uraian, analisis kompetensi/topik, remedial, log, koreksi, keterbatasan, tren riwayat | A2 |
+| prompts.js | Prompt tertanam (dibuat `tools/build-prompts.mjs`) untuk Salin Prompt + Data | A2 |
 | bank.js | Mesin status DRAFT→…→LIVE, lint, impor batch, publikasi, versi pack | A3 |
 | review-io.js | Ekspor paket review (reviewKey, kalibrasi tersembunyi), impor hasil, statistik kalibrasi | A3 |
 | format.js | Format angka id-ID (2/4 desimal), tanggal, durasi | A1 |
@@ -83,14 +86,19 @@ render memakai `js/ui/dom.js`.
 | home.js | Beranda: pemilih mata ujian, 4 kartu paket, Lanjutkan Ujian, menu ⋯ | A1 |
 | custom.js | Pengaturan Mode Kustom dan validasi bobot | A1 |
 | exam-room.js | Ruang ujian gaya SEB: bilah atas, daftar soal, mode fokus, autosave | A1 |
-| results.js | Hasil, status penilaian, impor penilaian, koreksi manual | A2 |
+| results.js | Hasil, status penilaian, salin/impor penilaian, koreksi manual, ekspor | A2 |
+| report-view.js | Merender blok laporan ke DOM (bagian yang dapat dibuka-tutup) | A2 |
 | history.js | Riwayat dan grafik tren SVG | A2 |
 | bank-manager.js | Pengelola Bank Soal (PIN lokal) | A3 |
 | settings.js, guide.js | Pengaturan, Panduan, Tentang (keterbatasan SPEC 12) | A1/A5 |
 
 ### js/export/
-`zip.js` (STORE + CRC-32), `docx.js`, `xlsx.js`, `html-report.js`,
-`csv.js` dan `doc-html.js` (fallback), `download.js` (unduh + petunjuk iOS). (A2)
+`zip.js` (STORE + CRC-32, pembaca untuk tes), `xml.js` (escape), `docx.js` dan
+`xlsx.js` (penulis generik), `report-blocks.js` (laporan -> blok dokumen untuk
+.docx, HTML, .doc, dan layar), `report-sheets.js` (laporan -> sheet .xlsx/.csv),
+`html-report.js` (HTML satu berkas dan fallback .doc), `csv.js` (fallback),
+`report-files.js` (fasad ekspor + fallback otomatis), `download.js` (unduh +
+petunjuk iOS). Lihat DECISIONS D-43. (A2)
 
 ### js/platform/
 `ios.js` (ajakan Layar Utama, storage.persist, visibilitychange/pageshow),

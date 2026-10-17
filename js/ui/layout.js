@@ -1,9 +1,9 @@
 // Komponen bersama layar non-ujian: kepala layar, menu sekunder, disclaimer.
 
 import { h } from './dom.js';
+import { DISCLAIMER } from '../core/report.js';
 
-export const DISCLAIMER = 'Simulator belajar, bukan ujian resmi, dan tidak berafiliasi dengan IAI. '
-  + 'Passing grade 70 adalah standar latihan internal, bukan ketentuan resmi IAI.';
+export { DISCLAIMER };
 
 export function disclaimer() {
   return h('p', { class: 'disclaimer', text: DISCLAIMER });

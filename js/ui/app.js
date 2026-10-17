@@ -14,6 +14,7 @@ import { renderResults } from './results.js';
 import { renderHistory } from './history.js';
 import { renderSettings } from './settings.js';
 import { renderGuide } from './guide.js';
+import { saveFile } from '../export/download.js';
 
 const SCREENS = {
   home: renderHome,
@@ -193,15 +194,8 @@ export class App {
     osc.stop(this.audio.currentTime + 0.35);
   }
 
-  download(filename, text, type = 'application/json') {
-    const url = URL.createObjectURL(new Blob([text], { type }));
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.append(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  download(filename, data, mime = 'application/json') {
+    saveFile({ filename, mime, data });
   }
 }
 

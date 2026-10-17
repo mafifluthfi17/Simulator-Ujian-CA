@@ -2,6 +2,11 @@
 import * as assert from './assert.js';
 import { loadJson } from './env.js';
 import { getType } from '../../js/types/registry.js';
+import { reportSections } from '../../js/ui/report-view.js';
+import { reportBlocks } from '../../js/export/report-blocks.js';
+import { buildReport } from '../../js/core/report.js';
+import { applyGradingResult, validateGradingResult } from '../../js/core/grading-io.js';
+import { T0, sampleResult, submittedDemo } from '../fixtures/demo-graded.js';
 
 const XSS = '<script>window.__xss = 1</script><img src=x onerror="window.__xss = 2">';
 
@@ -15,6 +20,34 @@ function sandbox() {
 export default {
   name: 'Tampilan',
   cases: [
+    {
+      id: 'TS-16',
+      browserOnly: true,
+      name: 'laporan di layar: jawaban dan penilaian AI berisi <script> tampil sebagai teks',
+      run: async () => {
+        const pack = await loadJson('packs/demo/pack.json');
+        const s = submittedDemo(pack);
+        const essay = s.items.find((it) => it.type === 'essay');
+        s.answers[essay.questionId].value = XSS;
+        const result = await sampleResult(s);
+        result.scores[0].strengths = XSS;
+        result.overallFeedback = XSS;
+        const v = await validateGradingResult(s, result);
+        assert.ok(v.ok, v.errors && v.errors.map((e) => e.message).join('; '));
+        await applyGradingResult(s, v, T0 + 1800000);
+        const box = sandbox();
+        try {
+          window.__xss = 0;
+          box.append(...reportSections(reportBlocks(buildReport(s, { pack }))));
+          assert.equal(box.querySelectorAll('script, img').length, 0, 'elemen dari teks tersisip');
+          assert.ok(box.textContent.includes('<script>window.__xss = 1</script>'));
+          await new Promise((r) => setTimeout(r, 50));
+          assert.equal(window.__xss, 0, 'skrip sisipan sempat berjalan');
+        } finally {
+          box.remove();
+        }
+      },
+    },
     {
       id: 'TS-16',
       browserOnly: true,

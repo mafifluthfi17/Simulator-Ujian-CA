@@ -1,0 +1,15 @@
+/* Cetak / PDF (SPEC 11): laporan saja, tanpa tombol dan menu; warna terang. */
+@page { size: A4; margin: 16mm 14mm; }
+:root { --bg: #fff; --surface: #fff; --surface-2: #eef1f5; --text: #000; --muted: #444; --border: #999; --shadow: none; }
+body { background: #fff; color: #000; font-size: 11pt; }
+.no-print, .app-header button, .btn, .toast, dialog { display: none !important; }
+.screen { max-width: none; padding: 0; }
+.card { border: 0; box-shadow: none; padding: 0; margin: 8px 0; }
+.report-section > summary { font-size: 14pt; color: #1d4ed8; break-after: avoid; }
+.report-section { break-before: page; }
+.report-section:first-of-type { break-before: auto; }
+h2, h3, h4 { break-after: avoid; }
+tr, .big-score { break-inside: avoid; }
+.table-wrap { overflow: visible; }
+.data-table th { background: #e7ecf3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.badge { border: 1px solid #000; }

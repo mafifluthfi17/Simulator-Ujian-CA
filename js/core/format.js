@@ -10,6 +10,11 @@ export function formatScore(value) {
   return nf2.format(value);
 }
 
+// Angka skor biasa (maks, skor per soal, passing grade): selalu 2 desimal.
+export function formatFixed2(value) {
+  return nf2.format(value);
+}
+
 export function formatNumber(value) {
   return nfFree.format(value);
 }

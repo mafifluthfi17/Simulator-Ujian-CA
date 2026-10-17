@@ -63,6 +63,64 @@ export function confirmDialog({ title, body = [], confirmLabel = 'Ya', cancelLab
   });
 }
 
+// Dialog berisi isian. validate() mengembalikan pesan error (dialog tetap terbuka)
+// atau null (dialog ditutup). Hasil: Promise<boolean>.
+export function formDialog({ title, body = [], confirmLabel = 'Simpan', cancelLabel = 'Batal', validate = () => null }) {
+  return new Promise((resolve) => {
+    const id = `dlg-title-${++dialogCounter}`;
+    const error = h('p', { class: 'error-list', role: 'alert', hidden: true });
+    const form = h('form', { method: 'dialog', novalidate: true },
+      h('div', { class: 'dialog-body' }, [body].flat()),
+      error,
+      h('div', { class: 'dialog-actions' },
+        h('button', { type: 'button', class: 'btn', onclick: () => close(false) }, cancelLabel),
+        h('button', { type: 'submit', class: 'btn btn-primary' }, confirmLabel)));
+    const dialog = h('dialog', { class: 'dialog', 'aria-labelledby': id }, h('h2', { id, text: title }), form);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let message;
+      try {
+        message = validate();
+      } catch (ex) {
+        message = ex.message;
+      }
+      if (message) {
+        error.textContent = message;
+        error.hidden = false;
+        return;
+      }
+      close(true);
+    });
+    function close(result) {
+      dialog.close();
+      dialog.remove();
+      resolve(result);
+    }
+    dialog.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      close(false);
+    });
+    document.body.append(dialog);
+    dialog.showModal();
+  });
+}
+
+// Elemen SVG (namespace SVG). Teks tetap sebagai text node.
+const SVG_NS = 'http://www.w3.org/2000/svg';
+export function svg(tag, attrs, ...children) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [key, value] of Object.entries(attrs || {})) {
+    if (value === undefined || value === null || value === false) continue;
+    if (key === 'text') el.textContent = value;
+    else el.setAttribute(key, String(value));
+  }
+  for (const child of children.flat(Infinity)) {
+    if (child === null || child === undefined || child === false) continue;
+    el.append(child instanceof Node ? child : document.createTextNode(String(child)));
+  }
+  return el;
+}
+
 export function alertDialog(title, body) {
   return confirmDialog({ title, body, confirmLabel: 'Tutup', cancelLabel: null });
 }
