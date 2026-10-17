@@ -55,10 +55,15 @@ const FLAG_LABELS = {
 
 export const DIFFICULTY_LABELS = { mudah: 'Mudah', sedang: 'Sedang', sulit: 'Sulit', sangat_sulit: 'Sangat sulit' };
 
+export const LEVEL_RULE = 'kuat ≥ 80%, cukup 70% ≤ capaian < 80%, lemah < 70%';
+
+// Kategori dihitung dari capaian yang DITAMPILKAN (2 desimal), sehingga angka dan
+// kategori di laporan selalu sejalan (mis. 79,996% tampil 80,00% dan berkategori kuat).
 export function levelFor(pct) {
   if (pct === null) return '—';
-  if (pct >= 80) return 'Kuat';
-  if (pct >= 70) return 'Cukup';
+  const shown = Math.round(pct * 100) / 100;
+  if (shown >= 80) return 'Kuat';
+  if (shown >= 70) return 'Cukup';
   return 'Lemah';
 }
 
@@ -258,13 +263,27 @@ function analysis(rows, field, names) {
   });
 }
 
+// Konsep acuan tanpa duplikat (tanpa memedulikan huruf besar-kecil dan spasi);
+// konsep yang sudah tercakup konsep lain yang lebih panjang (sebagai frasa utuh)
+// dibuang: "Balanced scorecard" tercakup "Balanced scorecard dan strategy map".
+export function dedupeConcepts(list) {
+  const norm = (s) => ` ${String(s).toLowerCase().replace(/\s+/g, ' ').trim()} `;
+  const unique = [];
+  for (const item of list) {
+    if (!String(item).trim()) continue;
+    if (!unique.some((u) => norm(u) === norm(item))) unique.push(String(item).trim());
+  }
+  return unique.filter((item) => !unique.some((other) => other !== item
+    && norm(other).length > norm(item).length && norm(other).includes(norm(item))));
+}
+
 function remedialPlan(topics, competencies, rows, isFinal) {
   const plan = [];
   const missed = (r) => r.scaledScore !== null && r.scaledScore < r.points - 1e-9;
   for (const [kind, list, field] of [['Topik', topics, 'topicIds'], ['Kompetensi', competencies, 'competencyIds']]) {
     for (const a of list.filter((x) => x.level === 'Lemah')) {
       const related = rows.filter((r) => r[field].includes(a.id) && missed(r));
-      const refs = [...new Set(related.flatMap((r) => r.references))];
+      const refs = dedupeConcepts(related.flatMap((r) => r.references));
       const actions = [];
       if (refs.length) actions.push(`Pelajari ulang konsep: ${refs.join('; ')}.`);
       if (related.length) actions.push(`Baca kembali pembahasan ${related.map((r) => `Soal ${r.no} (${r.questionId})`).join(', ')}.`);

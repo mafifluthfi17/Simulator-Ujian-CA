@@ -3,7 +3,8 @@
 // dan angka sebagai number. Semua teks di-escape.
 //
 // sheet: { name, columns: [{ header, width, kind }], rows: [[nilai]] }
-//   kind: 'text' (rata atas), 'wrap' (teks panjang dibungkus), 'number' (0,00), 'int' (0)
+//   kind: 'text' (rata atas), 'wrap' (teks panjang dibungkus), 'number' (0,00), 'int' (0),
+//         'percent' (pecahan, tampil 0,00%), 'date' (ISO -> tanggal Excel)
 //   nilai: string -> teks; number -> angka; boolean -> "Ya"/"Tidak"; null/undefined -> kosong.
 
 import { zipStore } from './zip.js';
@@ -20,7 +21,7 @@ const TRUNCATED = ' … [dipotong: batas 32.767 karakter per sel Excel; teks utu
 export const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 // Indeks gaya sel di cellXfs.
-const STYLE = { header: 1, number: 2, wrap: 3, int: 4, text: 5 };
+const STYLE = { header: 1, number: 2, wrap: 3, int: 4, text: 5, percent: 6, date: 7 };
 
 export function columnLetter(index) {
   let n = index + 1;
@@ -45,16 +46,30 @@ export function sheetNames(names) {
   });
 }
 
-function cellXml(ref, value, kind) {
+// Tanggal Excel (nomor seri) dari ISO, memakai jam perangkat seperti tampilan laporan.
+export function excelDate(iso) {
+  const d = new Date(iso);
+  return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()) / 86400000 + 25569;
+}
+
+// value boleh berupa { value, format } untuk format per sel ('int' | 'number' | 'percent' | 'date').
+function cellXml(ref, raw, kind) {
+  const cell = raw !== null && typeof raw === 'object' ? raw : { value: raw };
+  const value = cell.value;
+  const format = cell.format || kind;
   if (value === null || value === undefined || value === '') return '';
+  if (format === 'date' && typeof value === 'string') {
+    const serial = excelDate(value);
+    return Number.isFinite(serial) ? `<c r="${ref}" s="${STYLE.date}"><v>${serial}</v></c>` : '';
+  }
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) return '';
-    const style = kind === 'int' ? STYLE.int : STYLE.number;
+    const style = { int: STYLE.int, percent: STYLE.percent }[format] || STYLE.number;
     return `<c r="${ref}" s="${style}"><v>${value}</v></c>`;
   }
   let text = typeof value === 'boolean' ? (value ? 'Ya' : 'Tidak') : cleanText(value);
   if (text.length > MAX_CELL_CHARS) text = text.slice(0, MAX_CELL_CHARS - TRUNCATED.length) + TRUNCATED;
-  const style = kind === 'wrap' ? STYLE.wrap : STYLE.text;
+  const style = format === 'wrap' ? STYLE.wrap : STYLE.text;
   return `<c r="${ref}" s="${style}" t="inlineStr"><is><t xml:space="preserve">${escapeXml(text)}</t></is></c>`;
 }
 
@@ -70,7 +85,9 @@ export function worksheetXml(sheet, selected) {
     const n = r + 2;
     return `<row r="${n}">${cols.map((c, i) => cellXml(`${columnLetter(i)}${n}`, row[i], c.kind)).join('')}</row>`;
   }).join('');
+  // Cetak: A4 lanskap, muat selebar satu halaman (tinggi bebas); baris 1 berulang (definedNames).
   return `${XML_HEADER}<worksheet xmlns="${MAIN_NS}" xmlns:r="${R_NS}">`
+    + '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>'
     + `<dimension ref="A1:${lastCol}${lastRow}"/>`
     + `<sheetViews><sheetView workbookViewId="0"${selected ? ' tabSelected="1"' : ''}>`
     + '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>'
@@ -78,26 +95,34 @@ export function worksheetXml(sheet, selected) {
     + '<sheetFormatPr defaultRowHeight="15"/>'
     + `<cols>${cols.map((c, i) => `<col min="${i + 1}" max="${i + 1}" width="${c.width || 12}" customWidth="1"/>`).join('')}</cols>`
     + `<sheetData>${header}${body}</sheetData>`
-    + '<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>'
+    + '<pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/>'
+    + '<pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/>'
     + '</worksheet>';
 }
 
+// Format tanggal Indonesia (LCID 0421): "17 Oktober 2026 08.00".
+export const DATE_FORMAT = '[$-421]d mmmm yyyy hh.mm';
+
 export function stylesXml() {
   const thin = (side) => `<${side} style="thin"><color rgb="FF8C96A3"/></${side}>`;
+  const plain = (numFmtId, wrap = false) => `<xf numFmtId="${numFmtId}" fontId="0" fillId="0" borderId="0" xfId="0"${numFmtId ? ' applyNumberFormat="1"' : ''} applyAlignment="1"><alignment vertical="top"${wrap ? ' wrapText="1"' : ''}/></xf>`;
   return `${XML_HEADER}<styleSheet xmlns="${MAIN_NS}">`
+    + `<numFmts count="1"><numFmt numFmtId="164" formatCode="${escapeXml(DATE_FORMAT)}"/></numFmts>`
     + '<fonts count="2"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font>'
     + '<font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font></fonts>'
     + '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'
     + '<fill><patternFill patternType="solid"><fgColor rgb="FFE7ECF3"/><bgColor indexed="64"/></patternFill></fill></fills>'
     + `<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border>${['left', 'right', 'top', 'bottom'].map(thin).join('')}<diagonal/></border></borders>`
     + '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
-    + '<cellXfs count="6">'
+    + '<cellXfs count="8">'
     + '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
     + '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
-    + '<xf numFmtId="2" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment vertical="top"/></xf>'
-    + '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
-    + '<xf numFmtId="1" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment vertical="top"/></xf>'
-    + '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top"/></xf>'
+    + plain(2) // 2: angka 0,00
+    + plain(0, true) // 3: teks dibungkus
+    + plain(1) // 4: bilangan bulat
+    + plain(0) // 5: teks
+    + plain(10) // 6: persen 0,00%
+    + plain(164) // 7: tanggal
     + '</cellXfs>'
     + '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
     + '</styleSheet>';
@@ -122,7 +147,9 @@ export function xlsxFiles(sheets, { title, created } = {}) {
       name: 'xl/workbook.xml',
       data: `${XML_HEADER}<workbook xmlns="${MAIN_NS}" xmlns:r="${R_NS}"><bookViews><workbookView activeTab="0"/></bookViews><sheets>`
         + names.map((n, i) => `<sheet name="${escapeXml(n)}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')
-        + '</sheets></workbook>',
+        + '</sheets>'
+        + `<definedNames>${names.map((n, i) => `<definedName name="_xlnm.Print_Titles" localSheetId="${i}">'${escapeXml(n.replace(/'/g, "''"))}'!$1:$1</definedName>`).join('')}</definedNames>`
+        + '</workbook>',
     },
     {
       name: 'xl/_rels/workbook.xml.rels',

@@ -37,3 +37,20 @@ substansi, dan langkah kerja tidak berubah.
   CONTRACT.md dan Prompt C ke Project ChatGPT.
 - Formulir Permintaan Batch (dokumen Word, bagian 6.2): gunakan prefiks
   ESA/KAS untuk ID mulai esai dan kasus.
+
+## 2026-10-17 — Aturan rujukan kriteria pada soal kasus (perbaikan QA A2)
+Tidak ada perubahan pada `prompts/*.md`.
+
+### schema/CONTRACT.md
+- Aturan konsistensi 6: pada soal `case`, rujukan kriteria di
+  `acceptableAlternatives` (dan `modelAnswer` tingkat soal) wajib menyebut
+  bagiannya, mis. `(b) C3`. Ditegakkan `js/core/consistency.js` untuk soal, batch,
+  dan pack.
+
+### Data
+- `packs/demo/pack.json`, `schema/examples/question.case.json`,
+  `schema/examples/session.example.json`: "nilai penuh pada C3" menjadi
+  "nilai penuh pada (b) C3". `contentHash` tidak berubah (field ini tidak ikut hash).
+
+### Tindakan di luar repositori
+- Unggah ulang `schema/CONTRACT.md` ke Project Claude dan ChatGPT.

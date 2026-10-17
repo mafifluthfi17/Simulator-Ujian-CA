@@ -42,6 +42,12 @@ export function checkQuestion(q, path) {
     }
     findDuplicates(q.subQuestions.map((s) => s.id)).forEach((id) => add('subQuestions', `id sub-pertanyaan "${id}" ganda`));
     q.subQuestions.forEach((s, i) => checkRubric(s.rubric, s.maxScore, add, `subQuestions[${i}].rubric`, `sub (${s.id})`));
+    for (const field of ['acceptableAlternatives', 'modelAnswer']) {
+      const bare = unscopedCriterionRefs(q[field]);
+      if (bare.length) {
+        add(field, `rujukan kriteria ${bare.join(', ')} harus menyebut bagiannya karena setiap sub-pertanyaan punya rubrik sendiri (tulis mis. "(b) C3")`);
+      }
+    }
     (q.caseData || []).forEach((table, t) => {
       table.rows.forEach((row, r) => {
         if (row.length !== table.columns.length) {
@@ -120,6 +126,21 @@ function checkRubric(rubric, maxScore, add, field, owner = 'soal') {
     add(field, `jumlah maxScore rubrik (${total}) tidak sama dengan maxScore ${owner} (${maxScore})`);
   }
   findDuplicates(rubric.map((c) => c.criterionId)).forEach((id) => add(field, `criterionId ${id} ganda`));
+}
+
+// Rujukan kriteria (C1, C2, ...) yang tidak didahului label bagian "(a)".."(z)" dalam
+// 20 karakter sebelumnya (mis. "(b) C3" atau "(b) kriteria C3" sah; "pada C3" tidak).
+// Tanpa regex lookbehind agar berjalan di Safari < 16.4.
+export function unscopedCriterionRefs(text) {
+  if (typeof text !== 'string') return [];
+  const found = [];
+  const re = /\bC\d{1,2}\b/g;
+  let m;
+  while ((m = re.exec(text))) {
+    const before = text.slice(Math.max(0, m.index - 20), m.index);
+    if (!/\([a-z]\)[^()]*$/.test(before)) found.push(m[0]);
+  }
+  return [...new Set(found)];
 }
 
 function findDuplicates(values) {

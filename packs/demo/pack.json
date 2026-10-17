@@ -173,7 +173,7 @@
           ]
         }
       ],
-      "acceptableAlternatives": "Rekomendasi pilihan (1) dapat nilai penuh pada C3 bila argumennya kuat dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.",
+      "acceptableAlternatives": "Rekomendasi pilihan (1) dapat nilai penuh pada (b) C3 bila argumennya kuat dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.",
       "references": ["Analisis portofolio bisnis", "Keunggulan bersaing Porter"],
       "lifecycle": { "status": "LIVE", "contentHash": "02bb5b8bb1e8a8378d1f39b0dc51b7d8103e4a444ed91b16b760a4cd9cff586b", "review": null, "approvedBy": "DEMO", "approvedAt": "2026-10-17T00:00:00Z" },
       "authoring": { "createdBy": "manusia", "createdAt": "2026-10-17", "revision": 1, "notes": "Soal demo untuk pengujian aplikasi, bukan bank soal MSK." }

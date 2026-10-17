@@ -19,6 +19,10 @@ function base(report, prefix) {
   return `${prefix}-${report.recap.sessionId}`;
 }
 
+function footerText(report, title) {
+  return `${title} · ID sesi ${report.recap.sessionId}`;
+}
+
 // Hasil: { filename, mime, data (string | Uint8Array), fallbackMessage? }
 export function reportFile(kind, { report, session, now = Date.now() }) {
   const created = new Date(now);
@@ -26,12 +30,12 @@ export function reportFile(kind, { report, session, now = Date.now() }) {
     case 'docx':
       return withFallback(() => ({
         filename: `${base(report, 'laporan')}.docx`, mime: DOCX_MIME,
-        data: buildDocx(reportBlocks(report), { title: TITLES.report, created }),
+        data: buildDocx(reportBlocks(report), { title: TITLES.report, created, footer: footerText(report, TITLES.report) }),
       }), () => reportFile('doc', { report, session, now }), 'Berkas Word (.docx)', '.doc');
     case 'study':
       return withFallback(() => ({
         filename: `${base(report, 'lembar-belajar')}.docx`, mime: DOCX_MIME,
-        data: buildDocx(studySheetBlocks(report), { title: TITLES.study, created }),
+        data: buildDocx(studySheetBlocks(report), { title: TITLES.study, created, footer: footerText(report, TITLES.study) }),
       }), () => reportFile('study-doc', { report, session, now }), 'Lembar Belajar (.docx)', '.doc');
     case 'xlsx':
       return withFallback(() => ({

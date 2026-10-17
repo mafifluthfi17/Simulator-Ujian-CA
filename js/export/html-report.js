@@ -1,6 +1,10 @@
 // Blok dokumen -> HTML satu berkas (CSS di dalam, tanpa skrip, tanpa aset luar).
 // Dipakai untuk ekspor HTML (SPEC 11) dan fallback .doc berbasis HTML bila .docx gagal.
 // Semua teks di-escape; tidak ada isi peserta/AI yang menjadi markup.
+//
+// Mode forWord (fallback .doc): Word tidak mendukung white-space: pre-wrap dan
+// hr sebagai pemisah halaman, jadi setiap baris teks menjadi paragraf/<br> sendiri
+// (baris kosong dipertahankan) dan pemisah halaman memakai page-break-before.
 
 import { escapeHtml } from './xml.js';
 
@@ -22,36 +26,55 @@ hr.page{border:0;border-top:1px dashed #c9d0da;margin:2em 0}
 @media print{body{padding:0;max-width:none}hr.page{break-after:page;border:0;margin:0}h1,h2,h3{break-after:avoid}tr{break-inside:avoid}}
 `;
 
-function inline(runs) {
+const WORD_PAGE_BREAK = '<br clear=all style="page-break-before:always">';
+
+// Teks multi-baris: biasa apa adanya (CSS pre-wrap); untuk Word baris baru -> <br>.
+function text(value, forWord) {
+  const s = escapeHtml(value ?? '');
+  return forWord ? s.split('\n').join('<br>') : s;
+}
+
+function inline(runs, forWord) {
   return runs.map((r) => {
-    let s = escapeHtml(r.text);
+    let s = text(r.text, forWord);
     if (r.bold) s = `<strong>${s}</strong>`;
     if (r.italic) s = `<em>${s}</em>`;
     return s;
   }).join('');
 }
 
-function cell(tag, value) {
+function cell(tag, value, forWord) {
   const c = value !== null && typeof value === 'object' ? value : { text: value };
-  const text = escapeHtml(c.text ?? '');
+  const body = text(c.text, forWord);
   const style = c.fill ? ` style="background:#${c.fill}"` : '';
-  return `<${tag}${style}>${c.bold ? `<strong>${text}</strong>` : text}</${tag}>`;
+  return `<${tag}${style}>${c.bold ? `<strong>${body}</strong>` : body}</${tag}>`;
 }
 
-export function blockHtml(block) {
+// Paragraf untuk Word: satu <p> per baris; baris kosong menjadi <p>&nbsp;</p>.
+function wordParagraphs(block, cls) {
+  if (block.runs) return `<p${cls}>${inline(block.runs, true)}</p>`;
+  const wrap = (s) => (block.bold ? `<strong>${s}</strong>` : s);
+  const em = (s) => (block.italic ? `<em>${s}</em>` : s);
+  return String(block.text ?? '').split('\n')
+    .map((line) => `<p${cls}>${line.trim() ? em(wrap(escapeHtml(line))) : '&nbsp;'}</p>`).join('');
+}
+
+export function blockHtml(block, { forWord = false } = {}) {
   switch (block.type) {
     case 'title': return `<p class="title">${escapeHtml(block.text)}</p>`;
     case 'subtitle': return `<p class="subtitle">${escapeHtml(block.text)}</p>`;
     case 'heading': return `<h${block.level}>${escapeHtml(block.text)}</h${block.level}>`;
     case 'paragraph': {
       const cls = [block.small ? 'small' : '', block.muted ? 'muted' : ''].filter(Boolean).join(' ');
+      const attr = cls ? ` class="${cls}"` : '';
+      if (forWord) return wordParagraphs(block, attr);
       const runs = block.runs || [{ text: block.text, bold: block.bold, italic: block.italic }];
-      return `<p${cls ? ` class="${cls}"` : ''}>${inline(runs)}</p>`;
+      return `<p${attr}>${inline(runs, false)}</p>`;
     }
-    case 'bullets': return `<ul>${block.items.map((i) => `<li>${escapeHtml(i)}</li>`).join('')}</ul>`;
-    case 'table': return `<table><thead><tr>${block.columns.map((c) => cell('th', c.header)).join('')}</tr></thead>`
-      + `<tbody>${block.rows.map((row) => `<tr>${block.columns.map((_, i) => cell('td', row[i] ?? '')).join('')}</tr>`).join('')}</tbody></table>`;
-    case 'pageBreak': return '<hr class="page">';
+    case 'bullets': return `<ul>${block.items.map((i) => `<li>${text(i, forWord)}</li>`).join('')}</ul>`;
+    case 'table': return `<table><thead><tr>${block.columns.map((c) => cell('th', c.header, forWord)).join('')}</tr></thead>`
+      + `<tbody>${block.rows.map((row) => `<tr>${block.columns.map((_, i) => cell('td', row[i] ?? '', forWord)).join('')}</tr>`).join('')}</tbody></table>`;
+    case 'pageBreak': return forWord ? WORD_PAGE_BREAK : '<hr class="page">';
     default: throw new Error(`Blok tidak dikenal: ${block.type}`);
   }
 }
@@ -59,8 +82,11 @@ export function blockHtml(block) {
 // forWord: menambah penanda agar Word membuka berkas sebagai dokumen (fallback .doc).
 export function htmlDocument(blocks, { title, forWord = false } = {}) {
   const wordNs = forWord ? ' xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"' : '';
-  return `<!doctype html>\n<html lang="id"${wordNs}>\n<head>\n<meta charset="utf-8">\n`
+  // Word membaca encoding dari meta http-equiv (bukan <meta charset>); tanpanya Word
+  // dapat menampilkan dialog pilihan encoding saat membuka .doc.
+  const charset = forWord ? '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n' : '<meta charset="utf-8">\n';
+  return `<!doctype html>\n<html lang="id"${wordNs}>\n<head>\n${charset}`
     + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
     + `<title>${escapeHtml(title || 'Laporan')}</title>\n<style>${CSS}</style>\n</head>\n<body>\n`
-    + `${blocks.map(blockHtml).join('\n')}\n</body>\n</html>\n`;
+    + `${blocks.map((b) => blockHtml(b, { forWord })).join('\n')}\n</body>\n</html>\n`;
 }

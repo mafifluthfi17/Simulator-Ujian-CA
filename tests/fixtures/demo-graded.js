@@ -9,7 +9,7 @@ import { answersChecksum } from '../../js/core/grading-io.js';
 export const T0 = Date.parse('2026-10-17T01:00:00Z');
 export const MIN = 60000;
 
-export function newDemoSession(pack, { seed = 11, mode = 'latihan' } = {}) {
+export function newDemoSession(pack, { seed = 11, mode = 'latihan', start = T0 } = {}) {
   const rng = createRng(seed);
   const pkg = pack.packages[0];
   const built = buildFromPackage(pack, pkg, rng);
@@ -19,7 +19,7 @@ export function newDemoSession(pack, { seed = 11, mode = 'latihan' } = {}) {
   return createSession({
     pack, packageId: pkg.id, packageName: pkg.name, mode,
     config: { durationMinutes: pkg.durationMinutes, passingGrade: pack.passingGrade, shuffleQuestions: true, shuffleOptions: true, sectionWeights: weights },
-    items: orderItems(built.items, true, rng), rng, now: T0,
+    items: orderItems(built.items, true, rng), rng, now: start,
   });
 }
 
@@ -63,14 +63,29 @@ function criteria(rubric, offset) {
 }
 const total = (list) => list.reduce((n, c) => n + c.awardedScore, 0);
 
+// Umpan balik contoh (fiktif) dibedakan per tipe soal.
+const FEEDBACK = {
+  essay: {
+    strengths: 'Mengenali sifat lagging ukuran keuangan dan memberi contoh ukuran yang relevan.',
+    weaknesses: 'Hubungan sebab-akibat antarperspektif balanced scorecard belum dijelaskan.',
+    improvement: 'Gambarkan strategy map: pembelajaran -> proses internal -> pelanggan -> keuangan.',
+  },
+  case: {
+    strengths: 'Membaca data margin ketiga segmen dengan benar dan memberi rekomendasi tegas.',
+    weaknesses: 'Evaluasi pilihan kurang kuantitatif; risiko belum disertai mitigasi.',
+    improvement: 'Hitung dampak investasi Rp300 miliar pada laba operasi dan sertakan mitigasi tiap risiko.',
+  },
+};
+
 // Skor contoh untuk satu item sesi (esai atau kasus).
 export function sampleScore(item) {
   const q = item.question;
+  const feedback = FEEDBACK[item.type];
   const base = {
     questionId: item.questionId, maxScore: q.maxScore,
-    strengths: 'Membaca data dan konsep utama dengan benar.',
-    weaknesses: 'Hubungan sebab-akibat dan dampak keuangan belum dijelaskan.',
-    improvement: 'Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.',
+    strengths: feedback.strengths,
+    weaknesses: feedback.weaknesses,
+    improvement: feedback.improvement,
     confidence: 'sedang',
   };
   if (item.type === 'essay') {
@@ -99,8 +114,9 @@ export async function sampleResult(session, { types = ['essay', 'case'] } = {}) 
   };
 }
 
-export function submittedDemo(pack, opts) {
-  const s = answerDemo(newDemoSession(pack, opts));
-  submit(s, 'MANUAL', T0 + 25 * MIN);
+export function submittedDemo(pack, opts = {}) {
+  const start = opts.start ?? T0;
+  const s = answerDemo(newDemoSession(pack, opts), start + 5 * MIN);
+  submit(s, 'MANUAL', start + 25 * MIN);
   return s;
 }

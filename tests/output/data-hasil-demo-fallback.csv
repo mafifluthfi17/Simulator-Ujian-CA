@@ -39,53 +39,53 @@ C: Laba per saham adalah hasil akhir perspektif keuangan, bukan penggerak loyali
 No;ID soal;Tipe;Topik;Kompetensi;Soal;Jawaban peserta (asli);Jawaban ideal;Skor asli;Maks asli;Skor;Maks;Kekuatan;Kelemahan;Saran;Keyakinan;Tanda penilai;Dikoreksi manual;Jumlah AI tidak cocok;Penilai
 4;DEMO-ESA-001;Esai;T02;K01;[DEMO] Direksi PT Bumi Hijau Agro (fiktif) mengukur kinerja hanya dengan laba bersih dan pertumbuhan pendapatan. Jelaskan kelemahan pendekatan tersebut dan bagaimana balanced scorecard dapat memperbaikinya. Sertakan satu contoh ukuran untuk setiap perspektif.;"Laba bersih dan pertumbuhan pendapatan hanya menunjukkan hasil masa lalu (lagging) dan mendorong keputusan jangka pendek, misalnya menunda perawatan kebun.
 
-Balanced scorecard menambah perspektif pelanggan, proses internal, serta pembelajaran dan pertumbuhan. Contoh ukuran: ROCE, retensi distributor, rendemen pengolahan, dan jam pelatihan agronomi.";Ukuran keuangan bersifat lagging, berorientasi jangka pendek, dan tidak menjelaskan penyebab kinerja. Balanced scorecard menyeimbangkan ukuran lagging dan leading dalam empat perspektif yang terhubung sebab-akibat: keuangan (ROCE), pelanggan (retensi distributor), proses internal (rendemen pengolahan), pembelajaran dan pertumbuhan (jam pelatihan agronomi per karyawan).;7,5;10;22,5;30;Membaca data dan konsep utama dengan benar.;Hubungan sebab-akibat dan dampak keuangan belum dijelaskan.;Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.;sedang;;Ya;Tidak;contoh-penilai (fiktif, untuk uji)
+Balanced scorecard menambah perspektif pelanggan, proses internal, serta pembelajaran dan pertumbuhan. Contoh ukuran: ROCE, retensi distributor, rendemen pengolahan, dan jam pelatihan agronomi.";Ukuran keuangan bersifat lagging, berorientasi jangka pendek, dan tidak menjelaskan penyebab kinerja. Balanced scorecard menyeimbangkan ukuran lagging dan leading dalam empat perspektif yang terhubung sebab-akibat: keuangan (ROCE), pelanggan (retensi distributor), proses internal (rendemen pengolahan), pembelajaran dan pertumbuhan (jam pelatihan agronomi per karyawan).;7,5;10;22,5;30;Mengenali sifat lagging ukuran keuangan dan memberi contoh ukuran yang relevan.;Hubungan sebab-akibat antarperspektif balanced scorecard belum dijelaskan.;Gambarkan strategy map: pembelajaran -> proses internal -> pelanggan -> keuangan.;sedang;;Ya;Tidak;contoh-penilai (fiktif, untuk uji)
 5;DEMO-KAS-001;Studi kasus;T01, T03;K01, K02;"[DEMO] Bacalah kasus PT Sinar Nusantara Logistik (fiktif) lalu jawab kedua sub-pertanyaan.
 
 PT Sinar Nusantara Logistik (SNL) melayani tiga segmen: pengiriman B2B, pengiriman ritel, dan pergudangan. Pesaing digital menekan tarif pengiriman ritel. Direksi mempertimbangkan dua pilihan: (1) memperbesar armada ritel untuk merebut pangsa, atau (2) mengalihkan investasi ke pergudangan terpadu untuk klien B2B. Anggaran investasi tahun depan Rp300 miliar.
 
 (a) Analisis posisi ketiga segmen berdasarkan data kinerja dan kondisi persaingan.
 
-(b) Evaluasi kedua pilihan investasi dan berikan rekomendasi beserta risikonya.";"[a] B2B menyumbang laba operasi terbesar (98,4), pergudangan paling efisien dengan margin 15%, sedangkan ritel hanya 5% dan ditekan pesaing digital.
+(b) Evaluasi kedua pilihan investasi dan berikan rekomendasi beserta risikonya.";"(a) B2B menyumbang laba operasi terbesar (98,4), pergudangan paling efisien dengan margin 15%, sedangkan ritel hanya 5% dan ditekan pesaing digital.
 
-[b] Memperbesar armada ritel berisiko perang tarif. Pergudangan terpadu bersinergi dengan klien B2B dan marginnya tinggi. Saya merekomendasikan pergudangan; risikonya utilisasi gudang rendah pada tahun awal.";"(a) Pergudangan bermargin tertinggi (15%) dan bersinergi dengan B2B; B2B menyumbang laba terbesar (Rp98,4 miliar, margin 12%); ritel bermargin terendah (5%) dan tertekan pesaing digital.
+(b) Memperbesar armada ritel berisiko perang tarif. Pergudangan terpadu bersinergi dengan klien B2B dan marginnya tinggi. Saya merekomendasikan pergudangan; risikonya utilisasi gudang rendah pada tahun awal.";"(a) Pergudangan bermargin tertinggi (15%) dan bersinergi dengan B2B; B2B menyumbang laba terbesar (Rp98,4 miliar, margin 12%); ritel bermargin terendah (5%) dan tertekan pesaing digital.
 
-(b) Pilihan (2) lebih tepat: memperkuat segmen bermargin tinggi, membangun switching cost klien B2B, dan menghindari perang tarif. Risiko: konsentrasi pada klien besar dan utilisasi gudang; mitigasi dengan kontrak jangka panjang dan investasi bertahap.";13,5;20;27;40;Membaca data dan konsep utama dengan benar.;Hubungan sebab-akibat dan dampak keuangan belum dijelaskan.;Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.;sedang;;Tidak;Tidak;contoh-penilai (fiktif, untuk uji)
+(b) Pilihan (2) lebih tepat: memperkuat segmen bermargin tinggi, membangun switching cost klien B2B, dan menghindari perang tarif. Risiko: konsentrasi pada klien besar dan utilisasi gudang; mitigasi dengan kontrak jangka panjang dan investasi bertahap.";13,5;20;27;40;Membaca data margin ketiga segmen dengan benar dan memberi rekomendasi tegas.;"Evaluasi pilihan kurang kuantitatif; risiko belum disertai mitigasi.";Hitung dampak investasi Rp300 miliar pada laba operasi dan sertakan mitigasi tiap risiko.;sedang;;Tidak;Tidak;contoh-penilai (fiktif, untuk uji)
 
 == Rubrik ==
-No;ID soal;Bagian;Kriteria;Deskripsi;Skor AI;Skor dipakai;Maks;Dikoreksi manual;Alasan penilai
-4;DEMO-ESA-001;;C1;Kelemahan ukuran keuangan semata;2,5;2,5;3;Tidak;Bukti untuk kelemahan ukuran keuangan semata ditemukan sebagian di jawaban (contoh fiktif).
-4;DEMO-ESA-001;;C2;Logika balanced scorecard;2;2;3;Tidak;Bukti untuk logika balanced scorecard ditemukan sebagian di jawaban (contoh fiktif).
-4;DEMO-ESA-001;;C3;Contoh ukuran per perspektif;1,5;2;2;Ya;Bukti untuk contoh ukuran per perspektif ditemukan sebagian di jawaban (contoh fiktif).
-4;DEMO-ESA-001;;C4;Kualitas argumentasi;1;1;2;Tidak;Bukti untuk kualitas argumentasi ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(a);C1;Membaca data margin dan kontribusi laba;2;2;3;Tidak;Bukti untuk membaca data margin dan kontribusi laba ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(a);C2;Mengaitkan data dengan persaingan;2,5;2,5;3;Tidak;Bukti untuk mengaitkan data dengan persaingan ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(a);C3;Kesimpulan posisi segmen;1;1;2;Tidak;Bukti untuk kesimpulan posisi segmen ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(b);C1;Evaluasi pilihan (1);3;3;4;Tidak;Bukti untuk evaluasi pilihan (1) ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(b);C2;Evaluasi pilihan (2);2;2;4;Tidak;Bukti untuk evaluasi pilihan (2) ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(b);C3;Rekomendasi;1,5;1,5;2;Tidak;Bukti untuk rekomendasi ditemukan sebagian di jawaban (contoh fiktif).
-5;DEMO-KAS-001;(b);C4;Risiko dan mitigasi;1,5;1,5;2;Tidak;Bukti untuk risiko dan mitigasi ditemukan sebagian di jawaban (contoh fiktif).
+No;ID soal;Bagian;Kriteria;Deskripsi;Skor AI;Skor dipakai;Maks;Dikoreksi manual;Alasan penilai;Alasan koreksi manual
+4;DEMO-ESA-001;;C1;Kelemahan ukuran keuangan semata;2,5;2,5;3;Tidak;Bukti untuk kelemahan ukuran keuangan semata ditemukan sebagian di jawaban (contoh fiktif).;
+4;DEMO-ESA-001;;C2;Logika balanced scorecard;2;2;3;Tidak;Bukti untuk logika balanced scorecard ditemukan sebagian di jawaban (contoh fiktif).;
+4;DEMO-ESA-001;;C3;Contoh ukuran per perspektif;1,5;2;2;Ya;Bukti untuk contoh ukuran per perspektif ditemukan sebagian di jawaban (contoh fiktif).;Contoh koreksi: keempat ukuran relevan untuk agribisnis.
+4;DEMO-ESA-001;;C4;Kualitas argumentasi;1;1;2;Tidak;Bukti untuk kualitas argumentasi ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(a);C1;Membaca data margin dan kontribusi laba;2;2;3;Tidak;Bukti untuk membaca data margin dan kontribusi laba ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(a);C2;Mengaitkan data dengan persaingan;2,5;2,5;3;Tidak;Bukti untuk mengaitkan data dengan persaingan ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(a);C3;Kesimpulan posisi segmen;1;1;2;Tidak;Bukti untuk kesimpulan posisi segmen ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(b);C1;Evaluasi pilihan (1);3;3;4;Tidak;Bukti untuk evaluasi pilihan (1) ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(b);C2;Evaluasi pilihan (2);2;2;4;Tidak;Bukti untuk evaluasi pilihan (2) ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(b);C3;Rekomendasi;1,5;1,5;2;Tidak;Bukti untuk rekomendasi ditemukan sebagian di jawaban (contoh fiktif).;
+5;DEMO-KAS-001;(b);C4;Risiko dan mitigasi;1,5;1,5;2;Tidak;Bukti untuk risiko dan mitigasi ditemukan sebagian di jawaban (contoh fiktif).;
 
 == Kompetensi ==
-Jenis;ID;Nama;Skor;Maks;Capaian (%);Kategori;Nomor soal
-Kompetensi;K01;Menganalisis dan mengevaluasi strategi;46;70;65,714286;Lemah;1, 2, 4, 5
-Kompetensi;K02;Menilai dampak keuangan keputusan strategis;23,5;30;78,333333;Cukup;3, 5
-Topik;T01;Analisis lingkungan dan portofolio;23,5;30;78,333333;Cukup;1, 5
-Topik;T02;Pengukuran kinerja strategis;22,5;40;56,25;Lemah;2, 4
-Topik;T03;Keuangan stratejik;23,5;30;78,333333;Cukup;3, 5
+Jenis;ID;Nama;Skor;Maks;Capaian;Kategori;Nomor soal
+Kompetensi;K01;Menganalisis dan mengevaluasi strategi;46;70;65,71%;Lemah;1, 2, 4, 5
+Kompetensi;K02;Menilai dampak keuangan keputusan strategis;23,5;30;78,33%;Cukup;3, 5
+Topik;T01;Analisis lingkungan dan portofolio;23,5;30;78,33%;Cukup;1, 5
+Topik;T02;Pengukuran kinerja strategis;22,5;40;56,25%;Lemah;2, 4
+Topik;T03;Keuangan stratejik;23,5;30;78,33%;Cukup;3, 5
 
 == Remedial ==
-Jenis;ID;Nama;Capaian (%);Tindakan
-Topik;T02;Pengukuran kinerja strategis;56,25;"Pelajari ulang konsep: Balanced scorecard dan strategy map; Balanced scorecard."
-Topik;T02;Pengukuran kinerja strategis;56,25;Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001).
-Topik;T02;Pengukuran kinerja strategis;56,25;Saran penilai untuk Soal 4: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.
-Topik;T02;Pengukuran kinerja strategis;56,25;Berlatih lagi dengan Mode Kustom, filter topik T02.
-Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,714286;"Pelajari ulang konsep: Balanced scorecard dan strategy map; Balanced scorecard; Analisis portofolio bisnis; Keunggulan bersaing Porter."
-Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,714286;Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001), Soal 5 (DEMO-KAS-001).
-Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,714286;Saran penilai untuk Soal 4: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.
-Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,714286;Saran penilai untuk Soal 5: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.
+Jenis;ID;Nama;Capaian;Tindakan
+Topik;T02;Pengukuran kinerja strategis;56,25%;Pelajari ulang konsep: Balanced scorecard dan strategy map.
+Topik;T02;Pengukuran kinerja strategis;56,25%;Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001).
+Topik;T02;Pengukuran kinerja strategis;56,25%;Saran penilai untuk Soal 4: Gambarkan strategy map: pembelajaran -> proses internal -> pelanggan -> keuangan.
+Topik;T02;Pengukuran kinerja strategis;56,25%;Berlatih lagi dengan Mode Kustom, filter topik T02.
+Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,71%;"Pelajari ulang konsep: Balanced scorecard dan strategy map; Analisis portofolio bisnis; Keunggulan bersaing Porter."
+Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,71%;Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001), Soal 5 (DEMO-KAS-001).
+Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,71%;Saran penilai untuk Soal 4: Gambarkan strategy map: pembelajaran -> proses internal -> pelanggan -> keuangan.
+Kompetensi;K01;Menganalisis dan mengevaluasi strategi;65,71%;Saran penilai untuk Soal 5: Hitung dampak investasi Rp300 miliar pada laba operasi dan sertakan mitigasi tiap risiko.
 
 == Riwayat ==
 Dikumpulkan;Paket;ID sesi;Nilai;Passing grade;Status
-16 Oktober 2026 pukul 08.25;Training 1 (Demo);demo-20261017-3919b7e3;68;70;TIDAK LULUS
+16 Oktober 2026 pukul 08.25;Training 1 (Demo);demo-20261016-3919b7e3;68;70;TIDAK LULUS
 17 Oktober 2026 pukul 08.25;Training 1 (Demo);demo-20261017-99d81897;69,5;70;TIDAK LULUS

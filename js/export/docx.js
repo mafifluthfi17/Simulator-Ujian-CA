@@ -43,17 +43,38 @@ function paragraph(runs, { style, keepNext, spacingAfter } = {}) {
   return `<w:p>${pPr ? `<w:pPr>${pPr}</w:pPr>` : ''}${runs.map(run).join('')}</w:p>`;
 }
 
-function cellXml(cell, width, header) {
+const TABLE_TEXT_SIZE = 19; // 9,5 pt
+
+function cellXml(cell, width, header, keepNext) {
   const c = cell !== null && typeof cell === 'object' ? cell : { text: cell };
   const text = c.text === null || c.text === undefined ? '' : String(c.text);
   const fill = header ? 'E7ECF3' : c.fill;
   const tcPr = `<w:tcPr><w:tcW w:w="${width}" w:type="dxa"/>${fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${fill}"/>` : ''}</w:tcPr>`;
-  return `<w:tc>${tcPr}${paragraph([{ text, bold: header || c.bold, color: c.color }], { spacingAfter: 0 })}</w:tc>`;
+  return `<w:tc>${tcPr}${paragraph([{ text, bold: header || c.bold, color: c.color, size: TABLE_TEXT_SIZE }], { spacingAfter: 0, keepNext })}</w:tc>`;
 }
 
-function table({ columns, rows }) {
-  const total = columns.reduce((n, c) => n + (c.width || 1), 0);
-  const widths = columns.map((c) => Math.floor(((c.width || 1) / total) * PAGE_WIDTH_TWIPS));
+// Lebar kolom (twips) sebanding bobot, tetapi tidak lebih sempit dari kata terpanjang
+// pada judul kolom (judul seperti "Sebelum" tidak terpotong menjadi "Sebelu/m").
+export function columnWidths(columns, total = PAGE_WIDTH_TWIPS) {
+  const weights = columns.map((c) => c.width || 1);
+  const weightSum = weights.reduce((a, b) => a + b, 0);
+  const min = columns.map((c) => Math.max(600, ...String(c.header).split(/\s+/).map((w) => w.length * 115 + 260)));
+  let widths = weights.map((w) => (w / weightSum) * total);
+  for (let pass = 0; pass < 6; pass++) {
+    const deficit = widths.reduce((n, w, i) => n + Math.max(0, min[i] - w), 0);
+    if (deficit < 1) break;
+    const spare = widths.map((w, i) => Math.max(0, w - min[i]));
+    const spareSum = spare.reduce((a, b) => a + b, 0);
+    if (spareSum <= 0) break;
+    widths = widths.map((w, i) => (w < min[i] ? min[i] : w - (deficit * spare[i]) / spareSum));
+  }
+  return widths.map((w) => Math.floor(w));
+}
+
+// keepTogether: setiap baris (kecuali terakhir) "keep with next" agar tabel pendek
+// seperti opsi A-D dan rubrik tidak terbelah antarhalaman (cantSplit saja tidak cukup).
+function table({ columns, rows, keepTogether = false }) {
+  const widths = columnWidths(columns);
   const border = (side) => `<w:${side} w:val="single" w:sz="4" w:space="0" w:color="8C96A3"/>`;
   const tblPr = '<w:tblPr><w:tblStyle w:val="TableGrid"/>'
     + `<w:tblW w:w="${widths.reduce((a, b) => a + b, 0)}" w:type="dxa"/>`
@@ -62,8 +83,12 @@ function table({ columns, rows }) {
     + '<w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>'
     + '</w:tblPr>';
   const grid = `<w:tblGrid>${widths.map((w) => `<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>`;
-  const head = `<w:tr><w:trPr><w:tblHeader/></w:trPr>${columns.map((c, i) => cellXml(c.header, widths[i], true)).join('')}</w:tr>`;
-  const body = rows.map((row) => `<w:tr><w:trPr><w:cantSplit/></w:trPr>${columns.map((_, i) => cellXml(row[i] ?? '', widths[i], false)).join('')}</w:tr>`).join('');
+  // Baris judul selalu ditahan bersama baris pertama agar tidak tertinggal sendirian di akhir halaman.
+  const head = `<w:tr><w:trPr><w:cantSplit/><w:tblHeader/></w:trPr>${columns.map((c, i) => cellXml(c.header, widths[i], true, rows.length > 0)).join('')}</w:tr>`;
+  const body = rows.map((row, r) => {
+    const keep = keepTogether && r < rows.length - 1;
+    return `<w:tr><w:trPr><w:cantSplit/></w:trPr>${columns.map((_, i) => cellXml(row[i] ?? '', widths[i], false, keep)).join('')}</w:tr>`;
+  }).join('');
   // Paragraf kosong setelah tabel: tabel berurutan tidak menyatu dan dokumen tidak berakhir dengan tabel.
   return `<w:tbl>${tblPr}${grid}${head}${body}</w:tbl>${paragraph([], { spacingAfter: 120 })}`;
 }
@@ -85,9 +110,9 @@ function blockXml(block) {
   }
 }
 
-export function documentXml(blocks) {
+export function documentXml(blocks, { footer = false } = {}) {
   return `${XML_HEADER}<w:document xmlns:w="${W_NS}" xmlns:r="${R_NS}"><w:body>${blocks.map(blockXml).join('')}`
-    + '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'
+    + `<w:sectPr>${footer ? '<w:footerReference w:type="default" r:id="rId2"/>' : ''}<w:pgSz w:w="11906" w:h="16838"/>`
     + '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/>'
     + '</w:sectPr></w:body></w:document>';
 }
@@ -149,7 +174,17 @@ export function rootRelsXml(mainPart) {
 // Daftar entri wajib (dipakai tes TS-15).
 export const DOCX_PARTS = ['[Content_Types].xml', '_rels/.rels', 'word/document.xml', 'word/styles.xml', 'word/_rels/document.xml.rels', 'docProps/core.xml'];
 
-export function docxFiles(blocks, { title, created } = {}) {
+// Footer: teks bebas lalu "Halaman X dari Y" (field PAGE dan NUMPAGES).
+export function footerXml(text) {
+  const r = (t) => `<w:r><w:rPr><w:color w:val="${MUTED}"/><w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr><w:t xml:space="preserve">${escapeXml(t)}</w:t></w:r>`;
+  const field = (instr) => `<w:fldSimple w:instr=" ${instr} ">${r('1')}</w:fldSimple>`;
+  return `${XML_HEADER}<w:ftr xmlns:w="${W_NS}" xmlns:r="${R_NS}"><w:p><w:pPr><w:jc w:val="center"/></w:pPr>`
+    + `${r(`${text ? `${text} · ` : ''}Halaman `)}${field('PAGE')}${r(' dari ')}${field('NUMPAGES')}</w:p></w:ftr>`;
+}
+
+// options.footer: teks footer (mis. judul dan ID sesi); bila diisi, word/footer1.xml dibuat.
+export function docxFiles(blocks, { title, created, footer } = {}) {
+  const hasFooter = typeof footer === 'string';
   return [
     {
       name: '[Content_Types].xml',
@@ -158,15 +193,18 @@ export function docxFiles(blocks, { title, created } = {}) {
         + '<Default Extension="xml" ContentType="application/xml"/>'
         + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
         + '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'
+        + (hasFooter ? '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' : '')
         + '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>'
         + '</Types>',
     },
     { name: '_rels/.rels', data: rootRelsXml('word/document.xml') },
-    { name: 'word/document.xml', data: documentXml(blocks) },
+    { name: 'word/document.xml', data: documentXml(blocks, { footer: hasFooter }) },
     { name: 'word/styles.xml', data: stylesXml() },
+    ...(hasFooter ? [{ name: 'word/footer1.xml', data: footerXml(footer) }] : []),
     {
       name: 'word/_rels/document.xml.rels',
-      data: `${XML_HEADER}<Relationships xmlns="${REL_NS}"><Relationship Id="rId1" Type="${REL_TYPE}/styles" Target="styles.xml"/></Relationships>`,
+      data: `${XML_HEADER}<Relationships xmlns="${REL_NS}"><Relationship Id="rId1" Type="${REL_TYPE}/styles" Target="styles.xml"/>`
+        + `${hasFooter ? `<Relationship Id="rId2" Type="${REL_TYPE}/footer" Target="footer1.xml"/>` : ''}</Relationships>`,
     },
     { name: 'docProps/core.xml', data: corePropsXml({ title, created }) },
   ];

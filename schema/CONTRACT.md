@@ -75,6 +75,9 @@ Wajib untuk semua tipe: `id`, `type`, `topicIds` (min 1), `competencyIds`
 3. `criterionId` unik dalam satu rubrik; `id` sub-pertanyaan unik.
 4. ID soal unik dalam batch dan pack.
 5. Data kasus konsisten secara aritmetika (total, rasio, persentase).
+6. case: rujukan kriteria di `acceptableAlternatives` (dan `modelAnswer` tingkat soal)
+   wajib menyebut bagiannya, mis. `(b) C3`, karena setiap sub-pertanyaan punya
+   rubrik sendiri.
 
 ## D. Batch dari penyusun (`batch.schema.json`)
 ```json

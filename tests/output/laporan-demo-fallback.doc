@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="id" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
 <head>
-<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Laporan &amp; Pembahasan</title>
 <style>
@@ -31,20 +31,20 @@ hr.page{border:0;border-top:1px dashed #c9d0da;margin:2em 0}
 <p><strong>Nilai akhir: </strong>69,50 — TIDAK LULUS</p>
 <p><strong>Dibuat: </strong>17 Oktober 2026 pukul 08.40</p>
 <p class="muted"><em>Simulator belajar, bukan ujian resmi, dan tidak berafiliasi dengan IAI. Passing grade 70 adalah standar latihan internal, bukan ketentuan resmi IAI.</em></p>
-<hr class="page">
+<br clear=all style="page-break-before:always">
 <h1>1. Rekap Nilai</h1>
 <table><thead><tr><th>Keterangan</th><th>Nilai</th></tr></thead><tbody><tr><td>Mata ujian</td><td>DEMO — Manajemen Stratejik (soal contoh) (pack versi 1.0.0)</td></tr><tr><td>Paket</td><td>Training 1 (Demo) (T1)</td></tr><tr><td>Mode</td><td>Mode latihan (boleh jeda)</td></tr><tr><td>Mulai</td><td>17 Oktober 2026 pukul 08.00</td></tr><tr><td>Dikumpulkan</td><td>17 Oktober 2026 pukul 08.25 — Dikumpulkan peserta</td></tr><tr><td>Durasi paket</td><td>30 menit</td></tr><tr><td>Waktu pengerjaan</td><td>25 menit</td></tr><tr><td>Status penilaian</td><td>FINAL</td></tr><tr><td>Passing grade</td><td>70,00</td></tr><tr><td>Nilai akhir</td><td>69,50</td></tr><tr><td>Selisih terhadap passing grade</td><td>-0,50</td></tr><tr><td>Status kelulusan</td><td>TIDAK LULUS</td></tr></tbody></table>
-<h3>Skor per komponen</h3>
+<h2>Skor per komponen</h2>
 <table><thead><tr><th>Komponen</th><th>Soal</th><th>Sudah dinilai</th><th>Skor</th><th>Maks</th></tr></thead><tbody><tr><td>Pilihan ganda</td><td>2</td><td>2</td><td>10,00</td><td>20,00</td></tr><tr><td>Numerik</td><td>1</td><td>1</td><td>10,00</td><td>10,00</td></tr><tr><td>Esai</td><td>1</td><td>1</td><td>22,50</td><td>30,00</td></tr><tr><td>Studi kasus</td><td>1</td><td>1</td><td>27,00</td><td>40,00</td></tr><tr><td><strong>Total</strong></td><td>5</td><td>5</td><td><strong>69,50</strong></td><td><strong>100,00</strong></td></tr></tbody></table>
 <p class="small muted">Nilai akhir dihitung aplikasi: skor pilihan ganda/numerik + skor uraian (jumlah skor kriteria × faktor skala paket). LULUS bila nilai ≥ passing grade sebelum pembulatan.</p>
 <h1>2. Analisis Kompetensi dan Topik</h1>
-<p class="small muted">Capaian = skor diperoleh ÷ skor maksimum soal terkait (skor soal dengan beberapa topik/kompetensi dibagi rata). Kategori: kuat ≥ 80%, cukup 70–79%, lemah &lt; 70%.</p>
+<p class="small muted">Capaian = skor diperoleh ÷ skor maksimum soal terkait (skor soal dengan beberapa topik/kompetensi dibagi rata). Kategori: kuat ≥ 80%, cukup 70% ≤ capaian &lt; 80%, lemah &lt; 70%.</p>
 <h2>Kompetensi</h2>
 <table><thead><tr><th>ID</th><th>Nama</th><th>Skor</th><th>Maks</th><th>Capaian</th><th>Kategori</th></tr></thead><tbody><tr><td>K01</td><td>Menganalisis dan mengevaluasi strategi</td><td>46,00</td><td>70,00</td><td>65,71%</td><td><strong>Lemah</strong></td></tr><tr><td>K02</td><td>Menilai dampak keuangan keputusan strategis</td><td>23,50</td><td>30,00</td><td>78,33%</td><td>Cukup</td></tr></tbody></table>
 <h2>Topik</h2>
 <table><thead><tr><th>ID</th><th>Nama</th><th>Skor</th><th>Maks</th><th>Capaian</th><th>Kategori</th></tr></thead><tbody><tr><td>T01</td><td>Analisis lingkungan dan portofolio</td><td>23,50</td><td>30,00</td><td>78,33%</td><td>Cukup</td></tr><tr><td>T02</td><td>Pengukuran kinerja strategis</td><td>22,50</td><td>40,00</td><td>56,25%</td><td><strong>Lemah</strong></td></tr><tr><td>T03</td><td>Keuangan stratejik</td><td>23,50</td><td>30,00</td><td>78,33%</td><td>Cukup</td></tr></tbody></table>
 <h1>3. Pembahasan Pilihan Ganda dan Numerik</h1>
-<h3>Soal 1 · Pilihan ganda · DEMO-MCQ-001</h3>
+<h2>Soal 1 · Pilihan ganda · DEMO-MCQ-001</h2>
 <p>[DEMO] Kekuatan kompetitif manakah yang paling meningkat ketika biaya beralih (switching cost) pelanggan menjadi sangat rendah?</p>
 <table><thead><tr><th>Opsi</th><th>Teks</th><th>Keterangan</th></tr></thead><tbody><tr><td>A</td><td>Kebutuhan modal awal</td><td></td></tr><tr><td>B</td><td>Daya tawar pemasok</td><td></td></tr><tr><td>C</td><td>Hambatan masuk industri</td><td></td></tr><tr><td>D</td><td>Daya tawar pembeli</td><td style="background:#DCF2E3"><strong>Kunci · Jawaban Anda</strong></td></tr></tbody></table>
 <p><strong>Jawaban Anda: </strong>D. Daya tawar pembeli</p>
@@ -53,7 +53,7 @@ hr.page{border:0;border-top:1px dashed #c9d0da;margin:2em 0}
 <p><strong>Pembahasan: </strong>Biaya beralih yang rendah memudahkan pembeli berpindah ke pesaing sehingga daya tawarnya meningkat.</p>
 <p><strong>Mengapa pilihan lain salah:</strong></p>
 <ul><li>A — Kebutuhan modal tidak berkaitan dengan biaya beralih pelanggan.</li><li>B — Biaya beralih pelanggan tidak mengubah posisi tawar pemasok.</li><li>C — Biaya beralih yang rendah justru menurunkan hambatan masuk.</li></ul>
-<h3>Soal 2 · Pilihan ganda · DEMO-MCQ-002</h3>
+<h2>Soal 2 · Pilihan ganda · DEMO-MCQ-002</h2>
 <p>[DEMO] PT Rasa Laut Lestari (fiktif) ingin meningkatkan loyalitas gerai ritel modern. Dalam strategy map, sasaran manakah yang paling tepat sebagai penggerak langsung sasaran tersebut?</p>
 <table><thead><tr><th>Opsi</th><th>Teks</th><th>Keterangan</th></tr></thead><tbody><tr><td>A</td><td>Meningkatkan kompetensi digital tenaga penjual</td><td></td></tr><tr><td>B</td><td>Menurunkan biaya produksi per kaleng 5%</td><td>Jawaban Anda</td></tr><tr><td>C</td><td>Meningkatkan laba bersih per saham</td><td></td></tr><tr><td>D</td><td>Meningkatkan ketepatan waktu pengiriman ke gerai</td><td style="background:#DCF2E3"><strong>Kunci</strong></td></tr></tbody></table>
 <p><strong>Jawaban Anda: </strong>B. Menurunkan biaya produksi per kaleng 5%</p>
@@ -62,7 +62,7 @@ hr.page{border:0;border-top:1px dashed #c9d0da;margin:2em 0}
 <p><strong>Pembahasan: </strong>Sasaran pelanggan digerakkan langsung oleh sasaran proses internal; ketepatan pengiriman memengaruhi pengalaman gerai secara langsung.</p>
 <p><strong>Mengapa pilihan lain salah:</strong></p>
 <ul><li>A — Kompetensi karyawan berada dua tingkat di bawah sasaran pelanggan.</li><li>B — Efisiensi biaya tidak langsung dirasakan gerai sebagai pelanggan.</li><li>C — Laba per saham adalah hasil akhir perspektif keuangan, bukan penggerak loyalitas.</li></ul>
-<h3>Soal 3 · Numerik · DEMO-NUM-001</h3>
+<h2>Soal 3 · Numerik · DEMO-NUM-001</h2>
 <p>[DEMO] Divisi Logistik PT Arunika Niaga (fiktif) mencatat laba operasi setelah pajak Rp180 miliar, modal yang diinvestasikan Rp1.200 miliar, dan WACC 11%. Berapa Economic Value Added (EVA) divisi tersebut?</p>
 <p><strong>Jawaban Anda: </strong>47,8 Rp miliar</p>
 <p><strong>Kunci: </strong>48 Rp miliar (toleransi ±1%)</p>
@@ -74,19 +74,18 @@ hr.page{border:0;border-top:1px dashed #c9d0da;margin:2em 0}
 <h3>Soal</h3>
 <p>[DEMO] Direksi PT Bumi Hijau Agro (fiktif) mengukur kinerja hanya dengan laba bersih dan pertumbuhan pendapatan. Jelaskan kelemahan pendekatan tersebut dan bagaimana balanced scorecard dapat memperbaikinya. Sertakan satu contoh ukuran untuk setiap perspektif.</p>
 <h3>Jawaban Anda (asli, utuh)</h3>
-<p>Laba bersih dan pertumbuhan pendapatan hanya menunjukkan hasil masa lalu (lagging) dan mendorong keputusan jangka pendek, misalnya menunda perawatan kebun.
-
-Balanced scorecard menambah perspektif pelanggan, proses internal, serta pembelajaran dan pertumbuhan. Contoh ukuran: ROCE, retensi distributor, rendemen pengolahan, dan jam pelatihan agronomi.</p>
+<p>Laba bersih dan pertumbuhan pendapatan hanya menunjukkan hasil masa lalu (lagging) dan mendorong keputusan jangka pendek, misalnya menunda perawatan kebun.</p><p>&nbsp;</p><p>Balanced scorecard menambah perspektif pelanggan, proses internal, serta pembelajaran dan pertumbuhan. Contoh ukuran: ROCE, retensi distributor, rendemen pengolahan, dan jam pelatihan agronomi.</p>
 <h3>Jawaban ideal</h3>
 <p>Ukuran keuangan bersifat lagging, berorientasi jangka pendek, dan tidak menjelaskan penyebab kinerja. Balanced scorecard menyeimbangkan ukuran lagging dan leading dalam empat perspektif yang terhubung sebab-akibat: keuangan (ROCE), pelanggan (retensi distributor), proses internal (rendemen pengolahan), pembelajaran dan pertumbuhan (jam pelatihan agronomi per karyawan).</p>
 <p><strong>Alternatif yang dapat diterima: </strong>Ukuran lain yang relevan diterima (mis. NPS distributor, produktivitas lahan, indeks keterlibatan karyawan).</p>
 <h3>Rubrik dan skor per kriteria</h3>
-<table><thead><tr><th>Bagian</th><th>Kriteria</th><th>Deskripsi</th><th>Skor</th><th>Maks</th><th>Alasan penilai</th></tr></thead><tbody><tr><td>—</td><td>C1</td><td>Kelemahan ukuran keuangan semata</td><td>2,50</td><td>3,00</td><td>Bukti untuk kelemahan ukuran keuangan semata ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>—</td><td>C2</td><td>Logika balanced scorecard</td><td>2,00</td><td>3,00</td><td>Bukti untuk logika balanced scorecard ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>—</td><td>C3</td><td>Contoh ukuran per perspektif</td><td style="background:#FDECD3"><strong>2,00 (AI 1,50) DIKOREKSI MANUAL</strong></td><td>2,00</td><td>Bukti untuk contoh ukuran per perspektif ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>—</td><td>C4</td><td>Kualitas argumentasi</td><td>1,00</td><td>2,00</td><td>Bukti untuk kualitas argumentasi ditemukan sebagian di jawaban (contoh fiktif).</td></tr></tbody></table>
+<table><thead><tr><th>Bagian</th><th>Kriteria</th><th>Deskripsi</th><th>Skor</th><th>Maks</th><th>Alasan penilai</th></tr></thead><tbody><tr><td>—</td><td>C1</td><td>Kelemahan ukuran keuangan semata</td><td>2,50</td><td>3,00</td><td>Bukti untuk kelemahan ukuran keuangan semata ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>—</td><td>C2</td><td>Logika balanced scorecard</td><td>2,00</td><td>3,00</td><td>Bukti untuk logika balanced scorecard ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>—</td><td>C3</td><td>Contoh ukuran per perspektif</td><td style="background:#FDECD3"><strong>2,00*</strong></td><td>2,00</td><td>Bukti untuk contoh ukuran per perspektif ditemukan sebagian di jawaban (contoh fiktif).<br>Koreksi manual (skor AI 1,50 → 2,00): Contoh koreksi: keempat ukuran relevan untuk agribisnis.</td></tr><tr><td>—</td><td>C4</td><td>Kualitas argumentasi</td><td>1,00</td><td>2,00</td><td>Bukti untuk kualitas argumentasi ditemukan sebagian di jawaban (contoh fiktif).</td></tr></tbody></table>
+<p class="small"><em>* Dikoreksi manual — C3: AI 1,50 → 2,00. Rincian di Lampiran B.</em></p>
 <p><strong>Skor: </strong>7,50 dari 10,00 (skala asli) → 22,50 dari 30,00 poin</p>
-<p><strong>DIKOREKSI MANUAL: sebagian skor kriteria diubah manual; lihat Lampiran B.</strong></p>
-<p><strong>Kekuatan: </strong>Membaca data dan konsep utama dengan benar.</p>
-<p><strong>Kelemahan: </strong>Hubungan sebab-akibat dan dampak keuangan belum dijelaskan.</p>
-<p><strong>Saran perbaikan: </strong>Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.</p>
+<p><strong>DIKOREKSI MANUAL: sebagian skor kriteria diubah manual (tanda * pada tabel rubrik).</strong></p>
+<p><strong>Kekuatan: </strong>Mengenali sifat lagging ukuran keuangan dan memberi contoh ukuran yang relevan.</p>
+<p><strong>Kelemahan: </strong>Hubungan sebab-akibat antarperspektif balanced scorecard belum dijelaskan.</p>
+<p><strong>Saran perbaikan: </strong>Gambarkan strategy map: pembelajaran -&gt; proses internal -&gt; pelanggan -&gt; keuangan.</p>
 <p class="small muted">Keyakinan penilai: sedang · Penilai: contoh-penilai (fiktif, untuk uji)</p>
 <h2>Soal 5 · Studi kasus mini · DEMO-KAS-001</h2>
 <p class="small muted">Kesulitan: Sulit · Topik: T01, T03 · Kompetensi: K01, K02</p>
@@ -107,19 +106,19 @@ Balanced scorecard menambah perspektif pelanggan, proses internal, serta pembela
 <p>Pergudangan bermargin tertinggi (15%) dan bersinergi dengan B2B; B2B menyumbang laba terbesar (Rp98,4 miliar, margin 12%); ritel bermargin terendah (5%) dan tertekan pesaing digital.</p>
 <p><strong>(b)</strong></p>
 <p>Pilihan (2) lebih tepat: memperkuat segmen bermargin tinggi, membangun switching cost klien B2B, dan menghindari perang tarif. Risiko: konsentrasi pada klien besar dan utilisasi gudang; mitigasi dengan kontrak jangka panjang dan investasi bertahap.</p>
-<p><strong>Alternatif yang dapat diterima: </strong>Rekomendasi pilihan (1) dapat nilai penuh pada C3 bila argumennya kuat dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.</p>
+<p><strong>Alternatif yang dapat diterima: </strong>Rekomendasi pilihan (1) dapat nilai penuh pada (b) C3 bila argumennya kuat dan risikonya dianalisis. Kerangka GE-McKinsey, BCG, atau Porter boleh dipakai.</p>
 <h3>Rubrik dan skor per kriteria</h3>
 <table><thead><tr><th>Bagian</th><th>Kriteria</th><th>Deskripsi</th><th>Skor</th><th>Maks</th><th>Alasan penilai</th></tr></thead><tbody><tr><td>(a)</td><td>C1</td><td>Membaca data margin dan kontribusi laba</td><td>2,00</td><td>3,00</td><td>Bukti untuk membaca data margin dan kontribusi laba ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(a)</td><td>C2</td><td>Mengaitkan data dengan persaingan</td><td>2,50</td><td>3,00</td><td>Bukti untuk mengaitkan data dengan persaingan ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(a)</td><td>C3</td><td>Kesimpulan posisi segmen</td><td>1,00</td><td>2,00</td><td>Bukti untuk kesimpulan posisi segmen ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(b)</td><td>C1</td><td>Evaluasi pilihan (1)</td><td>3,00</td><td>4,00</td><td>Bukti untuk evaluasi pilihan (1) ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(b)</td><td>C2</td><td>Evaluasi pilihan (2)</td><td>2,00</td><td>4,00</td><td>Bukti untuk evaluasi pilihan (2) ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(b)</td><td>C3</td><td>Rekomendasi</td><td>1,50</td><td>2,00</td><td>Bukti untuk rekomendasi ditemukan sebagian di jawaban (contoh fiktif).</td></tr><tr><td>(b)</td><td>C4</td><td>Risiko dan mitigasi</td><td>1,50</td><td>2,00</td><td>Bukti untuk risiko dan mitigasi ditemukan sebagian di jawaban (contoh fiktif).</td></tr></tbody></table>
 <p><strong>Skor: </strong>13,50 dari 20,00 (skala asli: (a) 5,50/8,00 · (b) 8,00/12,00) → 27,00 dari 40,00 poin</p>
-<p><strong>Kekuatan: </strong>Membaca data dan konsep utama dengan benar.</p>
-<p><strong>Kelemahan: </strong>Hubungan sebab-akibat dan dampak keuangan belum dijelaskan.</p>
-<p><strong>Saran perbaikan: </strong>Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.</p>
+<p><strong>Kekuatan: </strong>Membaca data margin ketiga segmen dengan benar dan memberi rekomendasi tegas.</p>
+<p><strong>Kelemahan: </strong>Evaluasi pilihan kurang kuantitatif; risiko belum disertai mitigasi.</p>
+<p><strong>Saran perbaikan: </strong>Hitung dampak investasi Rp300 miliar pada laba operasi dan sertakan mitigasi tiap risiko.</p>
 <p class="small muted">Keyakinan penilai: sedang · Penilai: contoh-penilai (fiktif, untuk uji)</p>
 <h1>5. Rencana Remedial</h1>
-<h3>Topik T02 — Pengukuran kinerja strategis (capaian 56,25%)</h3>
-<ul><li>Pelajari ulang konsep: Balanced scorecard dan strategy map; Balanced scorecard.</li><li>Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001).</li><li>Saran penilai untuk Soal 4: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.</li><li>Berlatih lagi dengan Mode Kustom, filter topik T02.</li></ul>
-<h3>Kompetensi K01 — Menganalisis dan mengevaluasi strategi (capaian 65,71%)</h3>
-<ul><li>Pelajari ulang konsep: Balanced scorecard dan strategy map; Balanced scorecard; Analisis portofolio bisnis; Keunggulan bersaing Porter.</li><li>Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001), Soal 5 (DEMO-KAS-001).</li><li>Saran penilai untuk Soal 4: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.</li><li>Saran penilai untuk Soal 5: Tunjukkan rantai sebab-akibat dan hitung dampak keputusan pada laba.</li></ul>
+<h2>Topik T02 — Pengukuran kinerja strategis (capaian 56,25%)</h2>
+<ul><li>Pelajari ulang konsep: Balanced scorecard dan strategy map.</li><li>Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001).</li><li>Saran penilai untuk Soal 4: Gambarkan strategy map: pembelajaran -&gt; proses internal -&gt; pelanggan -&gt; keuangan.</li><li>Berlatih lagi dengan Mode Kustom, filter topik T02.</li></ul>
+<h2>Kompetensi K01 — Menganalisis dan mengevaluasi strategi (capaian 65,71%)</h2>
+<ul><li>Pelajari ulang konsep: Balanced scorecard dan strategy map; Analisis portofolio bisnis; Keunggulan bersaing Porter.</li><li>Baca kembali pembahasan Soal 2 (DEMO-MCQ-002), Soal 4 (DEMO-ESA-001), Soal 5 (DEMO-KAS-001).</li><li>Saran penilai untuk Soal 4: Gambarkan strategy map: pembelajaran -&gt; proses internal -&gt; pelanggan -&gt; keuangan.</li><li>Saran penilai untuk Soal 5: Hitung dampak investasi Rp300 miliar pada laba operasi dan sertakan mitigasi tiap risiko.</li></ul>
 <h1>Lampiran</h1>
 <h2>A. Log sesi</h2>
 <p>Meninggalkan layar ujian: 1 kali, total 12 detik (informasi, bukan hukuman). Jeda: 0 kali. Perubahan jam terdeteksi: 0 kali (deteksi tidak sempurna).</p>

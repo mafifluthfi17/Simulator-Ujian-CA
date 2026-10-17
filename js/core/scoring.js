@@ -108,7 +108,7 @@ export function effectiveEvaluations(session) {
     ev.criteria = flattenCriteria(ev.score).map((c) => {
       const applied = ev.corrections.filter((m) => m.criterionId === c.criterionId && (m.subId ?? null) === c.subId);
       const last = applied[applied.length - 1];
-      return { ...c, awardedScore: last ? last.after : c.aiScore, corrected: Boolean(last) };
+      return { ...c, awardedScore: last ? last.after : c.aiScore, corrected: Boolean(last), correction: last || null };
     });
     ev.rawScore = sum(ev.criteria.map((c) => c.awardedScore));
     ev.aiAwardedScore = ev.score.awardedScore;

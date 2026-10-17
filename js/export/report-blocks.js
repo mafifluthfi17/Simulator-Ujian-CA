@@ -3,7 +3,7 @@
 // Struktur Word "Laporan & Pembahasan" (SPEC 11): sampul; rekap nilai; analisis
 // kompetensi; pembahasan PG; pembahasan esai dan kasus; remedial; lampiran.
 
-import { DIFFICULTY_LABELS } from '../core/report.js';
+import { DIFFICULTY_LABELS, LEVEL_RULE } from '../core/report.js';
 import { formatDateTime, formatFixed2, formatMinutes, formatNumber, formatScore } from '../core/format.js';
 
 const p = (text, opts = {}) => ({ type: 'paragraph', text, ...opts });
@@ -56,7 +56,7 @@ function recapBlocks(report) {
   return [
     h1('1. Rekap Nilai'),
     { type: 'table', columns: [{ header: 'Keterangan', width: 2 }, { header: 'Nilai', width: 5 }], rows },
-    h3('Skor per komponen'),
+    h2('Skor per komponen'),
     {
       type: 'table',
       columns: [{ header: 'Komponen', width: 3 }, { header: 'Soal', width: 1 }, { header: 'Sudah dinilai', width: 2 }, { header: 'Skor', width: 2 }, { header: 'Maks', width: 2 }],
@@ -81,7 +81,7 @@ function analysisTable(list) {
 function analysisBlocks(report) {
   return [
     h1('2. Analisis Kompetensi dan Topik'),
-    p('Capaian = skor diperoleh ÷ skor maksimum soal terkait (skor soal dengan beberapa topik/kompetensi dibagi rata). Kategori: kuat ≥ 80%, cukup 70–79%, lemah < 70%.', { small: true, muted: true }),
+    p(`Capaian = skor diperoleh ÷ skor maksimum soal terkait (skor soal dengan beberapa topik/kompetensi dibagi rata). Kategori: ${LEVEL_RULE}.`, { small: true, muted: true }),
     ...(report.recap.isFinal ? [] : [p('Penilaian uraian belum lengkap; analisis hanya memakai soal yang sudah dinilai.', { italic: true })]),
     h2('Kompetensi'),
     ...analysisTable(report.competencies),
@@ -91,10 +91,11 @@ function analysisBlocks(report) {
 }
 
 function objectiveBlocks(r, { study }) {
-  const blocks = [h3(`Soal ${r.no} · ${r.typeLabel} · ${r.questionId}`), p(r.stem)];
+  const blocks = [h2(`Soal ${r.no} · ${r.typeLabel} · ${r.questionId}`), p(r.stem, { keepNext: r.type === 'mcq' })];
   if (r.type === 'mcq') {
     blocks.push({
       type: 'table',
+      keepTogether: true,
       columns: [{ header: 'Opsi', width: 1 }, { header: 'Teks', width: 7 }, { header: 'Keterangan', width: 2.5 }],
       rows: r.options.map((o) => [
         o.letter, o.text,
@@ -119,9 +120,10 @@ function caseBlocks(r) {
   const blocks = [];
   if (r.caseNarrative) blocks.push(p(r.caseNarrative));
   for (const t of r.caseData) {
-    blocks.push(p(t.title, { bold: true }));
+    blocks.push(p(t.title, { bold: true, keepNext: true }));
     blocks.push({
       type: 'table',
+      keepTogether: true,
       columns: t.columns.map((c) => ({ header: c, width: 1 })),
       rows: t.rows.map((row) => row.map((cell) => (typeof cell === 'number' ? formatNumber(cell) : cell))),
     });
@@ -133,19 +135,32 @@ function rubricTable(r, { study }) {
   if (study) {
     return {
       type: 'table',
+      keepTogether: true,
       columns: [{ header: 'Bagian', width: 1 }, { header: 'Kriteria', width: 1 }, { header: 'Deskripsi', width: 6 }, { header: 'Maks', width: 1 }],
       rows: r.rubricRows.map((c) => [subLabel(c.subId), c.criterionId, c.description, score(c.maxScore)]),
     };
   }
   return {
     type: 'table',
-    columns: [{ header: 'Bagian', width: 1 }, { header: 'Kriteria', width: 1 }, { header: 'Deskripsi', width: 3 }, { header: 'Skor', width: 1.3 }, { header: 'Maks', width: 1 }, { header: 'Alasan penilai', width: 5 }],
+    keepTogether: true,
+    columns: [{ header: 'Bagian', width: 1 }, { header: 'Kriteria', width: 1 }, { header: 'Deskripsi', width: 3 }, { header: 'Skor', width: 1.1 }, { header: 'Maks', width: 1 }, { header: 'Alasan penilai', width: 5 }],
     rows: r.rubricRows.map((c) => [
       subLabel(c.subId), c.criterionId, c.description,
-      c.corrected ? { text: `${score(c.awardedScore)} (AI ${score(c.aiScore)}) DIKOREKSI MANUAL`, bold: true, fill: 'FDECD3' } : score(c.awardedScore),
-      score(c.maxScore), c.justification || '—',
+      c.corrected ? { text: `${score(c.awardedScore)}*`, bold: true, fill: 'FDECD3' } : score(c.awardedScore),
+      score(c.maxScore),
+      c.corrected
+        ? `${c.justification || '—'}\nKoreksi manual (skor AI ${score(c.aiScore)} → ${score(c.awardedScore)}): ${c.correction.reason}`
+        : c.justification || '—',
     ]),
   };
+}
+
+// Catatan kaki untuk tanda * pada tabel rubrik.
+function correctionNote(r) {
+  const fixed = r.rubricRows.filter((c) => c.corrected);
+  if (!fixed.length) return [];
+  const list = fixed.map((c) => `${c.subId ? `(${c.subId}) ` : ''}${c.criterionId}: AI ${score(c.aiScore)} → ${score(c.awardedScore)}`).join('; ');
+  return [p(`* Dikoreksi manual — ${list}. Rincian di Lampiran B.`, { small: true, italic: true })];
 }
 
 function writtenBlocks(r, { study }) {
@@ -172,6 +187,7 @@ function writtenBlocks(r, { study }) {
   }
   if (r.acceptableAlternatives) blocks.push(labelled('Alternatif yang dapat diterima', r.acceptableAlternatives));
   blocks.push(h3(study ? 'Rubrik' : 'Rubrik dan skor per kriteria'), rubricTable(r, { study }));
+  if (!study) blocks.push(...correctionNote(r));
   if (study) return blocks;
   if (!r.graded) {
     blocks.push(p('Belum dinilai. Impor hasil penilaian AI di layar Hasil Ujian.', { italic: true }));
@@ -182,7 +198,7 @@ function writtenBlocks(r, { study }) {
   if (r.sumMismatch) {
     blocks.push(p(`Catatan: awardedScore dari AI (${score(r.aiAwardedScore)}) tidak sama dengan jumlah skor kriteria; aplikasi memakai jumlah kriteria.`, { italic: true }));
   }
-  if (r.manuallyCorrected) blocks.push(p('DIKOREKSI MANUAL: sebagian skor kriteria diubah manual; lihat Lampiran B.', { bold: true }));
+  if (r.manuallyCorrected) blocks.push(p('DIKOREKSI MANUAL: sebagian skor kriteria diubah manual (tanda * pada tabel rubrik).', { bold: true }));
   blocks.push(labelled('Kekuatan', r.strengths || '—'), labelled('Kelemahan', r.weaknesses || '—'), labelled('Saran perbaikan', r.improvement || '—'));
   blocks.push(p(`Keyakinan penilai: ${r.confidence} · Penilai: ${r.graderModel}`, { small: true, muted: true }));
   if (r.flags.length) {
@@ -195,7 +211,7 @@ function remedialBlocks(report) {
   const blocks = [h1('5. Rencana Remedial')];
   for (const note of report.remedial.notes) blocks.push(p(note, { italic: true }));
   for (const item of report.remedial.items) {
-    blocks.push(h3(`${item.kind} ${item.id} — ${item.name} (capaian ${pct(item.pct)})`), { type: 'bullets', items: item.actions });
+    blocks.push(h2(`${item.kind} ${item.id} — ${item.name} (capaian ${pct(item.pct)})`), { type: 'bullets', items: item.actions });
   }
   return blocks;
 }
@@ -216,7 +232,8 @@ function appendixBlocks(report) {
   if (report.corrections.length) {
     blocks.push({
       type: 'table',
-      columns: [{ header: 'Waktu', width: 2.5 }, { header: 'Skor yang dikoreksi', width: 3 }, { header: 'Sebelum', width: 1.2 }, { header: 'Sesudah', width: 1.2 }, { header: 'Alasan', width: 4 }, { header: 'Status', width: 2 }],
+      keepTogether: report.corrections.length <= 6,
+      columns: [{ header: 'Waktu', width: 2.5 }, { header: 'Skor yang dikoreksi', width: 3 }, { header: 'Sebelum', width: 1.6 }, { header: 'Sesudah', width: 1.6 }, { header: 'Alasan', width: 4 }, { header: 'Status', width: 2 }],
       rows: report.corrections.map((c) => [formatDateTime(c.at), c.target, score(c.before), score(c.after), c.reason, c.statusLabel]),
     });
   } else {

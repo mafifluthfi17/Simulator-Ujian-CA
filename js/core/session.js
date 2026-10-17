@@ -18,9 +18,10 @@ export class SessionLockedError extends Error {
 
 const iso = (ms) => new Date(ms).toISOString();
 
+// Tanggal di ID = tanggal mulai menurut jam perangkat (sama dengan yang tampil di laporan).
 export function makeSessionId(subjectId, now, rng) {
   const d = new Date(now);
-  const stamp = `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}${String(d.getUTCDate()).padStart(2, '0')}`;
+  const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
   return `${subjectId}-${stamp}-${randomHex(8, rng)}`;
 }
 

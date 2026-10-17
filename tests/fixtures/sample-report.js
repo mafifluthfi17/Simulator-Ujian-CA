@@ -9,8 +9,9 @@ import { MIN, T0, sampleResult, submittedDemo } from './demo-graded.js';
 
 export async function sampleReportFiles(pack) {
   // Sesi lama untuk sheet Riwayat dan sesi utama yang dilaporkan.
-  const older = submittedDemo(pack, { seed: 5 });
-  await grade(older, T0 + 30 * MIN);
+  const DAY = 24 * 60 * MIN;
+  const older = submittedDemo(pack, { seed: 5, start: T0 - DAY });
+  await grade(older, T0 - DAY + 30 * MIN);
   const session = submittedDemo(pack, { seed: 11 });
   await grade(session, T0 + 30 * MIN);
   const essay = session.items.find((it) => it.type === 'essay');
@@ -18,7 +19,6 @@ export async function sampleReportFiles(pack) {
     questionId: essay.questionId, subId: null, criterionId: 'C3', after: 2,
     reason: 'Contoh koreksi: keempat ukuran relevan untuk agribisnis.',
   }, T0 + 35 * MIN);
-  older.submittedAt = new Date(Date.parse(session.submittedAt) - 24 * 60 * MIN).toISOString();
 
   const now = T0 + 40 * MIN;
   const report = buildReport(session, { pack, history: [older, session], now });
