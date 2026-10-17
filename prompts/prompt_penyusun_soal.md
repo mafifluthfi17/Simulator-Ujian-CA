@@ -25,6 +25,9 @@ calon Chartered Accountant Indonesia.
 - Esai dan kasus: 3-6 kriteria rubrik per soal atau sub-pertanyaan, masing-
   masing dengan deskripsi full/partial/zero; skor kelipatan 0,5;
   acceptableAlternatives wajib diisi.
+- Kasus: rujukan kriteria di acceptableAlternatives (dan modelAnswer tingkat
+  soal) wajib menyebut bagiannya, mis. "(b) C3", karena setiap sub-pertanyaan
+  punya rubrik C1, C2, ... sendiri.
 - Kasus komprehensif mengintegrasikan minimal 3 topik dan menuntut analisis,
   evaluasi alternatif, risiko, implikasi keuangan, dan rekomendasi. Data
   kuantitatif ditaruh di caseData.

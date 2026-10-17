@@ -39,7 +39,11 @@ substansi, dan langkah kerja tidak berubah.
   ESA/KAS untuk ID mulai esai dan kasus.
 
 ## 2026-10-17 — Aturan rujukan kriteria pada soal kasus (perbaikan QA A2)
-Tidak ada perubahan pada `prompts/*.md`.
+Disetujui pemilik. Hanya bagian format data yang diubah.
+
+### prompts/prompt_penyusun_soal.md (Prompt B)
+- Butir baru di "Aturan wajib": rujukan kriteria pada soal kasus wajib menyebut
+  bagiannya, mis. "(b) C3" (B-8, D-56).
 
 ### schema/CONTRACT.md
 - Aturan konsistensi 6: pada soal `case`, rujukan kriteria di
@@ -53,4 +57,5 @@ Tidak ada perubahan pada `prompts/*.md`.
   "nilai penuh pada (b) C3". `contentHash` tidak berubah (field ini tidak ikut hash).
 
 ### Tindakan di luar repositori
-- Unggah ulang `schema/CONTRACT.md` ke Project Claude dan ChatGPT.
+- Unggah ulang `schema/CONTRACT.md` ke Project Claude dan ChatGPT, serta Prompt B
+  ke Project Claude.

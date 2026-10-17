@@ -28,3 +28,9 @@ data), jadi bentuk keluarannya harus lengkap di dalam prompt itu sendiri.
 | D-3 | Penilai | Tipe flag `ketidakpastian_tinggi` | Tidak disebut | Ada di enum SPEC 5.5 | AI tidak pernah memakainya | Tambah: "Bila confidence rendah, beri reviewFlags ketidakpastian_tinggi" |
 | D-4 | Penilai | Jawaban kasus | "jawaban asli peserta" | `answer` = satu teks berlabel `[a]`, `[b]` (D-13) | AI perlu tahu cara memetakan bagian jawaban | Tambah: "Jawaban kasus berlabel [a], [b], ... sesuai id sub-pertanyaan" |
 | D-5 | Penilai | Skala dan kelipatan | "skala asli, kelipatan 0,5" | `multipleOf 0.5`, `minimum 0` | Selaras | — |
+
+## Tambahan 2026-10-17 (perbaikan QA A2, D-56)
+
+| No | Prompt | Field / bagian | Isi prompt sebelumnya | Kontrak (skema) | Dampak | Perubahan (disetujui pemilik) |
+|---|---|---|---|---|---|---|
+| B-8 | Penyusun | Rujukan kriteria pada soal kasus | Tidak diatur | CONTRACT.md aturan konsistensi 6: rujukan C1, C2, ... di `acceptableAlternatives`/`modelAnswer` kasus wajib berlabel bagian, mis. `(b) C3` | Batch dengan "C3" saja ditolak saat impor (A3) | Tambah satu butir di "Aturan wajib" |
