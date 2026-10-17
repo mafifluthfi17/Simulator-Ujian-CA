@@ -9,6 +9,8 @@ import {
 } from '../core/session.js';
 import { ClockWatch, dueWarning } from '../core/timer.js';
 import { formatClockTime, formatDuration, formatScore } from '../core/format.js';
+import { isIOS, isStandalone } from '../platform/ios.js';
+import { sebBadge } from '../platform/seb.js';
 
 const TICK_MS = 500;
 const SAVE_DEBOUNCE_MS = 600;
@@ -29,10 +31,14 @@ export function renderExam(app, { session }) {
   const pauseBtn = session.mode === 'latihan'
     ? h('button', { type: 'button', class: 'btn', onclick: doPause }, 'Jeda') : null;
   const canFullscreen = Boolean(document.fullscreenEnabled && document.documentElement.requestFullscreen);
+  // iPhone tidak mendukung layar penuh halaman (SPEC 2b): sebagai gantinya mode fokus
+  // menyembunyikan unsur sekunder dan mengunci tampilan ruang ujian.
   const fullBtn = canFullscreen
-    ? h('button', { type: 'button', class: 'btn', 'aria-label': 'Layar penuh', onclick: toggleFullscreen }, '⛶') : null;
+    ? h('button', { type: 'button', class: 'btn', 'aria-label': 'Layar penuh', onclick: toggleFullscreen }, '⛶')
+    : h('button', { type: 'button', class: 'btn', 'aria-pressed': 'false', 'aria-label': 'Mode fokus', onclick: toggleFocus }, 'Fokus');
   const bar = h('div', { class: 'exam-bar' },
     h('span', { class: 'exam-title', text: session.packageName }),
+    sebBadge(),
     timerEl,
     pauseBtn,
     fullBtn,
@@ -243,6 +249,17 @@ export function renderExam(app, { session }) {
     e.returnValue = '';
   };
 
+  function toggleFocus() {
+    const on = !el.classList.contains('focus-mode');
+    el.classList.toggle('focus-mode', on);
+    document.documentElement.classList.toggle('exam-focus', on);
+    fullBtn.setAttribute('aria-pressed', String(on));
+    window.scrollTo(0, 0);
+    if (on && isIOS() && !isStandalone()) {
+      toast('Mode fokus aktif. Untuk tampilan tanpa bilah Safari, pasang aplikasi ke Layar Utama.');
+    }
+  }
+
   function toggleFullscreen() {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     else document.documentElement.requestFullscreen().catch(() => toast('Layar penuh tidak tersedia di perangkat ini.'));
@@ -269,6 +286,7 @@ export function renderExam(app, { session }) {
       window.removeEventListener('pageshow', onPageShow);
       window.removeEventListener('beforeunload', onBeforeUnload);
       document.querySelectorAll('.panel, .panel-backdrop').forEach((n) => n.remove());
+      document.documentElement.classList.remove('exam-focus');
     },
   };
 }

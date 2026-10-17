@@ -2,11 +2,9 @@
 // Bagikan/aplikasi Files, jadi ditampilkan petunjuk singkat (SPEC 2c).
 
 import { toast } from '../ui/dom.js';
+import { isIOS } from '../platform/ios.js';
 
-export function isIOS() {
-  const ua = navigator.userAgent || '';
-  return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-}
+export { isIOS };
 
 // file: { filename, mime, data: string | Uint8Array }
 export function saveFile({ filename, mime, data }) {

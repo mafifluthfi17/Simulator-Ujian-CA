@@ -35,7 +35,8 @@ packs/
 schema/                    JSON Schema, CONTRACT.md, examples/
 prompts/                   Prompt B, C, D (disalin oleh aplikasi)
 tools/                     validate.mjs, build-pack.mjs (A1), build-prompts.mjs,
-                           sample-report.mjs (A2), build-offline.mjs (A4)
+                           sample-report.mjs (A2), build-icons.mjs, build-sw.mjs,
+                           build-offline.mjs, icons.mjs, pwa-build.mjs (A4)
 tests/                     run.test.mjs + cases/ (node --test dan ?selftest),
                            fixtures/, output/ (contoh laporan demo, A2)
 dist/simulator-offline.html  satu berkas untuk file:// (A4)

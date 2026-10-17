@@ -47,3 +47,25 @@ node tools/sample-report.mjs
 
 Menulis contoh .docx, Lembar Belajar, .xlsx, HTML, dan fallback .doc/.csv dari
 sesi demo ke `tests/output/`. Penilaian uraian di contoh ini fiktif (bukan AI).
+
+## Berkas turunan (wajib dibangun ulang setelah mengubah aplikasi)
+
+```bash
+node tools/build-icons.mjs
+```
+
+```bash
+node tools/build-sw.mjs
+```
+
+```bash
+node tools/build-offline.mjs
+```
+
+`service-worker.js` memuat daftar aset dan versi cache; `dist/simulator-offline.html`
+adalah versi satu berkas yang dapat dibuka langsung (klik ganda) tanpa server.
+Tes sinkronisasi gagal bila salah satu berkas ini lupa dibangun ulang.
+
+## Safe Exam Browser
+
+Lihat `docs/seb/panduan_seb.md` dan `docs/seb/contoh-pengaturan-seb.xml`.

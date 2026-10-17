@@ -2,6 +2,7 @@
 
 import { h } from './dom.js';
 import { DISCLAIMER } from '../core/report.js';
+import { sebBadge } from '../platform/seb.js';
 
 export { DISCLAIMER };
 
@@ -14,6 +15,7 @@ export function header(app, { title, back = true, menu = false }) {
   return h('header', { class: 'app-header' },
     back ? h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Kembali ke beranda', onclick: () => app.show('home') }, '‹') : null,
     h('h1', { text: title }),
+    sebBadge(),
     menu ? secondaryMenu(app) : null);
 }
 

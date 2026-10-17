@@ -17,6 +17,12 @@ export function renderSettings(app) {
       'Bunyi peringatan sisa waktu (15, 5, dan 1 menit)'),
     h('p', { class: 'hint', text: 'Di iPhone/iPad, suara aktif setelah Anda mengetuk MULAI.' })));
 
+  el.append(h('div', { class: 'card' },
+    h('h2', { style: 'margin-top:0', text: 'Penyimpanan di perangkat' }),
+    h('p', { text: app.storagePersisted === true
+      ? 'Penyimpanan permanen aktif: browser tidak akan menghapus data aplikasi secara otomatis.'
+      : 'Penyimpanan permanen belum diberikan browser. Data dapat terhapus bila ruang penyimpanan menipis atau (di iPhone/iPad) bila aplikasi lama tidak dibuka. Pasang ke Layar Utama dan buat cadangan sesi berkala.' })));
+
   const packInput = h('input', { type: 'file', accept: '.json,application/json', hidden: true, onchange: () => importPack(packInput) });
   el.append(h('div', { class: 'card' },
     h('h2', { style: 'margin-top:0', text: 'Subject Pack' }),

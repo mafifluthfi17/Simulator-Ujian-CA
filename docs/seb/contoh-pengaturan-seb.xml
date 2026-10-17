@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CONTOH pengaturan Safe Exam Browser untuk Simulator Ujian CA. BELUM DIVERIFIKASI.
+  Ganti nilai startURL dengan alamat aplikasi Anda. Cara paling aman: buka SEB
+  Configuration Tool, isi nilai yang sama secara manual, lalu simpan sebagai .seb.
+  Nama kunci mengikuti format property list (plist) pengaturan SEB.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Halaman awal: alamat https aplikasi (GitHub Pages). -->
+  <key>startURL</key>
+  <string>https://AKUN-ANDA.github.io/NAMA-REPOSITORI/</string>
+
+  <!-- Peserta boleh keluar SEB setelah ujian (isi hashedQuitPassword bila perlu sandi). -->
+  <key>allowQuit</key>
+  <true/>
+  <key>hashedQuitPassword</key>
+  <string></string>
+
+  <!-- Tampilan layar penuh. -->
+  <key>browserViewMode</key>
+  <integer>1</integer>
+  <key>enableBrowserWindowToolbar</key>
+  <false/>
+  <key>showReloadButton</key>
+  <true/>
+  <key>browserWindowAllowReload</key>
+  <true/>
+
+  <!-- Unduhan diperlukan untuk laporan Word/Excel dan cadangan sesi. -->
+  <key>allowDownUploads</key>
+  <true/>
+
+  <!-- Jangan hapus data browser saat mulai/selesai agar riwayat ujian tidak hilang. -->
+  <key>examSessionClearCookiesOnStart</key>
+  <false/>
+  <key>examSessionClearCookiesOnEnd</key>
+  <false/>
+
+  <!-- Bantuan yang tidak diperlukan selama ujian. -->
+  <key>allowSpellCheck</key>
+  <false/>
+  <key>allowDictionaryLookup</key>
+  <false/>
+</dict>
+</plist>

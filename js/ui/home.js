@@ -7,6 +7,7 @@ import { formatErrors, loadActiveSession } from '../core/session-store.js';
 import { remainingMs } from '../core/session.js';
 import { buildFromPackage, packageQuestionCount } from '../core/blueprint.js';
 import { formatDuration, formatMinutes } from '../core/format.js';
+import { installCard, isIOS, isStandalone, shouldShowInstallPrompt } from '../platform/ios.js';
 
 const CUSTOM = '__custom__';
 
@@ -14,6 +15,10 @@ export function renderHome(app) {
   const el = h('div', { class: 'screen' }, header(app, { title: 'Simulator Ujian CA', back: false, menu: true }));
 
   for (const notice of app.notices) el.append(h('p', { class: 'notice', text: notice }));
+
+  if (shouldShowInstallPrompt({ ios: isIOS(), standalone: isStandalone(), dismissedAt: app.settings.installPromptDismissedAt, now: Date.now() })) {
+    el.append(installCard({ onDismiss: () => { app.saveSettings({ installPromptDismissedAt: Date.now() }); app.show('home'); } }));
+  }
 
   if (!app.pack) {
     el.append(

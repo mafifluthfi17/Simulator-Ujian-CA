@@ -54,14 +54,15 @@ async function loadBuiltIn(win, baseUrl, problems) {
   let ids = null;
   if (isHttp) ids = await fetchJson(`${baseUrl}index.json`);
   if (!Array.isArray(ids)) {
-    await loadScript(win, `${baseUrl}index.js`);
+    // Versi satu berkas (dist/) sudah menanam daftar dan isi pack; tidak perlu memuat skrip.
+    if (!Array.isArray(win.CA_SIM_PACK_INDEX)) await loadScript(win, `${baseUrl}index.js`);
     ids = Array.isArray(win.CA_SIM_PACK_INDEX) ? win.CA_SIM_PACK_INDEX : [];
   }
   const found = [];
   for (const id of ids) {
     let data = isHttp ? await fetchJson(`${baseUrl}${id}/pack.json`) : null;
     if (!data) {
-      await loadScript(win, `${baseUrl}${id}/pack.js`);
+      if (!(win.CA_SIM_PACKS && win.CA_SIM_PACKS[id])) await loadScript(win, `${baseUrl}${id}/pack.js`);
       data = win.CA_SIM_PACKS ? win.CA_SIM_PACKS[id] : null;
     }
     if (data) found.push({ data, source: `bawaan (${id})` });

@@ -22,3 +22,14 @@ export async function schemaFileNames() {
   const { SCHEMAS } = await import('../../js/core/schemas.js');
   return Object.keys(SCHEMAS);
 }
+
+export async function loadBytes(relPath) {
+  if (isNode) {
+    const { readFile } = await import('node:fs/promises');
+    const { fileURLToPath } = await import('node:url');
+    return new Uint8Array(await readFile(fileURLToPath(new URL(`../../${relPath}`, import.meta.url))));
+  }
+  const res = await fetch(new URL(`../../${relPath}`, import.meta.url), { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Gagal memuat ${relPath} (${res.status})`);
+  return new Uint8Array(await res.arrayBuffer());
+}

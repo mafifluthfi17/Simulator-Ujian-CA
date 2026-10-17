@@ -1,6 +1,6 @@
 // Pengendali aplikasi: memuat pack dan sesi, berpindah layar, menyimpan data.
 
-import { clear, confirmDialog, alertDialog, toast } from './dom.js';
+import { h, clear, confirmDialog, alertDialog, toast } from './dom.js';
 import { Store, StorageFullError, keys, memoryBackend } from '../core/storage.js';
 import { loadAllPacks } from '../core/pack-loader.js';
 import { formatErrors, loadActiveSession, releaseActive, saveSession } from '../core/session-store.js';
@@ -16,6 +16,7 @@ import { renderSettings } from './settings.js';
 import { renderGuide } from './guide.js';
 import { renderBank } from './bank-manager.js';
 import { saveFile } from '../export/download.js';
+import { registerServiceWorker, updateDecision } from '../platform/pwa.js';
 
 const SCREENS = {
   home: renderHome,
@@ -41,7 +42,11 @@ export class App {
   async start() {
     this.store = createStore(this.notices);
     this.settings = { sound: false, lastSubjectId: null, ...(this.store.getJson(keys.settings) || {}) };
-    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+    // SPEC 2a: minta penyimpanan permanen (mengurangi risiko data dihapus Safari).
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().then((ok) => { this.storagePersisted = ok; }).catch(() => {});
+    }
+    this.pwa = registerServiceWorker({ onWaiting: () => { this.updateWaiting = true; this.syncPlatform(); } });
     await this.reloadPacks();
     const expired = this.recoverSessions();
     this.show('home');
@@ -115,6 +120,44 @@ export class App {
     this.root.append(screen.el);
     window.scrollTo(0, 0);
     if (screen.focus) screen.focus();
+    this.screenName = name;
+    this.syncPlatform();
+  }
+
+  hasActiveSession() {
+    return this.packs.some(({ pack }) => Boolean(loadActiveSession(this.store, pack.subjectId)));
+  }
+
+  // Setiap pindah layar: kunci sesi ke service worker dan spanduk "Versi baru tersedia"
+  // yang tidak pernah tampil selama ada ujian berjalan (SPEC 2, TS-21).
+  syncPlatform() {
+    if (!this.screenName) return; // belum ada layar (pack masih dimuat)
+    const active = this.hasActiveSession();
+    if (this.pwa && this.sessionLocked !== active) {
+      this.sessionLocked = active;
+      this.pwa.setSessionLock(active);
+    }
+    const decision = updateDecision({ waiting: Boolean(this.updateWaiting), activeSession: active, screen: this.screenName });
+    let banner = document.getElementById('update-banner');
+    if (!decision.show || this.updateDismissed) {
+      if (banner) banner.remove();
+      return;
+    }
+    if (banner) return;
+    banner = h('div', { id: 'update-banner', class: 'update-banner', role: 'status' },
+      h('span', { text: 'Versi baru tersedia.' }),
+      h('button', { type: 'button', class: 'btn btn-primary', onclick: () => this.applyUpdate() }, 'Muat Ulang'),
+      h('button', { type: 'button', class: 'btn', onclick: () => { this.updateDismissed = true; this.syncPlatform(); } }, 'Nanti'));
+    document.body.append(banner);
+  }
+
+  applyUpdate() {
+    if (this.hasActiveSession()) {
+      alertDialog('Ada ujian yang sedang berjalan', ['Pembaruan dipasang setelah ujian dikumpulkan.']);
+      this.syncPlatform();
+      return;
+    }
+    if (!this.pwa || !this.pwa.applyUpdate()) window.location.reload();
   }
 
   // Menyimpan sesi. Hasil true bila berhasil; bila penyimpanan penuh, pengguna
