@@ -264,6 +264,12 @@ select, input[type=number], input[type=text] {
 .fill-fdecd3 { background: var(--warn-soft); }
 .grade-status { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
 .grade-status li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--border); padding: 4px 0; }
+.grading-steps { margin: 4px 0 8px; padding-left: 1.3rem; }
+.grading-steps li { margin: 2px 0; }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; }
+.mail-info { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 8px 0; }
+.mail-info dt { font-weight: 600; }
+.mail-info dd { margin: 0; overflow-wrap: anywhere; }
 .paste-area { min-height: 140px; font-family: ui-monospace, Consolas, monospace; font-size: .9rem; }
 .import-errors .error-list { overflow-wrap: anywhere; }
 details > summary { cursor: pointer; }

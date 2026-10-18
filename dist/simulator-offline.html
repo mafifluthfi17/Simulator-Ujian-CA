@@ -274,6 +274,12 @@ select, input[type=number], input[type=text] {
 .fill-fdecd3 { background: var(--warn-soft); }
 .grade-status { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
 .grade-status li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--border); padding: 4px 0; }
+.grading-steps { margin: 4px 0 8px; padding-left: 1.3rem; }
+.grading-steps li { margin: 2px 0; }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; }
+.mail-info { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 8px 0; }
+.mail-info dt { font-weight: 600; }
+.mail-info dd { margin: 0; overflow-wrap: anywhere; }
 .paste-area { min-height: 140px; font-family: ui-monospace, Consolas, monospace; font-size: .9rem; }
 .import-errors .error-list { overflow-wrap: anywhere; }
 details > summary { cursor: pointer; }
@@ -6451,6 +6457,8 @@ function promptPlusData(promptText, pkg) {
 }
 
 // Membaca teks tempelan: BOM, spasi, dan pagar ```json ... ``` dibuang (DECISIONS D-38).
+// Bila masih bukan JSON (AI menambah kalimat pembuka/penutup), dipakai isi blok kode
+// pertama atau teks dari tanda { pertama sampai } terakhir (DECISIONS D-82).
 function parseResultText(text) {
   let s = String(text ?? '').replace(/^﻿/, '').trim();
   const fenced = /^```[a-zA-Z]*\s*\n([\s\S]*?)\n?```$/.exec(s);
@@ -6459,11 +6467,26 @@ function parseResultText(text) {
   try {
     return { ok: true, data: JSON.parse(s) };
   } catch (e) {
+    for (const candidate of embeddedJson(s)) {
+      try {
+        return { ok: true, data: JSON.parse(candidate) };
+      } catch { /* coba kandidat berikutnya */ }
+    }
     return {
       ok: false,
       errors: [{ path: '$', message: `Teks bukan JSON yang valid (${e.message}). Salin seluruh jawaban AI, dari tanda { pertama sampai } terakhir.` }],
     };
   }
+}
+
+function embeddedJson(s) {
+  const out = [];
+  const block = /```[a-zA-Z]*\s*\n([\s\S]*?)\n?```/.exec(s);
+  if (block) out.push(block[1].trim());
+  const first = s.indexOf('{');
+  const last = s.lastIndexOf('}');
+  if (first >= 0 && last > first) out.push(s.slice(first, last + 1));
+  return out;
 }
 
 const err = (path, message) => ({ path, message });
@@ -6667,6 +6690,57 @@ const PROMPTS = {
   "prompt_penyusun_soal.md": "# PROMPT PENYUSUN SOAL — SIMULATOR UJIAN CA (v4.2)\n\n## Peran\nAnda dosen senior dan penyusun soal ujian profesi akuntan untuk mata ujian\nyang disebut di formulir, berpengalaman menulis soal penerapan (C3-C6) bagi\ncalon Chartered Accountant Indonesia.\n\n## Sumber\n- Gunakan dokumen di pengetahuan Project (silabus/RPS, CPMK, taksonomi pack,\n  materi, soal emas) sebagai acuan utama. Format data mengikuti CONTRACT.md;\n  bila ada contoh di schema/examples, contoh itulah patokan bentuk field.\n- Jika materi tidak mencakup topik yang diminta, gunakan pengetahuan umum yang\n  mapan dan tulis \"di luar materi terlampir\" di authoring.notes.\n- Soal emas adalah patokan gaya, kedalaman, dan tingkat kesulitan.\n\n## Pemeriksaan formulir (sebelum menulis soal)\nPeriksa formulir. Jika ada salah satu masalah berikut, JANGAN keluarkan JSON.\nSebutkan masalahnya dalam daftar singkat dan tanyakan maksud saya:\n- Prefiks ID mulai tidak cocok dengan tipe (mcq → MCQ, essay → ESA,\n  case → KAS, numeric → NUM).\n- Jumlah melebihi batas: mcq 10, numeric 10, essay 5, case 2.\n- Jumlah sebaran topik atau sebaran kesulitan tidak sama dengan jumlah soal.\n- Ukuran kasus kosong untuk tipe case, atau diisi untuk tipe lain.\n- Batch ID atau rentang ID soal sudah pernah dipakai di percakapan ini atau\n  di Project, kecuali formulir menyatakan \"ganti batch lama\".\n\n## Aturan wajib\n- Orisinal. Jangan menyalin soal resmi atau soal berhak cipta. Jangan\n  mengklaim soal sebagai soal resmi IAI.\n- Perusahaan fiktif dengan konteks Indonesia yang realistis.\n- Ikuti jumlah, tipe, topik, kesulitan, ukuran kasus, dan ID awal di formulir.\n- topicIds dan competencyIds hanya boleh diambil dari taksonomi pack di\n  Project. Jika taksonomi pack tidak ada, gunakan pemetaan di formulir; jika\n  formulir juga tidak memuatnya, tulis pemetaan yang Anda pakai di Catatan\n  penyusun.\n- cognitiveLevel C3-C6. C2 hanya bila formulir memintanya.\n- Skala asli: mcq 1, numeric 1, essay 10, case 20.\n- PG: tepat 4 opsi A-D, setiap huruf dipakai sekali; satu jawaban paling\n  tepat; setiap distraktor mewakili miskonsepsi yang dijelaskan di\n  distractorRationale (hanya untuk opsi selain kunci); panjang dan gaya opsi\n  setara; tanpa \"semua benar\" atau \"semua salah\".\n- Sebaran kunci PG: dalam satu batch, setiap huruf kunci dipakai paling\n  banyak jumlah soal dibagi 4, dibulatkan ke atas (10 soal → maks 3;\n  5-8 soal → maks 2; 1-4 soal → maks 1), agar bank tetap di bawah 35% per\n  huruf.\n- Numerik: numericAnswer berisi value, unit, dan tolerance. Pakai tolerance\n  \"absolute\" (selisih maksimum dalam satuan jawaban) untuk jawaban hasil\n  pembulatan, dan \"relative\" (0.01 = 1%) untuk angka besar. Stem wajib\n  menyebut satuan dan aturan pembulatan. explanation menampilkan langkah\n  perhitungan.\n- Esai: 3-6 kriteria rubrik dengan deskripsi full/partial/zero; jumlah\n  maxScore kriteria = 10.\n- Kasus: setiap sub-pertanyaan punya 3-6 kriteria rubrik; jumlah rubrik tiap\n  sub = maxScore sub tersebut; jumlah maxScore semua sub = 20.\n- Skor kelipatan 0,5 dan ditulis dengan titik desimal (7.5).\n- acceptableAlternatives wajib untuk esai dan kasus.\n- Kasus: rujukan kriteria di acceptableAlternatives (dan modelAnswer tingkat\n  soal) wajib menyebut bagiannya, mis. \"(b) C3\".\n- Kasus komprehensif mengintegrasikan minimal 3 topik dan menuntut analisis,\n  evaluasi alternatif, risiko, implikasi keuangan, dan rekomendasi. Data\n  kuantitatif ditaruh di caseData; jumlah sel setiap baris = jumlah kolom;\n  total, rasio, dan persentase harus konsisten.\n- Jangan mengarang referensi, judul buku, standar, atau nomor halaman.\n- ID soal: <SUBJEK>-<TIPE>-<nomor 3 digit>, mis. MSK-ESA-016. Mulai dari ID\n  di formulir dan berurutan.\n- Field wajib dan field terlarang per tipe mengikuti CONTRACT.md bagian C.\n  Jangan menambah field di luar CONTRACT.md.\n- Bentuk field yang tidak dirinci CONTRACT.md: ikuti schema/examples. Jika\n  tidak tersedia, pakai bentuk baku berikut dan sebutkan di Catatan penyusun:\n  options = [{\"key\": \"A\", \"text\": \"...\"}, ...];\n  distractorRationale = {\"B\": \"...\", \"C\": \"...\", \"D\": \"...\"};\n  acceptableAlternatives = \"...\" (satu teks, bukan daftar; beberapa\n  alternatif dipisah titik koma).\n- lifecycle = {\"status\": \"DRAFT\", \"contentHash\": \"\", \"review\": null,\n  \"approvedBy\": null, \"approvedAt\": null}. contentHash dihitung aplikasi.\n- authoring = {\"createdBy\": \"AI\", \"model\": \"<nama model Anda>\",\n  \"createdAt\": \"<tanggal hari ini, YYYY-MM-DD>\", \"revision\": 1, \"notes\": \"\"}.\n\n## Langkah kerja (jangan tampilkan langkah 1 dan 3)\n1. Periksa formulir, lalu rencanakan sebaran topik, kesulitan, dan posisi\n   kunci.\n2. Tulis soal.\n3. Periksa diri: kerjakan ulang setiap PG tanpa melihat kunci; hitung ulang\n   semua angka; jumlahkan skor rubrik; hitung sebaran kunci; cocokkan setiap\n   field dengan CONTRACT.md.\n4. Keluarkan hasil.\n\n## Format output\nSatu blok kode JSON berisi objek batch:\n{\"batchType\": \"soal\", \"schemaVersion\": \"4.1\", \"subjectId\": \"...\",\n \"batchId\": \"...\", \"items\": [ ... ]}\nSetelah blok JSON, maksimal 5 baris berjudul \"Catatan penyusun\" (keraguan,\ntopik di luar materi, asumsi bentuk field, sebaran kunci). Tidak ada teks\nlain. Pengecualian: bila pemeriksaan formulir menemukan masalah, keluarkan\ndaftar masalah dan pertanyaan saja.\n\n## Revisi\nJika saya mengirim temuan reviewer atau error lint:\n- Revisi hanya soal yang disebut, dengan ID yang sama.\n- Pakai batchId yang sama dengan batch asal.\n- Naikkan authoring.revision sebesar 1; createdAt tetap tanggal asli;\n  ringkas perubahan di authoring.notes.\n- Keluarkan batch berisi soal hasil revisi saja.\n- Jika Anda tidak setuju dengan suatu temuan, jelaskan di Catatan penyusun\n  dan tetap keluarkan versi terbaik Anda.\n",
   "prompt_reviewer_soal.md": "# PROMPT REVIEWER BANK SOAL — SIMULATOR UJIAN CA (v4.1)\n\n## Peran\nAnda panel reviewer bank soal ujian profesi akuntan yang bekerja dengan tiga\nlensa berurutan: (1) ahli materi untuk mata ujian pada input, (2) psikometrikus,\n(3) editor bahasa. Tugas Anda menyeleksi soal sebelum tayang. Anda bukan\npenulis soal; usulan perbaikan hanya di suggestedFix.\n\n## Input\nPaket review JSON berisi batchId, nama mata ujian, taksonomi, dan soal dengan\nreviewKey (R01, R02, ...) serta contentHash. Paket dapat memuat soal kontrol\nmutu; review semua soal dengan standar yang sama. Acuan materi ada di\npengetahuan Project.\n\n## Langkah untuk setiap soal\n1. Kerjakan soal sendiri TANPA melihat answerKey, modelAnswer, atau explanation.\n   Catat jawaban Anda di independentAnswer.\n2. Bandingkan dengan kunci. Bila berbeda, tentukan mana yang benar dan\n   jelaskan.\n3. PG: uji setiap opsi. Bila opsi selain kunci dapat dibenarkan praktisi\n   kompeten, itu temuan kritis.\n4. Kasus: hitung ulang setiap angka, total, persentase, rasio. Selisih apa pun\n   adalah temuan.\n5. Rubrik: periksa jumlah skor, keterukuran kriteria, dan apakah jawaban\n   alternatif yang benar tetap dapat memperoleh nilai penuh.\n6. Lensa psikometri: kesulitan dan level kognitif sesuai label, distraktor\n   berfungsi, estimasi waktu wajar.\n7. Lensa editor: bahasa baku, jelas, tanpa petunjuk jawaban terselubung.\n8. Beri skor bilangan bulat 1-5 untuk kesepuluh dimensi, lalu tetapkan verdict.\n   Hanya singleBestAnswer, distractorQuality, rubricQuality, dan\n   dataConsistency yang boleh null (bila tidak berlaku). Untuk esai dan kasus,\n   keyCorrectness menilai kebenaran jawaban ideal dan data kasus.\n\n## Tingkat temuan\n- kritis: kunci salah; lebih dari satu jawaban benar; data kasus tidak\n  konsisten sehingga mengubah jawaban; jumlah rubrik salah.\n- mayor: stem ambigu; distraktor lemah; label kesulitan meleset dua tingkat;\n  kriteria rubrik tidak terukur.\n- minor: bahasa, ejaan, format.\n\n## Aturan verdict\n- APPROVE: tanpa temuan kritis atau mayor, semua dimensi yang berlaku >= 4.\n- REVISE: ada temuan mayor, ada dimensi <= 3, atau temuan kritis yang dapat\n  diperbaiki.\n- REJECT: konsep dasar salah dan tidak dapat diperbaiki tanpa menulis ulang,\n  duplikat, atau melanggar orisinalitas.\n\n## Larangan\n- Jangan mengarang referensi, standar, judul buku, atau nomor halaman.\n- Jangan menyetujui karena \"kemungkinan benar\". Bila ragu: confidence\n  \"rendah\" dan verdict REVISE.\n- Salin reviewKey dan contentHash persis; jangan menghitung hash.\n\n## Format output\nHANYA satu objek JSON valid, tanpa teks lain dan tanpa blok kode:\n{\"reviewVersion\": \"4.1\", \"batchId\": \"salin persis dari input\", \"reviewerModel\": \"...\",\n \"reviewedAt\": \"ISO 8601\",\n \"items\": [{\"reviewKey\": \"R01\", \"contentHash\": \"...\",\n   \"independentAnswer\": \"...\", \"keyAgreement\": \"setuju | tidak_setuju | sebagian\",\n   \"dimensionScores\": {\"keyCorrectness\": 5, \"singleBestAnswer\": 5,\n     \"stemClarity\": 4, \"distractorQuality\": 4, \"rubricQuality\": null,\n     \"dataConsistency\": null, \"alignment\": 4, \"timeEstimate\": 4,\n     \"originality\": 5, \"fairness\": 5},\n   \"findings\": [{\"severity\": \"kritis | mayor | minor\", \"dimension\": \"...\",\n                 \"issue\": \"...\", \"suggestedFix\": \"...\"}],\n   \"suggestedDifficulty\": \"mudah | sedang | sulit | sangat_sulit\",\n   \"verdict\": \"APPROVE | REVISE | REJECT\",\n   \"confidence\": \"tinggi | sedang | rendah\", \"summary\": \"1-2 kalimat\"}],\n \"batchNotes\": \"pola masalah lintas soal, cakupan topik, sebaran kunci\"}\nfindings[].dimension wajib salah satu nama kunci di dimensionScores\n(keyCorrectness, singleBestAnswer, stemClarity, distractorQuality,\nrubricQuality, dataConsistency, alignment, timeEstimate, originality,\nfairness). findings boleh berupa array kosong.\n\n## Pemeriksaan sebelum mengirim\nJumlah items sama dengan input; batchId, reviewKey, dan contentHash disalin persis;\nverdict konsisten dengan temuan; JSON dapat di-parse.\n"
 };
+
+});
+
+__define("js/core/grader-contact.js", function (__exports, __require) {
+'use strict';
+Object.defineProperties(__exports, {
+  "GRADER_CONTACT": { enumerable: true, get: () => GRADER_CONTACT },
+  "graderContactEnabled": { enumerable: true, get: () => graderContactEnabled },
+  "gradingRequestFilename": { enumerable: true, get: () => gradingRequestFilename },
+  "gradingRequestEmail": { enumerable: true, get: () => gradingRequestEmail }
+});
+// Pilihan "Minta dinilai pengelola" (DECISIONS D-81): peserta mengunduh berkas
+// prompt + data lalu mengirimnya lewat email miliknya sendiri. Aplikasi tidak
+// mengirim apa pun. Fungsi murni tanpa DOM.
+
+// Diisi pemilik aplikasi. Bila `email` kosong, pilihan ini tidak ditampilkan.
+const GRADER_CONTACT = {
+  email: '',
+  responseTime: 'biasanya dalam 1×24 jam',
+};
+
+const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
+
+function graderContactEnabled(contact = GRADER_CONTACT) {
+  return EMAIL_RE.test(String(contact.email ?? '').trim());
+}
+
+function gradingRequestFilename(session) {
+  return `prompt-penilaian-${session.sessionId}.txt`;
+}
+
+// Email permintaan penilaian: { to, subject, body, href (mailto:) }.
+// Isi email tidak memuat jawaban; jawaban ada di lampiran.
+function gradingRequestEmail(session, { subjectName, contact = GRADER_CONTACT } = {}) {
+  const to = String(contact.email ?? '').trim();
+  const subject = `Permintaan penilaian ${subjectName || session.subjectId} · ${session.sessionId}`;
+  const body = [
+    'Yth. Pengelola Simulator Ujian CA,',
+    '',
+    'Mohon penilaian esai dan studi kasus untuk ujian berikut.',
+    `Mata ujian: ${subjectName || session.subjectId}`,
+    `Paket: ${session.packageName}`,
+    `Kode sesi: ${session.sessionId}`,
+    '',
+    `Berkas jawaban terlampir: ${gradingRequestFilename(session)}`,
+    '',
+    'Terima kasih.',
+  ].join('\n');
+  const href = `mailto:${encodeURIComponent(to).replace(/%40/g, '@')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return { to, subject, body, href };
+}
 
 });
 
@@ -7979,6 +8053,9 @@ const {
 } = __require("js/core/grading-io.js");
 const { formatErrors, listSessions } = __require("js/core/session-store.js");
 const { PROMPTS } = __require("js/core/prompts.js");
+const {
+  GRADER_CONTACT, graderContactEnabled, gradingRequestEmail, gradingRequestFilename,
+} = __require("js/core/grader-contact.js");
 const { formatDateTime, formatFixed2, formatNumber, formatScore, parseDecimalInput } = __require("js/core/format.js");
 const { reportBlocks } = __require("js/export/report-blocks.js");
 const { reportFile } = __require("js/export/report-files.js");
@@ -8061,19 +8138,29 @@ function renderResults(app, { session }) {
     area.value = pasted;
     const fileInput = h('input', { type: 'file', accept: '.json,.txt,application/json,text/plain', hidden: true, onchange: () => importFile(fileInput) });
     const done = graded.size === aiItems(session).length;
+    const manager = graderContactEnabled();
     return h('div', { class: 'card grading-card no-print' },
       h('h2', { style: 'margin-top:0', text: 'Penilaian esai dan kasus' }),
       h('p', { text: done
         ? 'Semua jawaban uraian sudah dinilai. Anda tetap dapat mengimpor penilaian ulang bila perlu.'
-        : 'Jawaban esai dan kasus dinilai dengan layanan AI pilihan Anda. Aplikasi tidak memiliki AI bawaan dan tidak mengirim data sendiri.' }),
+        : `Jawaban esai dan kasus belum dinilai. ${manager ? 'Pilih salah satu cara di bawah.' : 'Nilai dengan layanan AI pilihan Anda.'} Aplikasi tidak memiliki AI bawaan dan tidak mengirim data sendiri.` }),
       statusList,
-      h('h3', { text: 'Langkah 1 — Salin soal dan jawaban untuk AI' }),
-      h('p', { class: 'hint', text: 'Tempel ke percakapan baru di layanan AI pilihan Anda (mis. ChatGPT, Claude, Gemini), lalu kirim.' }),
+      h('h3', { text: `${manager ? 'Cara 1 — ' : ''}Nilai sendiri dengan AI (beberapa menit)` }),
+      h('ol', { class: 'grading-steps' },
+        h('li', { text: 'Ketuk Salin Prompt + Data.' }),
+        h('li', { text: 'Buka percakapan baru di ChatGPT, Claude, Gemini, DeepSeek, atau AI lain. Tempel, lalu kirim.' }),
+        h('li', { text: 'Bila jawaban AI terpotong, ketik "lanjutkan" sampai selesai.' }),
+        h('li', { text: 'Salin seluruh jawaban AI, tempel di kotak di bawah, lalu ketuk Periksa & Simpan Nilai.' })),
+      h('p', { class: 'hint', text: 'Skor dapat berbeda antar AI. Pakai AI yang sama setiap kali agar perkembangan Anda sebanding; mode "berpikir" atau "reasoning" biasanya lebih teliti. Bila jawaban Anda panjang dan AI hanya menilai sebagian soal, simpan dulu hasilnya, lalu minta AI di percakapan yang sama menilai soal yang belum dinilai.' }),
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn btn-primary', onclick: copyPackage }, 'Salin Prompt + Data'),
         h('button', { type: 'button', class: 'btn', onclick: () => downloadPackage('txt') }, 'Unduh sebagai teks'),
         h('button', { type: 'button', class: 'btn', onclick: () => downloadPackage('json') }, 'Unduh berkas data')),
-      h('h3', { text: 'Langkah 2 — Tempel jawaban AI' }),
+      manager ? managerSection() : null,
+      h('h3', { text: 'Tempel hasil penilaian' }),
+      h('p', { class: 'hint', text: manager
+        ? 'Tempel jawaban AI, atau ambil berkas hasil yang dikirim pengelola. Lakukan di perangkat dan browser yang sama dengan tempat Anda mengerjakan ujian.'
+        : 'Tempel seluruh jawaban AI di sini.' }),
       area,
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn btn-primary', onclick: () => importText(area.value) }, 'Periksa & Simpan Nilai'),
@@ -8084,16 +8171,64 @@ function renderResults(app, { session }) {
         h('ul', { class: 'error-list' }, formatErrors(importErrors, 15).map((line) => h('li', { text: line })))) : null);
   }
 
+  function managerSection() {
+    return [
+      h('h3', { text: `Cara 2 — Minta dinilai pengelola (${GRADER_CONTACT.responseTime})` }),
+      h('ol', { class: 'grading-steps' },
+        h('li', { text: 'Ketuk Kirim ke Pengelola. Berkas jawaban terunduh dan aplikasi email terbuka.' }),
+        h('li', { text: 'Lampirkan berkas yang baru terunduh, lalu kirim email.' }),
+        h('li', { text: 'Pengelola membalas dengan berkas hasil penilaian. Ambil berkas itu di kotak di bawah.' })),
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn', onclick: requestManagerGrading }, 'Kirim ke Pengelola')),
+    ];
+  }
+
   async function confirmPrivacy(action) {
     return confirmDialog({
       title: 'Jawaban akan dikirim ke layanan AI',
       body: [
         'Paket ini berisi soal, rubrik, dan jawaban esai/kasus Anda apa adanya.',
         'Anda sendiri yang menempelkannya ke layanan AI pilihan Anda; aplikasi tidak mengirim data ke mana pun.',
-        'Data akan diproses oleh layanan tersebut sesuai kebijakan privasinya. Jangan menulis data pribadi di jawaban.',
+        'Data akan disimpan dan diproses di server layanan tersebut (dapat berada di luar negeri) sesuai kebijakan privasinya. Jangan menulis data pribadi di jawaban.',
       ],
       confirmLabel: action,
     });
+  }
+
+  async function requestManagerGrading() {
+    const ok = await confirmDialog({
+      title: 'Kirim jawaban ke pengelola',
+      body: [
+        'Berkas berisi soal, rubrik, dan jawaban esai/kasus Anda apa adanya.',
+        `Anda sendiri yang mengirimnya dari email Anda ke ${GRADER_CONTACT.email}. Pengelola akan melihat jawaban dan alamat email Anda, lalu menilainya dengan layanan AI.`,
+        'Jangan menulis data pribadi lain di jawaban.',
+      ],
+      confirmLabel: 'Saya setuju, lanjutkan',
+    });
+    if (!ok) return;
+    const pkg = await packageFor();
+    const filename = gradingRequestFilename(session);
+    saveFile({ filename, mime: 'text/plain;charset=utf-8', data: promptPlusData(PROMPTS[GRADING_PROMPT], pkg) });
+    const mail = gradingRequestEmail(session, { subjectName: app.packFor(session.subjectId)?.subjectName });
+    const link = h('a', { class: 'btn btn-primary', href: mail.href, text: 'Buka aplikasi email' });
+    const copyAddress = h('button', { type: 'button', class: 'btn', onclick: async () => {
+      try {
+        await navigator.clipboard.writeText(mail.to);
+        toast('Alamat email tersalin.');
+      } catch {
+        toast('Alamat email tidak dapat disalin otomatis. Ketik alamatnya secara manual.');
+      }
+    } }, 'Salin alamat email');
+    alertDialog('Kirim email ke pengelola', [
+      `Berkas ${filename} sudah diunduh.`,
+      h('dl', { class: 'mail-info' },
+        h('dt', { text: 'Kepada' }), h('dd', { text: mail.to }),
+        h('dt', { text: 'Subjek' }), h('dd', { text: mail.subject }),
+        h('dt', { text: 'Lampiran' }), h('dd', { text: filename })),
+      h('div', { class: 'row' }, link, copyAddress),
+      'Bila aplikasi email tidak terbuka, kirim email secara manual dengan data di atas.',
+      'Ingat: ambil berkas hasil penilaian dari pengelola di perangkat dan browser ini juga.',
+    ]);
   }
 
   async function copyPackage() {
@@ -8538,7 +8673,7 @@ const STEPS = [
   'Gunakan Daftar Soal untuk berpindah soal dan melihat soal yang belum dijawab atau ditandai.',
   'Mode latihan boleh dijeda. Mode ketat (Simulasi Ujian) tidak dapat dijeda.',
   'Ketuk KUMPULKAN bila selesai. Saat waktu habis, ujian dikumpulkan otomatis.',
-  'Soal pilihan ganda dan numerik langsung dinilai. Esai dan kasus dinilai dengan AI pilihan Anda: di layar Hasil, salin prompt dan data, tempel ke AI, lalu tempel jawabannya kembali.',
+  'Soal pilihan ganda dan numerik langsung dinilai. Esai dan kasus dinilai dengan AI pilihan Anda (ChatGPT, Claude, Gemini, DeepSeek, atau lainnya): di layar Hasil, salin prompt dan data, tempel ke AI, lalu tempel jawabannya kembali. Bila tersedia, Anda juga dapat meminta dinilai pengelola lewat email.',
   'Laporan dapat diunduh sebagai Word, Excel, PDF (cetak), halaman web, atau berkas data sesi. Lembar Belajar berisi soal, kunci, dan pembahasan tanpa jawaban Anda.',
 ];
 

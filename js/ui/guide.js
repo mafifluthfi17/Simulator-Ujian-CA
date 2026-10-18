@@ -11,7 +11,7 @@ const STEPS = [
   'Gunakan Daftar Soal untuk berpindah soal dan melihat soal yang belum dijawab atau ditandai.',
   'Mode latihan boleh dijeda. Mode ketat (Simulasi Ujian) tidak dapat dijeda.',
   'Ketuk KUMPULKAN bila selesai. Saat waktu habis, ujian dikumpulkan otomatis.',
-  'Soal pilihan ganda dan numerik langsung dinilai. Esai dan kasus dinilai dengan AI pilihan Anda: di layar Hasil, salin prompt dan data, tempel ke AI, lalu tempel jawabannya kembali.',
+  'Soal pilihan ganda dan numerik langsung dinilai. Esai dan kasus dinilai dengan AI pilihan Anda (ChatGPT, Claude, Gemini, DeepSeek, atau lainnya): di layar Hasil, salin prompt dan data, tempel ke AI, lalu tempel jawabannya kembali. Bila tersedia, Anda juga dapat meminta dinilai pengelola lewat email.',
   'Laporan dapat diunduh sebagai Word, Excel, PDF (cetak), halaman web, atau berkas data sesi. Lembar Belajar berisi soal, kunci, dan pembahasan tanpa jawaban Anda.',
 ];
 

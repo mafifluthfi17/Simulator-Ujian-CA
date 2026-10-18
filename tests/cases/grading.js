@@ -12,6 +12,7 @@ import { createSession, setAnswer, submit } from '../../js/core/session.js';
 import { createRng } from '../../js/core/random.js';
 import { formatScore } from '../../js/core/format.js';
 import { PROMPTS } from '../../js/core/prompts.js';
+import { graderContactEnabled, gradingRequestEmail, gradingRequestFilename } from '../../js/core/grader-contact.js';
 import { MIN, T0, sampleResult, submittedDemo } from '../fixtures/demo-graded.js';
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -188,6 +189,11 @@ export default {
         const fenced = await validateGradingResult(session, `\`\`\`json\n${JSON.stringify(result)}\n\`\`\``);
         assert.ok(fenced.ok, 'pagar ```json dari AI diterima');
         assert.deepEqual(parseResultText('﻿ {"a":1} ').data, { a: 1 });
+        const chatty = await validateGradingResult(session, `Berikut hasil penilaiannya:\n\n${JSON.stringify(result, null, 2)}\n\nSemoga membantu.`);
+        assert.ok(chatty.ok, 'kalimat pembuka/penutup di luar JSON dibuang (D-82)');
+        const chattyFence = await validateGradingResult(session, `Hasil:\n\`\`\`json\n${JSON.stringify(result)}\n\`\`\`\nCatatan: periksa ulang.`);
+        assert.ok(chattyFence.ok, 'blok kode di tengah teks diterima (D-82)');
+        assert.ok(!parseResultText('Nilai {tidak} valid').ok, 'teks tanpa JSON tetap ditolak');
       },
     },
     {
@@ -269,6 +275,24 @@ export default {
         assert.equal(s.grading.finalScore, 70);
         assert.equal(s.grading.passed, true);
         assert.equal(formatScore(s.grading.finalScore), '70,0000');
+      },
+    },
+    {
+      name: 'minta dinilai pengelola: tersembunyi tanpa alamat; email tanpa jawaban (D-81)',
+      run: async () => {
+        const { session } = await gradedDemo();
+        assert.equal(graderContactEnabled({ email: '' }), false);
+        assert.equal(graderContactEnabled({ email: 'bukan-email' }), false);
+        assert.equal(graderContactEnabled({ email: ' penilai@contoh.id ' }), true);
+        const mail = gradingRequestEmail(session, { subjectName: 'Demo', contact: { email: 'penilai@contoh.id' } });
+        assert.equal(mail.to, 'penilai@contoh.id');
+        assert.ok(mail.href.startsWith('mailto:penilai@contoh.id?subject='), mail.href);
+        assert.ok(mail.subject.includes(session.sessionId));
+        assert.ok(mail.body.includes(gradingRequestFilename(session)));
+        assert.equal(decodeURIComponent(mail.href.split('&body=')[1]), mail.body);
+        for (const { answer } of (await buildGradingPackage(session)).items) {
+          if (answer) assert.ok(!mail.body.includes(answer), 'isi email tidak memuat jawaban');
+        }
       },
     },
   ],

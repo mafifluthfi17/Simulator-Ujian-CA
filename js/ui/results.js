@@ -13,6 +13,9 @@ import {
 } from '../core/grading-io.js';
 import { formatErrors, listSessions } from '../core/session-store.js';
 import { PROMPTS } from '../core/prompts.js';
+import {
+  GRADER_CONTACT, graderContactEnabled, gradingRequestEmail, gradingRequestFilename,
+} from '../core/grader-contact.js';
 import { formatDateTime, formatFixed2, formatNumber, formatScore, parseDecimalInput } from '../core/format.js';
 import { reportBlocks } from '../export/report-blocks.js';
 import { reportFile } from '../export/report-files.js';
@@ -95,19 +98,29 @@ export function renderResults(app, { session }) {
     area.value = pasted;
     const fileInput = h('input', { type: 'file', accept: '.json,.txt,application/json,text/plain', hidden: true, onchange: () => importFile(fileInput) });
     const done = graded.size === aiItems(session).length;
+    const manager = graderContactEnabled();
     return h('div', { class: 'card grading-card no-print' },
       h('h2', { style: 'margin-top:0', text: 'Penilaian esai dan kasus' }),
       h('p', { text: done
         ? 'Semua jawaban uraian sudah dinilai. Anda tetap dapat mengimpor penilaian ulang bila perlu.'
-        : 'Jawaban esai dan kasus dinilai dengan layanan AI pilihan Anda. Aplikasi tidak memiliki AI bawaan dan tidak mengirim data sendiri.' }),
+        : `Jawaban esai dan kasus belum dinilai. ${manager ? 'Pilih salah satu cara di bawah.' : 'Nilai dengan layanan AI pilihan Anda.'} Aplikasi tidak memiliki AI bawaan dan tidak mengirim data sendiri.` }),
       statusList,
-      h('h3', { text: 'Langkah 1 — Salin soal dan jawaban untuk AI' }),
-      h('p', { class: 'hint', text: 'Tempel ke percakapan baru di layanan AI pilihan Anda (mis. ChatGPT, Claude, Gemini), lalu kirim.' }),
+      h('h3', { text: `${manager ? 'Cara 1 — ' : ''}Nilai sendiri dengan AI (beberapa menit)` }),
+      h('ol', { class: 'grading-steps' },
+        h('li', { text: 'Ketuk Salin Prompt + Data.' }),
+        h('li', { text: 'Buka percakapan baru di ChatGPT, Claude, Gemini, DeepSeek, atau AI lain. Tempel, lalu kirim.' }),
+        h('li', { text: 'Bila jawaban AI terpotong, ketik "lanjutkan" sampai selesai.' }),
+        h('li', { text: 'Salin seluruh jawaban AI, tempel di kotak di bawah, lalu ketuk Periksa & Simpan Nilai.' })),
+      h('p', { class: 'hint', text: 'Skor dapat berbeda antar AI. Pakai AI yang sama setiap kali agar perkembangan Anda sebanding; mode "berpikir" atau "reasoning" biasanya lebih teliti. Bila jawaban Anda panjang dan AI hanya menilai sebagian soal, simpan dulu hasilnya, lalu minta AI di percakapan yang sama menilai soal yang belum dinilai.' }),
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn btn-primary', onclick: copyPackage }, 'Salin Prompt + Data'),
         h('button', { type: 'button', class: 'btn', onclick: () => downloadPackage('txt') }, 'Unduh sebagai teks'),
         h('button', { type: 'button', class: 'btn', onclick: () => downloadPackage('json') }, 'Unduh berkas data')),
-      h('h3', { text: 'Langkah 2 — Tempel jawaban AI' }),
+      manager ? managerSection() : null,
+      h('h3', { text: 'Tempel hasil penilaian' }),
+      h('p', { class: 'hint', text: manager
+        ? 'Tempel jawaban AI, atau ambil berkas hasil yang dikirim pengelola. Lakukan di perangkat dan browser yang sama dengan tempat Anda mengerjakan ujian.'
+        : 'Tempel seluruh jawaban AI di sini.' }),
       area,
       h('div', { class: 'row' },
         h('button', { type: 'button', class: 'btn btn-primary', onclick: () => importText(area.value) }, 'Periksa & Simpan Nilai'),
@@ -118,16 +131,64 @@ export function renderResults(app, { session }) {
         h('ul', { class: 'error-list' }, formatErrors(importErrors, 15).map((line) => h('li', { text: line })))) : null);
   }
 
+  function managerSection() {
+    return [
+      h('h3', { text: `Cara 2 — Minta dinilai pengelola (${GRADER_CONTACT.responseTime})` }),
+      h('ol', { class: 'grading-steps' },
+        h('li', { text: 'Ketuk Kirim ke Pengelola. Berkas jawaban terunduh dan aplikasi email terbuka.' }),
+        h('li', { text: 'Lampirkan berkas yang baru terunduh, lalu kirim email.' }),
+        h('li', { text: 'Pengelola membalas dengan berkas hasil penilaian. Ambil berkas itu di kotak di bawah.' })),
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn', onclick: requestManagerGrading }, 'Kirim ke Pengelola')),
+    ];
+  }
+
   async function confirmPrivacy(action) {
     return confirmDialog({
       title: 'Jawaban akan dikirim ke layanan AI',
       body: [
         'Paket ini berisi soal, rubrik, dan jawaban esai/kasus Anda apa adanya.',
         'Anda sendiri yang menempelkannya ke layanan AI pilihan Anda; aplikasi tidak mengirim data ke mana pun.',
-        'Data akan diproses oleh layanan tersebut sesuai kebijakan privasinya. Jangan menulis data pribadi di jawaban.',
+        'Data akan disimpan dan diproses di server layanan tersebut (dapat berada di luar negeri) sesuai kebijakan privasinya. Jangan menulis data pribadi di jawaban.',
       ],
       confirmLabel: action,
     });
+  }
+
+  async function requestManagerGrading() {
+    const ok = await confirmDialog({
+      title: 'Kirim jawaban ke pengelola',
+      body: [
+        'Berkas berisi soal, rubrik, dan jawaban esai/kasus Anda apa adanya.',
+        `Anda sendiri yang mengirimnya dari email Anda ke ${GRADER_CONTACT.email}. Pengelola akan melihat jawaban dan alamat email Anda, lalu menilainya dengan layanan AI.`,
+        'Jangan menulis data pribadi lain di jawaban.',
+      ],
+      confirmLabel: 'Saya setuju, lanjutkan',
+    });
+    if (!ok) return;
+    const pkg = await packageFor();
+    const filename = gradingRequestFilename(session);
+    saveFile({ filename, mime: 'text/plain;charset=utf-8', data: promptPlusData(PROMPTS[GRADING_PROMPT], pkg) });
+    const mail = gradingRequestEmail(session, { subjectName: app.packFor(session.subjectId)?.subjectName });
+    const link = h('a', { class: 'btn btn-primary', href: mail.href, text: 'Buka aplikasi email' });
+    const copyAddress = h('button', { type: 'button', class: 'btn', onclick: async () => {
+      try {
+        await navigator.clipboard.writeText(mail.to);
+        toast('Alamat email tersalin.');
+      } catch {
+        toast('Alamat email tidak dapat disalin otomatis. Ketik alamatnya secara manual.');
+      }
+    } }, 'Salin alamat email');
+    alertDialog('Kirim email ke pengelola', [
+      `Berkas ${filename} sudah diunduh.`,
+      h('dl', { class: 'mail-info' },
+        h('dt', { text: 'Kepada' }), h('dd', { text: mail.to }),
+        h('dt', { text: 'Subjek' }), h('dd', { text: mail.subject }),
+        h('dt', { text: 'Lampiran' }), h('dd', { text: filename })),
+      h('div', { class: 'row' }, link, copyAddress),
+      'Bila aplikasi email tidak terbuka, kirim email secara manual dengan data di atas.',
+      'Ingat: ambil berkas hasil penilaian dari pengelola di perangkat dan browser ini juga.',
+    ]);
   }
 
   async function copyPackage() {

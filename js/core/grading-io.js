@@ -66,6 +66,8 @@ export function promptPlusData(promptText, pkg) {
 }
 
 // Membaca teks tempelan: BOM, spasi, dan pagar ```json ... ``` dibuang (DECISIONS D-38).
+// Bila masih bukan JSON (AI menambah kalimat pembuka/penutup), dipakai isi blok kode
+// pertama atau teks dari tanda { pertama sampai } terakhir (DECISIONS D-82).
 export function parseResultText(text) {
   let s = String(text ?? '').replace(/^﻿/, '').trim();
   const fenced = /^```[a-zA-Z]*\s*\n([\s\S]*?)\n?```$/.exec(s);
@@ -74,11 +76,26 @@ export function parseResultText(text) {
   try {
     return { ok: true, data: JSON.parse(s) };
   } catch (e) {
+    for (const candidate of embeddedJson(s)) {
+      try {
+        return { ok: true, data: JSON.parse(candidate) };
+      } catch { /* coba kandidat berikutnya */ }
+    }
     return {
       ok: false,
       errors: [{ path: '$', message: `Teks bukan JSON yang valid (${e.message}). Salin seluruh jawaban AI, dari tanda { pertama sampai } terakhir.` }],
     };
   }
+}
+
+function embeddedJson(s) {
+  const out = [];
+  const block = /```[a-zA-Z]*\s*\n([\s\S]*?)\n?```/.exec(s);
+  if (block) out.push(block[1].trim());
+  const first = s.indexOf('{');
+  const last = s.lastIndexOf('}');
+  if (first >= 0 && last > first) out.push(s.slice(first, last + 1));
+  return out;
 }
 
 const err = (path, message) => ({ path, message });

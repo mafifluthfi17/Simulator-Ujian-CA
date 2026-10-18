@@ -66,18 +66,42 @@ Alamat aplikasi: **https://mafifluthfi17.github.io/Simulator-Ujian-CA/**
 ## 3. Menilai esai dan kasus dengan AI
 
 Pilihan ganda dan numerik langsung dinilai. Esai dan kasus dinilai dengan
-layanan AI pilihan Anda (mis. ChatGPT, Claude, Gemini). Aplikasi tidak punya AI
-sendiri dan tidak mengirim data ke mana pun; Anda sendiri yang menyalin dan
-menempel.
+layanan AI pilihan Anda (mis. ChatGPT, Claude, Gemini, DeepSeek). Aplikasi tidak
+punya AI sendiri dan tidak mengirim data ke mana pun; Anda sendiri yang menyalin
+dan menempel.
+
+### Cara 1 — Nilai sendiri dengan AI (beberapa menit)
 
 1. Di layar **Hasil Ujian**, bagian **Penilaian esai dan kasus**, ketuk
    **Salin Prompt + Data**. Baca pemberitahuan lalu ketuk **Saya mengerti, salin**.
    - Bila muncul kotak "Salin secara manual", pilih semua teks di kotak itu lalu
      salin.
-2. Buka percakapan **baru** di layanan AI, tempel, lalu kirim.
-3. Salin **seluruh** jawaban AI (diawali `{` dan diakhiri `}`).
-4. Kembali ke aplikasi, tempel di kotak **Langkah 2** lalu ketuk
+2. Buka percakapan **baru** di layanan AI, tempel, lalu kirim. Bila jawaban AI
+   terpotong, ketik "lanjutkan" sampai selesai.
+3. Salin **seluruh** jawaban AI. Kalimat pembuka atau penutup dari AI boleh ikut
+   tersalin.
+4. Kembali ke aplikasi, tempel di kotak **Tempel hasil penilaian** lalu ketuk
    **Periksa & Simpan Nilai**.
+
+Skor dapat berbeda antar AI. Pakai AI yang sama setiap kali agar perkembangan
+Anda sebanding; mode "berpikir" atau "reasoning" biasanya lebih teliti.
+
+### Cara 2 — Minta dinilai pengelola
+
+Cara ini hanya tampil bila pengelola sudah menyediakan alamat email.
+
+1. Ketuk **Kirim ke Pengelola**, baca pemberitahuan, lalu ketuk
+   **Saya setuju, lanjutkan**. Berkas `prompt-penilaian-….txt` terunduh.
+2. Ketuk **Buka aplikasi email** (atau kirim manual ke alamat yang tampil),
+   lampirkan berkas tadi, lalu kirim.
+3. Pengelola membalas dengan berkas hasil penilaian (waktu layanan tertulis di
+   layar). Buka aplikasi di **perangkat dan browser yang sama**, ketuk
+   **Ambil dari berkas** di bagian **Tempel hasil penilaian**, lalu pilih berkas
+   itu.
+
+### Setelah hasil ditempel atau diambil
+
+4. Aplikasi memeriksa hasil sebelum menyimpan.
 5. Bila ditolak, aplikasi menyebut bagian yang salah. Contoh: jawaban AI untuk
    sesi lain, skor melebihi maksimum, atau kriteria yang belum dinilai. Kirim
    pesan itu ke AI dan minta diperbaiki, lalu tempel lagi.
