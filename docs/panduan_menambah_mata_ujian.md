@@ -150,8 +150,10 @@ Skala asli: mcq 1, numeric 1, essay 10, case 20. Field wajib per tipe: lihat
    REVISE atau temuan kritis → *Perlu revisi*; REJECT → *Ditolak*. Bila soal
    kalibrasi lolos tanpa temuan, seluruh hasil batch ditolak. Statistik tangkapan
    tercatat per reviewer.
-7. **Revisi**: kirim temuan ke penyusun, impor ulang dengan ID yang sama. Isi
-   yang berubah kembali menjadi Draf.
+7. **Revisi**: buka pratinjau soal *Perlu revisi* (atau pilih beberapa soal di
+   Daftar Soal), tekan **Salin untuk penyusun**, lalu tempel ke Project
+   penyusun. Teks itu memuat temuan reviewer dan JSON soal. Impor ulang
+   hasilnya dengan ID yang sama. Isi yang berubah kembali menjadi Draf.
 8. **Setujui**: periksa pratinjau, lalu Setujui dengan inisial → *Disetujui*.
    Review ganda opsional: impor hasil reviewer kedua untuk paket yang sama. Bila
    pendapat berbeda, putuskan sendiri dengan alasan.

@@ -13,7 +13,7 @@ import {
 } from '../core/bank.js';
 import {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
-  reviewPromptText, validateReviewResult,
+  reviewPromptText, revisionRequestText, validateReviewResult,
 } from '../core/review-io.js';
 import { DIFFICULTY_LABELS } from '../core/report.js';
 import { formatErrors, loadActiveSession } from '../core/session-store.js';
@@ -203,6 +203,7 @@ export function renderBank(app) {
         h('button', { type: 'button', class: 'btn', disabled: !list.length || shown === list.length, onclick: () => selectShown(true) }, `Pilih semua (${list.length})`),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: approveSelected }, 'Setujui terpilih'),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: () => { state.tab = 'review'; render(); } }, 'Buat paket review dari terpilih'),
+        h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: () => copyRevision(selected) }, 'Salin untuk penyusun'),
         h('button', { type: 'button', class: 'btn btn-link', disabled: !selected.length, onclick: () => { state.selected.clear(); render(); } }, 'Kosongkan pilihan')),
       h('div', { class: 'table-wrap' }, h('table', { class: 'data-table bank-table' },
         h('thead', {}, h('tr', {}, h('th', {}, allBox), ['ID', 'Tipe', 'Topik', 'Kesulitan', 'Status'].map((t) => h('th', { text: t })))),
@@ -219,6 +220,7 @@ export function renderBank(app) {
     const actions = [];
     if (s === 'AI_REVIEWED' && !bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => approveIds([q.id]) }, 'Setujui'));
     if (bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => decideConflict(q.id) }, 'Putuskan hasil review'));
+    if (review && s !== 'CALIBRATION') actions.push(h('button', { type: 'button', class: s === 'NEEDS_REVISION' ? 'btn btn-primary' : 'btn', onclick: () => copyRevision([q.id]) }, 'Salin untuk penyusun'));
     if (s === 'REJECTED') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Batalkan penolakan', undoReject) }, 'Batalkan penolakan'));
     if (s === 'LIVE') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Pensiunkan soal', retire) }, 'Pensiunkan'));
     return h('div', { class: 'card preview-card' },
@@ -451,13 +453,27 @@ export function renderBank(app) {
     render();
   }
 
-  async function copyPackage(pkg) {
-    const text = reviewPromptText(PROMPTS[REVIEW_PROMPT], pkg);
+  function copyPackage(pkg) {
+    return copyText(reviewPromptText(PROMPTS[REVIEW_PROMPT], pkg), 'Prompt + data tersalin. Tempel ke percakapan baru di AI reviewer.', 'Prompt dan paket review');
+  }
+
+  function copyRevision(ids) {
+    let text;
+    try {
+      text = revisionRequestText(bank, ids);
+    } catch (e) {
+      alertDialog('Tidak dapat menyalin', [e.message]);
+      return;
+    }
+    copyText(text, `Temuan dan soal ${ids.join(', ')} tersalin. Tempel ke Project penyusun.`, 'Permintaan revisi untuk penyusun');
+  }
+
+  async function copyText(text, okMessage, label) {
     try {
       await navigator.clipboard.writeText(text);
-      toast('Prompt + data tersalin. Tempel ke percakapan baru di AI reviewer.');
+      toast(okMessage);
     } catch {
-      const box = h('textarea', { class: 'answer-text', rows: 10, readonly: true, 'aria-label': 'Prompt dan paket review' });
+      const box = h('textarea', { class: 'answer-text', rows: 10, readonly: true, 'aria-label': label });
       box.value = text;
       alertDialog('Salin secara manual', ['Papan klip tidak dapat diakses otomatis. Pilih semua teks di bawah lalu salin.', box]);
       setTimeout(() => { box.focus(); box.select(); }, 50);

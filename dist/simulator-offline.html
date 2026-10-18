@@ -9003,6 +9003,7 @@ Object.defineProperties(__exports, {
   "checkReviewSelection": { enumerable: true, get: () => checkReviewSelection },
   "buildReviewPackage": { enumerable: true, get: () => buildReviewPackage },
   "reviewPromptText": { enumerable: true, get: () => reviewPromptText },
+  "revisionRequestText": { enumerable: true, get: () => revisionRequestText },
   "decide": { enumerable: true, get: () => decide },
   "calibrationCaught": { enumerable: true, get: () => calibrationCaught },
   "validateReviewResult": { enumerable: true, get: () => validateReviewResult },
@@ -9100,6 +9101,54 @@ async function buildReviewPackage(bank, ids, { includeCalibration = false, rng =
 
 function reviewPromptText(promptText, pkg) {
   return `${promptText.trim()}\n\n## PAKET REVIEW (JSON)\n\n${JSON.stringify(pkg, null, 2)}\n`;
+}
+
+// Permintaan revisi untuk AI penyusun (D-79): temuan review terakhir + JSON soal
+// dalam bentuk item batch (lifecycle dikosongkan seperti keluaran penyusun), siap
+// ditempel ke Project penyusun. Batch asal soal tidak tercatat di bank.
+function revisionRequestText(bank, ids) {
+  if (!ids.length) throw new BankError('Pilih minimal satu soal.');
+  const qs = ids.map((id) => {
+    const q = findQuestion(bank, id);
+    if (!q) throw new BankError(`Soal ${id} tidak ada di bank.`);
+    return q;
+  });
+  const sections = qs.map((q) => {
+    const review = q.lifecycle.review;
+    const lines = [`## ${q.id}`];
+    if (!review) lines.push('Belum ada hasil review untuk soal ini.');
+    else {
+      const r = review.result;
+      lines.push(`Verdict reviewer: ${r.verdict} (keyakinan ${r.confidence}, kesepakatan kunci ${r.keyAgreement})`);
+      lines.push(`Ringkasan reviewer: ${r.summary}`);
+      lines.push(`Jawaban independen reviewer: ${r.independentAnswer}`);
+      lines.push('Temuan:');
+      if (r.findings.length) r.findings.forEach((f, i) => lines.push(`${i + 1}. [${f.severity}] ${f.dimension}: ${f.issue}${f.suggestedFix ? ` Saran: ${f.suggestedFix}` : ''}`));
+      else lines.push('(tanpa temuan)');
+    }
+    return lines.join('\n');
+  });
+  const items = qs.map((q) => {
+    const item = clone(q);
+    item.lifecycle = { status: q.lifecycle.status === 'CALIBRATION' ? 'CALIBRATION' : 'DRAFT', contentHash: '', review: null, approvedBy: null, approvedAt: null };
+    return item;
+  });
+  return [
+    'Mohon revisi soal berikut sesuai bagian "Revisi" pada instruksi penyusun.',
+    `subjectId: ${bank.subjectId} · schemaVersion: ${SCHEMA_VERSION} · soal: ${qs.map((q) => q.id).join(', ')}`,
+    'batchId batch asal tidak tercatat di aplikasi. Pakai batchId asal bila Anda mengetahuinya; bila tidak, buat batchId baru.',
+    '',
+    '# TEMUAN REVIEWER',
+    '',
+    sections.join('\n\n'),
+    '',
+    '# SOAL SAAT INI (JSON)',
+    '',
+    '```json',
+    JSON.stringify(items, null, 2),
+    '```',
+    '',
+  ].join('\n');
 }
 
 // Keputusan otomatis (SPEC 8): APPROVE tanpa temuan kritis -> AI_REVIEWED;
@@ -9278,7 +9327,7 @@ const {
 } = __require("js/core/bank.js");
 const {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
-  reviewPromptText, validateReviewResult,
+  reviewPromptText, revisionRequestText, validateReviewResult,
 } = __require("js/core/review-io.js");
 const { DIFFICULTY_LABELS } = __require("js/core/report.js");
 const { formatErrors, loadActiveSession } = __require("js/core/session-store.js");
@@ -9468,6 +9517,7 @@ function renderBank(app) {
         h('button', { type: 'button', class: 'btn', disabled: !list.length || shown === list.length, onclick: () => selectShown(true) }, `Pilih semua (${list.length})`),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: approveSelected }, 'Setujui terpilih'),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: () => { state.tab = 'review'; render(); } }, 'Buat paket review dari terpilih'),
+        h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: () => copyRevision(selected) }, 'Salin untuk penyusun'),
         h('button', { type: 'button', class: 'btn btn-link', disabled: !selected.length, onclick: () => { state.selected.clear(); render(); } }, 'Kosongkan pilihan')),
       h('div', { class: 'table-wrap' }, h('table', { class: 'data-table bank-table' },
         h('thead', {}, h('tr', {}, h('th', {}, allBox), ['ID', 'Tipe', 'Topik', 'Kesulitan', 'Status'].map((t) => h('th', { text: t })))),
@@ -9484,6 +9534,7 @@ function renderBank(app) {
     const actions = [];
     if (s === 'AI_REVIEWED' && !bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => approveIds([q.id]) }, 'Setujui'));
     if (bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => decideConflict(q.id) }, 'Putuskan hasil review'));
+    if (review && s !== 'CALIBRATION') actions.push(h('button', { type: 'button', class: s === 'NEEDS_REVISION' ? 'btn btn-primary' : 'btn', onclick: () => copyRevision([q.id]) }, 'Salin untuk penyusun'));
     if (s === 'REJECTED') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Batalkan penolakan', undoReject) }, 'Batalkan penolakan'));
     if (s === 'LIVE') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Pensiunkan soal', retire) }, 'Pensiunkan'));
     return h('div', { class: 'card preview-card' },
@@ -9716,13 +9767,27 @@ function renderBank(app) {
     render();
   }
 
-  async function copyPackage(pkg) {
-    const text = reviewPromptText(PROMPTS[REVIEW_PROMPT], pkg);
+  function copyPackage(pkg) {
+    return copyText(reviewPromptText(PROMPTS[REVIEW_PROMPT], pkg), 'Prompt + data tersalin. Tempel ke percakapan baru di AI reviewer.', 'Prompt dan paket review');
+  }
+
+  function copyRevision(ids) {
+    let text;
+    try {
+      text = revisionRequestText(bank, ids);
+    } catch (e) {
+      alertDialog('Tidak dapat menyalin', [e.message]);
+      return;
+    }
+    copyText(text, `Temuan dan soal ${ids.join(', ')} tersalin. Tempel ke Project penyusun.`, 'Permintaan revisi untuk penyusun');
+  }
+
+  async function copyText(text, okMessage, label) {
     try {
       await navigator.clipboard.writeText(text);
-      toast('Prompt + data tersalin. Tempel ke percakapan baru di AI reviewer.');
+      toast(okMessage);
     } catch {
-      const box = h('textarea', { class: 'answer-text', rows: 10, readonly: true, 'aria-label': 'Prompt dan paket review' });
+      const box = h('textarea', { class: 'answer-text', rows: 10, readonly: true, 'aria-label': label });
       box.value = text;
       alertDialog('Salin secara manual', ['Papan klip tidak dapat diakses otomatis. Pilih semua teks di bawah lalu salin.', box]);
       setTimeout(() => { box.focus(); box.select(); }, 50);

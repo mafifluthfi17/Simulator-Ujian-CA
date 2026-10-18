@@ -7,7 +7,7 @@ import {
   loadBank, planBatchImport, publish, resolveConflict, retire, saveBank, undoReject,
 } from '../../js/core/bank.js';
 import {
-  applyReviewResult, buildReviewPackage, checkReviewSelection, decide, reviewPromptText, validateReviewResult,
+  applyReviewResult, buildReviewPackage, checkReviewSelection, decide, reviewPromptText, revisionRequestText, validateReviewResult,
 } from '../../js/core/review-io.js';
 import { contentHash } from '../../js/core/hash.js';
 import { validatePack, loadAllPacks, saveImportedPack } from '../../js/core/pack-loader.js';
@@ -246,6 +246,37 @@ export default {
         undoReject(bank, ids[3], { by: 'LMA', reason: 'Reviewer keliru membaca stem.' }, T);
         assert.equal(findQuestion(bank, ids[3]).lifecycle.status, 'DRAFT');
         assert.deepEqual(validatePack(bank.pack).errors, undefined);
+      },
+    },
+    {
+      name: 'salin untuk penyusun: temuan + JSON soal; JSON dapat diimpor ulang sebagai batch',
+      run: async () => {
+        const { pack, bank, ids } = await bankWithDrafts(2);
+        const pkg = await buildReviewPackage(bank, ids, { includeCalibration: true, rng: createRng(5), now: T });
+        const pending = bank.pendingReviews.at(-1);
+        const fix = { severity: 'kritis', dimension: 'singleBestAnswer', issue: 'Opsi B juga dapat dibenarkan.', suggestedFix: 'Pertegas stem.' };
+        const verdictFor = (i) => (i.reviewKey === pending.calibrationKey ? { verdict: 'REJECT', findings: [finding('kritis', 'keyCorrectness')] }
+          : pending.keyMap[i.reviewKey].questionId === ids[0] ? { verdict: 'REVISE', findings: [fix] } : { verdict: 'APPROVE' });
+        applyReviewResult(bank, validateReviewResult(bank, makeReviewResult(pkg, { verdictFor })), T);
+        assert.equal(findQuestion(bank, ids[0]).lifecycle.status, 'NEEDS_REVISION');
+
+        const text = revisionRequestText(bank, ids);
+        assert.ok(text.includes('bagian "Revisi"'));
+        assert.ok(text.includes(`## ${ids[0]}`) && text.includes(`## ${ids[1]}`));
+        assert.ok(text.includes('1. [kritis] singleBestAnswer: Opsi B juga dapat dibenarkan. Saran: Pertegas stem.'));
+        assert.ok(text.includes('(tanpa temuan)'));
+        assert.ok(!text.includes('DEMO-MCQ-190'), 'soal kalibrasi tidak ikut');
+        const parsed = extractJson(text);
+        assert.ok(parsed.ok, parsed.errors && messages(parsed.errors));
+        assert.deepEqual(parsed.data.map((q) => q.id), ids);
+        assert.deepEqual(parsed.data[0].lifecycle, { status: 'DRAFT', contentHash: '', review: null, approvedBy: null, approvedAt: null });
+        // Bank tidak berubah; JSON yang disalin lolos lint batch dan isinya dikenali sama.
+        assert.equal(findQuestion(bank, ids[0]).lifecycle.status, 'NEEDS_REVISION');
+        const plan = await planBatchImport(bank, makeBatch(pack, parsed.data, 'DEMO-B01'));
+        assert.ok(plan.ok, plan.errors && messages(plan.errors));
+        assert.deepEqual(plan.entries.map((e) => e.action), ['sama', 'sama']);
+        await assert.rejects(async () => revisionRequestText(bank, []), /minimal satu/);
+        await assert.rejects(async () => revisionRequestText(bank, ['DEMO-MCQ-999']), /tidak ada di bank/);
       },
     },
     {

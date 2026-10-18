@@ -91,6 +91,54 @@ export function reviewPromptText(promptText, pkg) {
   return `${promptText.trim()}\n\n## PAKET REVIEW (JSON)\n\n${JSON.stringify(pkg, null, 2)}\n`;
 }
 
+// Permintaan revisi untuk AI penyusun (D-79): temuan review terakhir + JSON soal
+// dalam bentuk item batch (lifecycle dikosongkan seperti keluaran penyusun), siap
+// ditempel ke Project penyusun. Batch asal soal tidak tercatat di bank.
+export function revisionRequestText(bank, ids) {
+  if (!ids.length) throw new BankError('Pilih minimal satu soal.');
+  const qs = ids.map((id) => {
+    const q = findQuestion(bank, id);
+    if (!q) throw new BankError(`Soal ${id} tidak ada di bank.`);
+    return q;
+  });
+  const sections = qs.map((q) => {
+    const review = q.lifecycle.review;
+    const lines = [`## ${q.id}`];
+    if (!review) lines.push('Belum ada hasil review untuk soal ini.');
+    else {
+      const r = review.result;
+      lines.push(`Verdict reviewer: ${r.verdict} (keyakinan ${r.confidence}, kesepakatan kunci ${r.keyAgreement})`);
+      lines.push(`Ringkasan reviewer: ${r.summary}`);
+      lines.push(`Jawaban independen reviewer: ${r.independentAnswer}`);
+      lines.push('Temuan:');
+      if (r.findings.length) r.findings.forEach((f, i) => lines.push(`${i + 1}. [${f.severity}] ${f.dimension}: ${f.issue}${f.suggestedFix ? ` Saran: ${f.suggestedFix}` : ''}`));
+      else lines.push('(tanpa temuan)');
+    }
+    return lines.join('\n');
+  });
+  const items = qs.map((q) => {
+    const item = clone(q);
+    item.lifecycle = { status: q.lifecycle.status === 'CALIBRATION' ? 'CALIBRATION' : 'DRAFT', contentHash: '', review: null, approvedBy: null, approvedAt: null };
+    return item;
+  });
+  return [
+    'Mohon revisi soal berikut sesuai bagian "Revisi" pada instruksi penyusun.',
+    `subjectId: ${bank.subjectId} · schemaVersion: ${SCHEMA_VERSION} · soal: ${qs.map((q) => q.id).join(', ')}`,
+    'batchId batch asal tidak tercatat di aplikasi. Pakai batchId asal bila Anda mengetahuinya; bila tidak, buat batchId baru.',
+    '',
+    '# TEMUAN REVIEWER',
+    '',
+    sections.join('\n\n'),
+    '',
+    '# SOAL SAAT INI (JSON)',
+    '',
+    '```json',
+    JSON.stringify(items, null, 2),
+    '```',
+    '',
+  ].join('\n');
+}
+
 // Keputusan otomatis (SPEC 8): APPROVE tanpa temuan kritis -> AI_REVIEWED;
 // REVISE atau ada temuan kritis -> NEEDS_REVISION; REJECT -> REJECTED.
 export function decide(item) {

@@ -120,3 +120,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-78 | Kerangka `packs/msk/pack.json` 1.0.0 dari RPS PPAk Untar 2026-2027: 16 bahan kajian dikelompokkan menjadi 12 topik (T01 = bahan 1+4, T04 = 5+7, T09 = 11+12, T10 = 13+14, lainnya satu-satu); 6 CPMK menjadi kompetensi K01-K06; blueprint T1/T2/SIM persis SPEC 6; `questions` kosong. Pemetaan dan catatan cakupan K04 (kinerja, risiko, tata kelola) di `docs/msk_taksonomi.md`. | SPEC 7 menetapkan 12 topik; kode topik akan dipakai semua soal sehingga perlu ditetapkan sebelum batch pertama. | DISETUJUI (2026-10-17) |
+
+## Bank soal — alur revisi
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-79 | Tombol **Salin untuk penyusun** (pratinjau soal yang sudah direview, kecuali kalibrasi; juga untuk soal terpilih di Daftar Soal) menyalin teks permintaan revisi: temuan review terakhir per soal dan JSON soal sebagai larik item batch dengan `lifecycle` dikosongkan seperti keluaran penyusun (`authoring` tetap, agar penyusun menaikkan `revision`). Karena batch asal soal tidak tercatat di bank, teks meminta penyusun memakai batchId asal bila diketahui, atau batchId baru. Bank tidak berubah saat menyalin. | Langkah 7 alur bank soal (kirim temuan ke penyusun) sebelumnya manual dan bergantung pada percakapan penyusun yang lama; aplikasi tidak memeriksa kecocokan batchId saat impor. | DISETUJUI (2026-10-18) |
