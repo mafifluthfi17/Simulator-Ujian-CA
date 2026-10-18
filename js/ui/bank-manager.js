@@ -185,6 +185,13 @@ export function renderBank(app) {
       h('td', { text: DIFFICULTY_LABELS[q.difficulty] }),
       h('td', {}, statusBadge(q.lifecycle.status), bank.conflicts[q.id] ? h('span', { class: 'badge badge-wait', text: 'Review berbeda' }) : null)));
     const selected = [...state.selected].filter((id) => findQuestion(bank, id));
+    const shown = list.filter((q) => state.selected.has(q.id)).length;
+    const selectShown = (on) => { for (const q of list) { if (on) state.selected.add(q.id); else state.selected.delete(q.id); } render(); };
+    const allBox = h('input', {
+      type: 'checkbox', checked: list.length > 0 && shown === list.length, disabled: !list.length,
+      'aria-label': 'Pilih semua soal yang ditampilkan', onchange: (e) => selectShown(e.target.checked),
+    });
+    allBox.indeterminate = shown > 0 && shown < list.length;
     return h('div', {},
       h('div', { class: 'form-grid' },
         select('f-status', 'Status', f.status, STATUS_ORDER.map((s) => [s, STATUS_LABELS[s]]), setFilter('status')),
@@ -193,11 +200,12 @@ export function renderBank(app) {
         select('f-diff', 'Kesulitan', f.difficulty, Object.entries(DIFFICULTY_LABELS), setFilter('difficulty'))),
       h('p', { class: 'hint', text: `${list.length} soal ditampilkan · ${selected.length} dipilih` }),
       h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn', disabled: !list.length || shown === list.length, onclick: () => selectShown(true) }, `Pilih semua (${list.length})`),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: approveSelected }, 'Setujui terpilih'),
         h('button', { type: 'button', class: 'btn', disabled: !selected.length, onclick: () => { state.tab = 'review'; render(); } }, 'Buat paket review dari terpilih'),
         h('button', { type: 'button', class: 'btn btn-link', disabled: !selected.length, onclick: () => { state.selected.clear(); render(); } }, 'Kosongkan pilihan')),
       h('div', { class: 'table-wrap' }, h('table', { class: 'data-table bank-table' },
-        h('thead', {}, h('tr', {}, ['', 'ID', 'Tipe', 'Topik', 'Kesulitan', 'Status'].map((t) => h('th', { text: t })))),
+        h('thead', {}, h('tr', {}, h('th', {}, allBox), ['ID', 'Tipe', 'Topik', 'Kesulitan', 'Status'].map((t) => h('th', { text: t })))),
         h('tbody', {}, rows))),
       list.length ? null : h('p', { class: 'hint', text: 'Tidak ada soal yang cocok dengan filter.' }),
       state.preview && findQuestion(bank, state.preview) ? previewCard(findQuestion(bank, state.preview)) : null);

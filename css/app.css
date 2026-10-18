@@ -119,6 +119,8 @@ select, input[type=number], input[type=text] {
 /* Formulir kustom */
 .form-grid { display: grid; gap: 10px 16px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 .field { display: grid; gap: 4px; }
+.form-grid > .field { min-width: 0; }
+.form-grid select { width: 100%; }
 .field label, .field .label { font-weight: 600; }
 .section-table { width: 100%; border-collapse: collapse; }
 .section-table th, .section-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: left; }
