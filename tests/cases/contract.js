@@ -118,7 +118,7 @@ export default {
     {
       name: 'packs/*/pack.js dan packs/index.json sinkron dengan pack.json',
       run: async () => {
-        const ids = ['demo', 'msk'];
+        const ids = ['demo', 'msk', 'pk'];
         assert.equal(await loadText('packs/index.json'), packIndexJson(ids), 'packs/index.json usang; jalankan node tools/build-pack.mjs');
         for (const id of ids) {
           const pack = await loadJson(`packs/${id}/pack.json`);
@@ -142,6 +142,20 @@ export default {
         assert.equal(pack.questions.length, 0, 'soal MSK tidak ditulis oleh Claude Code');
         const built = buildFromPackage(pack, pack.packages[0], createRng(1));
         assert.ok(!built.ok && built.problems.includes('butuh 10 PG, tersedia 0 yang sesuai'), built.problems && built.problems.join('; '));
+      },
+    },
+    {
+      name: 'kerangka pack Pelaporan Korporat: valid, 12 topik, 5 kompetensi, blueprint sama dengan MSK, belum ada soal',
+      run: async () => {
+        const pack = await loadJson('packs/pk/pack.json');
+        const msk = await loadJson('packs/msk/pack.json');
+        const result = validatePack(pack);
+        assert.ok(result.ok, result.errors && result.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
+        assert.equal(pack.subjectId, 'pk');
+        assert.equal(pack.topics.length, 12);
+        assert.equal(pack.competencies.length, 5);
+        assert.deepEqual(pack.packages, msk.packages);
+        assert.equal(pack.questions.length, 0, 'soal Pelaporan Korporat tidak ditulis oleh Claude Code');
       },
     },
     {

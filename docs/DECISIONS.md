@@ -126,3 +126,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-79 | Tombol **Salin untuk penyusun** (pratinjau soal yang sudah direview, kecuali kalibrasi; juga untuk soal terpilih di Daftar Soal) menyalin teks permintaan revisi: temuan review terakhir per soal dan JSON soal sebagai larik item batch dengan `lifecycle` dikosongkan seperti keluaran penyusun (`authoring` tetap, agar penyusun menaikkan `revision`). Karena batch asal soal tidak tercatat di bank, teks meminta penyusun memakai batchId asal bila diketahui, atau batchId baru. Bank tidak berubah saat menyalin. | Langkah 7 alur bank soal (kirim temuan ke penyusun) sebelumnya manual dan bergantung pada percakapan penyusun yang lama; aplikasi tidak memeriksa kecocokan batchId saat impor. | DISETUJUI (2026-10-18) |
+
+## Pack Pelaporan Korporat
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-80 | Mata ujian Pelaporan Korporat ditambahkan sebagai pack kerangka `packs/pk/pack.json` 1.0.0 (subjectId `pk`, prefiks soal `PK-`): 12 topik dan 5 kompetensi **sementara** dari cakupan umum SAK Indonesia (bukan RPS), blueprint T1/T2/SIM disalin dari MSK, passing grade 70, `questions` kosong. Taksonomi di `docs/pk_taksonomi.md`, rencana kerja di `docs/PLAN_PELAPORAN_KORPORAT.md`. Kode aplikasi tidak diubah; menu muncul lewat pemilih mata ujian yang sudah ada. | Pemilik meminta menu PK. RPS/modul PK belum tersedia di repositori, jadi taksonomi dan blueprint perlu dicocokkan sebelum batch soal pertama. | MENUNGGU PERSETUJUAN |
