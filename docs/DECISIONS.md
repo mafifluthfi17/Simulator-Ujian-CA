@@ -141,3 +141,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | D-81a | Alamat email pengelola untuk Cara 2: `mamaunastore@gmail.com` (`GRADER_CONTACT.email`). Alamat ini tampil di aplikasi publik. | Diberikan pemilik 2026-10-19. | DISETUJUI (2026-10-19) |
 | D-81b | Kalimat waktu layanan Cara 2: "biasanya dalam 1×24 jam" (bukan "paling lambat"). | Janji "paling lambat" mengikat pengelola yang menilai manual. | USULAN |
 | D-82 | Perluasan D-38: bila teks tempelan (setelah dibersihkan) bukan JSON, aplikasi mencoba isi blok kode ```` ``` ```` pertama, lalu teks dari tanda `{` pertama sampai `}` terakhir. Bila tetap gagal, pesan "bukan JSON" yang sama ditampilkan. Isi hasil tetap divalidasi penuh (skema, checksum, aturan isi). | AI gratis sering menambah kalimat pembuka/penutup di luar JSON; menolak hal ini tidak menambah mutu data. | TEKNIS |
+
+## Mesin pencari
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-83 | `index.html` berisi teks statis di dalam `#app` (judul, penjelasan singkat, mata ujian MSK dan PK, cara pakai, pernyataan bukan ujian resmi). Teks ini tampil sebagai layar memuat dan diganti aplikasi saat dimulai. Ditambah judul halaman yang lebih panjang, `description` baru, `canonical`, dan tag Open Graph/Twitter dengan alamat GitHub Pages. `sitemap.xml` berisi satu URL dan tidak di-cache service worker. Tidak ada `robots.txt` karena untuk situs proyek GitHub Pages berkas itu hanya dibaca dari root `mafifluthfi17.github.io/`. Bila nanti memakai domain sendiri, alamat di `canonical`, `og:url`, `og:image`, dan `sitemap.xml` perlu diganti. | Permintaan pemilik 2026-10-19 agar situs dapat ditemukan di Google/Bing. HTML awal sebelumnya hanya "Memuat aplikasi…", sehingga mesin pencari yang tidak menjalankan JavaScript tidak melihat isi apa pun. | USULAN |
