@@ -4,7 +4,7 @@
 
 // Diisi pemilik aplikasi. Bila `email` kosong, pilihan ini tidak ditampilkan.
 export const GRADER_CONTACT = {
-  email: '',
+  email: 'mamaunastore@gmail.com',
   responseTime: 'biasanya dalam 1×24 jam',
 };
 
