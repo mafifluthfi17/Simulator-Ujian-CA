@@ -16,6 +16,8 @@ tidak disalin dan tetap di folder lokal `Materi Pelaporan Korposat/` (tidak di-c
 3. Jangan menyalin contoh, angka, atau nama perusahaan dari materi dan contoh
    ujian. Buat skenario dan angka baru.
 4. Tidak ada soal akuntansi syariah atau sektor publik (D-80).
+5. **Standar berlaku**: SAK Indonesia yang efektif per **1 Januari 2026**. Jangan memakai
+   standar atau amendemen yang belum efektif pada tanggal itu (D-84b).
 
 ## 2. Tabel penomoran PSAK
 
