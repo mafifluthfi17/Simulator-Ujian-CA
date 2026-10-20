@@ -25,7 +25,7 @@ export function mountCalculator(parent = document.body) {
   }, h('span', { class: 'calc-fab-icon', 'aria-hidden': 'true' }, '🖩'), h('span', { class: 'calc-fab-label', text: 'Kalkulator' }));
   const panel = h('div', { class: 'calc-panel', role: 'dialog', 'aria-label': 'Kalkulator', hidden: true, tabindex: '-1' },
     h('div', { class: 'calc-head' },
-      h('span', { class: 'calc-title' }, 'Kalkulator ', h('small', { text: '· tarik untuk geser' })),
+      h('span', { class: 'calc-title' }, 'Kalkulator ', h('small', { text: '· tarik panel untuk geser' })),
       h('button', { type: 'button', class: 'calc-side', 'aria-label': 'Pindahkan kalkulator ke sisi seberang', title: 'Pindah kiri/kanan', onclick: flipSide }, '⇄'),
       h('button', { type: 'button', class: 'calc-close', 'aria-label': 'Tutup kalkulator', onclick: () => setOpen(false) }, '×')),
     h('div', { class: 'calc-screen' }, exprEl, resultEl),
@@ -47,7 +47,7 @@ export function mountCalculator(parent = document.body) {
     placePanel(r.left < window.innerWidth / 2 ? window.innerWidth : 0, r.top);
   }
   let drag = null;
-  const head = panel.querySelector('.calc-head');
+  const head = panel; // seluruh panel (selain tombol) dapat ditarik
   head.addEventListener('pointerdown', (e) => {
     if (e.target.closest('button')) return;
     const r = panel.getBoundingClientRect();
