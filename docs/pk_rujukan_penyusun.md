@@ -24,8 +24,9 @@ PSAK 100+*n*; standar khas Indonesia menjadi seri 300.
 
 | Baru (lama) | Nama standar | Topik |
 |---|---|---|
+| 102 (53) | Pembayaran Berbasis Saham | T08 (usulan; tidak ada subbab modul) |
 | 103 (22) | Kombinasi Bisnis | T10 |
-| 105 (58) | Aset Tidak Lancar yang Dimiliki untuk Dijual dan Operasi yang Dihentikan | T04 |
+| 105 (58) | Aset Tidak Lancar yang Dikuasai untuk Dijual dan Operasi yang Dihentikan | T04 |
 | 106 (64) | Aktivitas Eksplorasi dan Evaluasi pada Pertambangan Sumber Daya Mineral | T05 |
 | 107 (60) | Instrumen Keuangan: Pengungkapan | T07 |
 | 108 (5) | Segmen Operasi | T03 |
@@ -40,11 +41,11 @@ PSAK 100+*n*; standar khas Indonesia menjadi seri 300.
 | 202 (14) | Persediaan | T04 |
 | 207 (2) | Laporan Arus Kas | T03 |
 | 208 (25) | Kebijakan Akuntansi, Perubahan Estimasi Akuntansi, dan Kesalahan | T03 |
-| 210 (8) | Peristiwa setelah Periode Pelaporan | T03 |
+| 210 (8) | Peristiwa Setelah Periode Pelaporan | T03 |
 | 212 (46) | Pajak Penghasilan | T09 |
 | 216 (16) | Aset Tetap | T05 |
 | 219 (24) | Imbalan Kerja | T08 |
-| 220 (61) | Akuntansi Hibah Pemerintah | T05 |
+| 220 (61) | Akuntansi Hibah Pemerintah dan Pengungkapan Bantuan Pemerintah | T05 |
 | 221 (10) | Pengaruh Perubahan Kurs Valuta Asing | T03 |
 | 223 (26) | Biaya Pinjaman | T05 |
 | 224 (7) | Pengungkapan Pihak-Pihak Berelasi | T03 |
@@ -62,9 +63,35 @@ PSAK 100+*n*; standar khas Indonesia menjadi seri 300.
 | 338 (38) | Kombinasi Bisnis Entitas Sepengendali | T10 |
 | 370 (70) | Akuntansi Aset dan Liabilitas Pengampunan Pajak | T09 |
 
-Nomor 103, 110, 227, 236, 338, dan 370 tercantum langsung di materi PPL IAPI
-3 November 2025. Nomor 201, 202, 207, 221, 224, 228, 237, dan 240 tercantum di
-slide FEB Untar PPAk 2026. Nomor lainnya diturunkan dari pola penomoran.
+**Sumber nomor baru dan judul:** pengumuman resmi IAI "Perubahan Penomoran PSAK dan
+ISAK dalam SAK Indonesia" (`Materi Pelaporan Korposat/nomor PSAK Terbaru.pdf`),
+berlaku efektif 1 Januari 2024. Semua nomor baru dan judul di tabel ini sudah
+dicocokkan dengan daftar tersebut. Daftar IAI tidak memuat nomor lama, jadi nomor
+dalam kurung berasal dari materi (PPL IAPI 3 November 2025, slide FEB Untar PPAk
+2026) dan pola penomoran.
+
+Daftar IAI juga memuat PSAK 104 dan 117 (kontrak asuransi), 226 (program manfaat
+purnakarya), 229 (ekonomi hiperinflasi), 328 dan 336 (asuransi), serta seri 400
+(syariah). Standar ini **di luar cakupan** soal PK: tidak ada subbab modul, dan
+seri 400 termasuk larangan syariah (D-80).
+
+### ISAK yang dapat muncul di soal
+Nomor baru dan judul dari daftar IAI. Nomor lama dalam kurung **belum
+diverifikasi pemilik**. Bila ragu, tulis nomor baru saja untuk ISAK.
+
+| Baru (lama) | Judul | Topik |
+|---|---|---|
+| ISAK 101 (9) | Perubahan atas Liabilitas Aktivitas Purnaoperasi, Restorasi, dan Liabilitas Serupa | T05, T08 |
+| ISAK 112 (16) | Perjanjian Konsesi Jasa | T05 |
+| ISAK 114 (15) | PSAK 219 – Batas Aset Imbalan Pasti, Persyaratan Pendanaan Minimum, dan Interaksinya | T08 |
+| ISAK 117 (11) | Distribusi Aset Nonkas kepada Pemilik | T03 |
+| ISAK 121 (30) | Pungutan | T08 |
+| ISAK 122 (33) | Transaksi Valuta Asing dan Imbalan di Muka | T03 |
+| ISAK 123 (34) | Ketidakpastian dalam Perlakuan Pajak Penghasilan | T09 |
+| ISAK 225 (20) | Pajak Penghasilan – Perubahan dalam Status Pajak Entitas atau Para Pemegang Sahamnya | T09 |
+| ISAK 232 (14) | Aset Takberwujud – Biaya Situs Web | T05 |
+| ISAK 331 (31) | Interpretasi atas Ruang Lingkup PSAK 240: Properti Investasi | T05 |
+| ISAK 336 (36) | Interpretasi atas Interaksi antara Ketentuan Mengenai Hak atas Tanah dalam PSAK 216: Aset Tetap dan PSAK 116: Sewa | T05, T06 |
 
 ## 3. Isi materi yang sudah usang (jangan diikuti)
 
