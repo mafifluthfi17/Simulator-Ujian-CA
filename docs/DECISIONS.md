@@ -168,3 +168,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-86 | Hasil Ekspor Pack PK 1.2.0 dari aplikasi online (`Publikasi Soal/PK-RV007 pack.json`, 15 soal LIVE PK-MCQ-001–015) digabung ke `packs/pk/pack.json`: `questions` dan entri changelog 1.1.0/1.2.0 diambil dari ekspor; `topics`, `competencies`, dan changelog 1.0.0 tetap versi yang disetujui (D-80). Aplikasi online masih memuat kerangka 12 topik lama karena commit taksonomi belum di-push, sedangkan penyusun memakai kode 14 topik; `topicIds` soal diperiksa cocok dengan taksonomi baru. Tes pack PK kini memeriksa prefiks `PK-` dan larangan soal demo, bukan bank kosong. | Mencegah nama topik salah di aplikasi online dan kehilangan soal yang hanya tersimpan di browser. `contentHash` tidak mencakup topik sehingga status LIVE tetap sah (diperiksa build-pack). | TEKNIS |
+
+## Bank soal — pembaruan taksonomi
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-87 | Pengelola Bank Soal membandingkan `topics` dan `competencies` bank dengan pack **bawaan** aplikasi (`loadAllPacks` kini juga mengembalikan `builtIn`, karena pack impor menimpa pack bawaan). Bila berbeda, tampil pemberitahuan dan tombol **Perbarui daftar topik dan kompetensi**: daftar di bank dan di pack ujian perangkat (bila sumbernya impor/publikasi) diganti dari pack bawaan; soal, status, `contentHash`, blueprint, versi, dan changelog tidak berubah; tercatat di log bank. Ditolak bila ada soal yang memakai kode yang tidak ada di daftar baru, atau bila ujian sedang berjalan. Fungsi inti `taxonomyDiff`, `withTaxonomy`, `updateTaxonomy` di `js/core/bank.js`. | Pack PK 1.2.0 di perangkat pemilik masih memakai 12 topik lama (D-86); sebelumnya tidak ada cara memperbarui taksonomi bank tanpa menghapus data browser, dan publikasi berikutnya akan menulis ulang daftar lama. | TEKNIS |

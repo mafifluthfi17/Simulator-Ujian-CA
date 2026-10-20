@@ -9,7 +9,7 @@ import { getType } from '../types/registry.js';
 import {
   BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
-  retire, saveBank, undoReject, KEY_SHARE_LIMIT,
+  retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } from '../core/bank.js';
 import {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
@@ -152,6 +152,7 @@ export function renderBank(app) {
       header(app, { title: 'Pengelola Bank Soal' }),
       h('p', { class: 'hint', text: `${bank.pack.subjectName} · bank versi ${bank.pack.packVersion} · ${bank.pack.questions.length} soal · pack ujian versi ${app.pack.packVersion}` }),
       differs ? h('p', { class: 'notice', text: `Pack yang dipakai ujian (versi ${app.pack.packVersion}) berbeda dengan bank (versi ${bank.pack.packVersion}). Perubahan bank baru berlaku untuk ujian setelah Publikasikan.` }) : null,
+      taxonomyNotice(),
       h('div', { class: 'tabs', role: 'tablist' }, TABS.map(([id, label]) => h('button', {
         type: 'button', role: 'tab', 'aria-selected': String(state.tab === id), class: state.tab === id ? 'tab active' : 'tab',
         onclick: () => { state.tab = id; render(); },
@@ -160,6 +161,55 @@ export function renderBank(app) {
       disclaimer(),
     ]);
     if (y) window.scrollTo(0, y);
+  }
+
+  // Daftar topik/kompetensi bawaan aplikasi berubah (mis. setelah pembaruan) tetapi
+  // bank dan pack ujian di perangkat masih memakai daftar lama (D-87).
+  function taxonomyNotice() {
+    const source = app.builtInPacks && app.builtInPacks[bank.subjectId];
+    const diff = taxonomyDiff(bank, source);
+    if (!diff) return null;
+    const what = [diff.topics ? 'topik' : null, diff.competencies ? 'kompetensi' : null].filter(Boolean).join(' dan ');
+    return h('div', { class: 'notice' },
+      h('p', { text: `Daftar ${what} di bank soal berbeda dengan versi terbaru aplikasi (${source.topics.length} topik, ${source.competencies.length} kompetensi). Nama topik di daftar soal, statistik, dan laporan memakai daftar lama sampai diperbarui.` }),
+      h('button', { type: 'button', class: 'btn', onclick: () => doUpdateTaxonomy(source) }, `Perbarui daftar ${what}`));
+  }
+
+  async function doUpdateTaxonomy(source) {
+    const diff = taxonomyDiff(bank, source);
+    if (!diff) return;
+    if (diff.missing.length) {
+      alertDialog('Daftar belum dapat diperbarui', [
+        'Soal berikut memakai kode yang tidak ada di daftar terbaru. Revisi soalnya lebih dulu:',
+        ...diff.missing.slice(0, 10).map((m) => `${m.questionId}: ${m.code}`),
+      ]);
+      return;
+    }
+    if (loadActiveSession(app.store, bank.subjectId)) {
+      alertDialog('Ada ujian yang sedang berjalan', ['Pembaruan menunggu sampai ujian dikumpulkan.']);
+      return;
+    }
+    const ok = await confirmDialog({
+      title: 'Perbarui daftar topik dan kompetensi?',
+      body: [
+        `Bank soal dan pack ujian di perangkat ini memakai ${source.topics.length} topik dan ${source.competencies.length} kompetensi dari versi terbaru aplikasi.`,
+        'Soal, status, kode topik soal, dan versi pack tidak berubah.',
+      ],
+      confirmLabel: 'Perbarui',
+    });
+    if (!ok) return;
+    const entry = app.packs.find((p) => p.pack.subjectId === bank.subjectId);
+    try {
+      updateTaxonomy(bank, source, Date.now());
+      if (entry && entry.source === 'impor') saveImportedPack(app.store, withTaxonomy(entry.pack, source));
+    } catch (e) {
+      alertDialog('Pembaruan gagal', [e.message]);
+      return;
+    }
+    persist();
+    await app.reloadPacks();
+    toast('Daftar topik dan kompetensi diperbarui.');
+    render();
   }
 
   const statusBadge = (s) => h('span', { class: `badge status-${s.toLowerCase()}`, text: STATUS_LABELS[s] });

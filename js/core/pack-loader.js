@@ -14,16 +14,20 @@ export function validatePackText(text) {
   return parsed.ok ? validatePack(parsed.data) : parsed;
 }
 
-// Hasil: { packs: [{ pack, source }], problems: [{ source, errors }] }.
-// Pack impor menggantikan pack bawaan dengan subjectId yang sama.
+// Hasil: { packs: [{ pack, source }], builtIn: { subjectId: pack }, problems: [{ source, errors }] }.
+// Pack impor menggantikan pack bawaan dengan subjectId yang sama; builtIn tetap
+// menyimpan pack bawaan untuk pembaruan taksonomi bank (D-87).
 export async function loadAllPacks({ store, win = globalThis.window, baseUrl = 'packs/' } = {}) {
   const problems = [];
   const bySubject = new Map();
+  const builtIn = {};
 
   for (const { data, source } of await loadBuiltIn(win, baseUrl, problems)) {
     const result = validatePack(data);
-    if (result.ok) bySubject.set(result.data.subjectId, { pack: result.data, source });
-    else problems.push({ source, errors: result.errors });
+    if (result.ok) {
+      bySubject.set(result.data.subjectId, { pack: result.data, source });
+      builtIn[result.data.subjectId] = result.data;
+    } else problems.push({ source, errors: result.errors });
   }
 
   if (store) {
@@ -37,7 +41,7 @@ export async function loadAllPacks({ store, win = globalThis.window, baseUrl = '
   }
 
   const packs = [...bySubject.values()].sort((a, b) => a.pack.subjectName.localeCompare(b.pack.subjectName, 'id'));
-  return { packs, problems };
+  return { packs, builtIn, problems };
 }
 
 export function saveImportedPack(store, pack) {

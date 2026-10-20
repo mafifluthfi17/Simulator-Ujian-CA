@@ -4,7 +4,7 @@ import * as assert from './assert.js';
 import { loadJson } from './env.js';
 import {
   applyBatchImport, approve, bankStats, createBank, editQuestion, exportPackText, extractJson, findQuestion,
-  loadBank, planBatchImport, publish, resolveConflict, retire, saveBank, undoReject,
+  loadBank, planBatchImport, publish, resolveConflict, retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
 } from '../../js/core/bank.js';
 import {
   applyReviewResult, buildReviewPackage, checkReviewSelection, decide, reviewPromptText, revisionRequestText, validateReviewResult,
@@ -399,6 +399,56 @@ export default {
         assert.ok(validatePack(exported).ok);
         assert.ok(exported.questions.some((q) => q.lifecycle.status === 'CALIBRATION'));
         await assert.rejects(() => publish(b, T + 3000, { publishedPack: used.pack }), /Tidak ada perubahan/);
+      },
+    },
+    {
+      name: 'pembaruan taksonomi bank dari pack bawaan: deteksi, kode hilang ditolak, soal dan hash tetap (D-87)',
+      run: async () => {
+        const { pack, bank } = await bankWithDrafts(2);
+        assert.equal(taxonomyDiff(bank, pack), null, 'taksonomi sama: tidak ada pemberitahuan');
+        assert.equal(taxonomyDiff(bank, { ...pack, subjectId: 'lain' }), null, 'mata ujian lain diabaikan');
+        const source = clone(pack);
+        source.packVersion = '2.0.0';
+        source.topics = source.topics.map((t) => ({ ...t, name: `${t.name} (baru)` }));
+        source.topics.push({ id: 'T99', name: 'Topik tambahan' });
+        const diff = taxonomyDiff(bank, source);
+        assert.ok(diff && diff.topics && !diff.competencies && diff.missing.length === 0, JSON.stringify(diff));
+        const before = clone(bank.pack.questions);
+        const version = bank.pack.packVersion;
+        updateTaxonomy(bank, source, T);
+        assert.deepEqual(bank.pack.topics, source.topics);
+        assert.deepEqual(bank.pack.questions, before, 'soal, status, dan contentHash tidak berubah');
+        assert.equal(bank.pack.packVersion, version, 'versi pack tidak berubah');
+        assert.ok(bank.log.at(-1).message.includes('versi 2.0.0'));
+        assert.equal(taxonomyDiff(bank, source), null);
+        assert.ok(validatePack(bank.pack).ok);
+        await assert.rejects(async () => updateTaxonomy(bank, source, T), /sudah sama/);
+        // Kode yang dipakai soal hilang dari pack bawaan: ditolak, bank tidak berubah.
+        const usedTopic = bank.pack.questions[0].topicIds[0];
+        const shrunk = clone(source);
+        shrunk.topics = shrunk.topics.filter((t) => t.id !== usedTopic);
+        const d2 = taxonomyDiff(bank, shrunk);
+        assert.ok(d2.missing.some((m) => m.code === usedTopic));
+        await assert.rejects(async () => updateTaxonomy(bank, shrunk, T), new RegExp(usedTopic));
+        assert.deepEqual(bank.pack.topics, source.topics);
+        // Pack ujian di perangkat (impor) ikut diperbarui tanpa mengubah soal.
+        const updated = withTaxonomy(pack, source);
+        assert.deepEqual(updated.topics, source.topics);
+        assert.deepEqual(updated.questions, pack.questions);
+        assert.ok(validatePack(updated).ok);
+      },
+    },
+    {
+      name: 'loadAllPacks: pack bawaan tetap tersedia walau digantikan pack impor (D-87)',
+      run: async () => {
+        const pack = await loadJson('packs/demo/pack.json');
+        const imported = { ...clone(pack), topics: pack.topics.map((t) => ({ ...t, name: 'lama' })) };
+        const store = new Store(memoryBackend());
+        saveImportedPack(store, imported);
+        const win = { location: { protocol: 'file:' }, CA_SIM_PACK_INDEX: [pack.subjectId], CA_SIM_PACKS: { [pack.subjectId]: pack } };
+        const { packs, builtIn } = await loadAllPacks({ store, win });
+        assert.equal(packs.find((p) => p.pack.subjectId === pack.subjectId).source, 'impor');
+        assert.deepEqual(builtIn[pack.subjectId].topics, pack.topics);
       },
     },
   ],

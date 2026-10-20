@@ -34,6 +34,7 @@ export class App {
     this.root = root;
     this.current = null;
     this.packs = [];
+    this.builtInPacks = {};
     this.problems = [];
     this.notices = [];
     this.audio = null;
@@ -60,8 +61,9 @@ export class App {
   }
 
   async reloadPacks() {
-    const { packs, problems } = await loadAllPacks({ store: this.store });
+    const { packs, builtIn, problems } = await loadAllPacks({ store: this.store });
     this.packs = packs;
+    this.builtInPacks = builtIn;
     this.problems = problems;
     const ids = packs.map((p) => p.pack.subjectId);
     this.subjectId = ids.includes(this.subjectId) ? this.subjectId

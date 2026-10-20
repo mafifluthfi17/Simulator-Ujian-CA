@@ -162,6 +162,12 @@ Skala asli: mcq 1, numeric 1, essay 10, case 20. Field wajib per tipe: lihat
    pack baru.
 10. **Ekspor Pack**: unduh `pack.json` lengkap lalu simpan ke
     `packs/<subjectId>/pack.json` di repositori.
+11. **Taksonomi berubah**: bank soal dan pack hasil publikasi menyimpan
+    salinan daftar topik dan kompetensi sendiri. Bila daftar itu diubah di
+    repositori dan aplikasi diperbarui, Pengelola Bank Soal menampilkan
+    pemberitahuan dengan tombol **Perbarui daftar topik dan kompetensi**.
+    Soal, status, dan versi pack tidak berubah. Pembaruan ditolak bila ada soal
+    yang memakai kode yang tidak ada lagi di daftar baru.
 
 Target bank, misalnya jumlah soal per topik atau posisi kunci PG maksimal 35%
 per huruf, dapat dipantau di tab **Statistik**.

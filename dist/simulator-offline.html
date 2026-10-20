@@ -3726,16 +3726,20 @@ function validatePackText(text) {
   return parsed.ok ? validatePack(parsed.data) : parsed;
 }
 
-// Hasil: { packs: [{ pack, source }], problems: [{ source, errors }] }.
-// Pack impor menggantikan pack bawaan dengan subjectId yang sama.
+// Hasil: { packs: [{ pack, source }], builtIn: { subjectId: pack }, problems: [{ source, errors }] }.
+// Pack impor menggantikan pack bawaan dengan subjectId yang sama; builtIn tetap
+// menyimpan pack bawaan untuk pembaruan taksonomi bank (D-87).
 async function loadAllPacks({ store, win = globalThis.window, baseUrl = 'packs/' } = {}) {
   const problems = [];
   const bySubject = new Map();
+  const builtIn = {};
 
   for (const { data, source } of await loadBuiltIn(win, baseUrl, problems)) {
     const result = validatePack(data);
-    if (result.ok) bySubject.set(result.data.subjectId, { pack: result.data, source });
-    else problems.push({ source, errors: result.errors });
+    if (result.ok) {
+      bySubject.set(result.data.subjectId, { pack: result.data, source });
+      builtIn[result.data.subjectId] = result.data;
+    } else problems.push({ source, errors: result.errors });
   }
 
   if (store) {
@@ -3749,7 +3753,7 @@ async function loadAllPacks({ store, win = globalThis.window, baseUrl = 'packs/'
   }
 
   const packs = [...bySubject.values()].sort((a, b) => a.pack.subjectName.localeCompare(b.pack.subjectName, 'id'));
-  return { packs, problems };
+  return { packs, builtIn, problems };
 }
 
 function saveImportedPack(store, pack) {
@@ -8757,6 +8761,9 @@ Object.defineProperties(__exports, {
   "loadBank": { enumerable: true, get: () => loadBank },
   "saveBank": { enumerable: true, get: () => saveBank },
   "findQuestion": { enumerable: true, get: () => findQuestion },
+  "taxonomyDiff": { enumerable: true, get: () => taxonomyDiff },
+  "withTaxonomy": { enumerable: true, get: () => withTaxonomy },
+  "updateTaxonomy": { enumerable: true, get: () => updateTaxonomy },
   "extractJson": { enumerable: true, get: () => extractJson },
   "labelItemErrors": { enumerable: true, get: () => labelItemErrors },
   "planBatchImport": { enumerable: true, get: () => planBatchImport },
@@ -8888,6 +8895,46 @@ function saveBank(store, bank) {
 
 function findQuestion(bank, id) {
   return bank.pack.questions.find((q) => q.id === id) || null;
+}
+
+// ---------- Pembaruan taksonomi dari pack bawaan (D-87) ----------
+
+const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+// Bank menyimpan salinan pack sendiri, sehingga daftar topik/kompetensi yang
+// diperbarui di pack bawaan tidak ikut berubah. Hasil: null bila sama atau mata
+// ujian berbeda; selain itu { topics, competencies, missing } dengan missing =
+// kode yang dipakai soal bank tetapi tidak ada di pack sumber.
+function taxonomyDiff(bank, sourcePack) {
+  if (!sourcePack || sourcePack.subjectId !== bank.subjectId) return null;
+  const topics = !sameList(bank.pack.topics, sourcePack.topics);
+  const competencies = !sameList(bank.pack.competencies, sourcePack.competencies);
+  if (!topics && !competencies) return null;
+  const topicIds = new Set(sourcePack.topics.map((t) => t.id));
+  const competencyIds = new Set(sourcePack.competencies.map((k) => k.id));
+  const missing = [];
+  for (const q of bank.pack.questions) {
+    for (const id of q.topicIds) if (!topicIds.has(id)) missing.push({ questionId: q.id, code: id });
+    for (const id of q.competencyIds) if (!competencyIds.has(id)) missing.push({ questionId: q.id, code: id });
+  }
+  return { topics, competencies, missing };
+}
+
+// Salinan pack dengan topik dan kompetensi dari pack sumber; soal, blueprint,
+// versi, dan changelog tidak berubah (contentHash tidak mencakup topik).
+function withTaxonomy(pack, sourcePack) {
+  return { ...clone(pack), topics: clone(sourcePack.topics), competencies: clone(sourcePack.competencies) };
+}
+
+function updateTaxonomy(bank, sourcePack, now) {
+  const diff = taxonomyDiff(bank, sourcePack);
+  if (!diff) throw new BankError('Daftar topik dan kompetensi bank sudah sama dengan pack bawaan.');
+  if (diff.missing.length) {
+    throw new BankError(`Kode berikut dipakai soal tetapi tidak ada di pack bawaan: ${diff.missing.map((m) => `${m.questionId} (${m.code})`).join(', ')}.`);
+  }
+  bank.pack = withTaxonomy(bank.pack, sourcePack);
+  log(bank, now, `Topik dan kompetensi diperbarui dari pack bawaan versi ${sourcePack.packVersion} (${sourcePack.topics.length} topik, ${sourcePack.competencies.length} kompetensi).`);
+  return diff;
 }
 
 // ---------- Impor batch (SPEC 5.3, 8) ----------
@@ -9501,7 +9548,7 @@ const { getType } = __require("js/types/registry.js");
 const {
   BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
-  retire, saveBank, undoReject, KEY_SHARE_LIMIT,
+  retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } = __require("js/core/bank.js");
 const {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
@@ -9644,6 +9691,7 @@ function renderBank(app) {
       header(app, { title: 'Pengelola Bank Soal' }),
       h('p', { class: 'hint', text: `${bank.pack.subjectName} · bank versi ${bank.pack.packVersion} · ${bank.pack.questions.length} soal · pack ujian versi ${app.pack.packVersion}` }),
       differs ? h('p', { class: 'notice', text: `Pack yang dipakai ujian (versi ${app.pack.packVersion}) berbeda dengan bank (versi ${bank.pack.packVersion}). Perubahan bank baru berlaku untuk ujian setelah Publikasikan.` }) : null,
+      taxonomyNotice(),
       h('div', { class: 'tabs', role: 'tablist' }, TABS.map(([id, label]) => h('button', {
         type: 'button', role: 'tab', 'aria-selected': String(state.tab === id), class: state.tab === id ? 'tab active' : 'tab',
         onclick: () => { state.tab = id; render(); },
@@ -9652,6 +9700,55 @@ function renderBank(app) {
       disclaimer(),
     ]);
     if (y) window.scrollTo(0, y);
+  }
+
+  // Daftar topik/kompetensi bawaan aplikasi berubah (mis. setelah pembaruan) tetapi
+  // bank dan pack ujian di perangkat masih memakai daftar lama (D-87).
+  function taxonomyNotice() {
+    const source = app.builtInPacks && app.builtInPacks[bank.subjectId];
+    const diff = taxonomyDiff(bank, source);
+    if (!diff) return null;
+    const what = [diff.topics ? 'topik' : null, diff.competencies ? 'kompetensi' : null].filter(Boolean).join(' dan ');
+    return h('div', { class: 'notice' },
+      h('p', { text: `Daftar ${what} di bank soal berbeda dengan versi terbaru aplikasi (${source.topics.length} topik, ${source.competencies.length} kompetensi). Nama topik di daftar soal, statistik, dan laporan memakai daftar lama sampai diperbarui.` }),
+      h('button', { type: 'button', class: 'btn', onclick: () => doUpdateTaxonomy(source) }, `Perbarui daftar ${what}`));
+  }
+
+  async function doUpdateTaxonomy(source) {
+    const diff = taxonomyDiff(bank, source);
+    if (!diff) return;
+    if (diff.missing.length) {
+      alertDialog('Daftar belum dapat diperbarui', [
+        'Soal berikut memakai kode yang tidak ada di daftar terbaru. Revisi soalnya lebih dulu:',
+        ...diff.missing.slice(0, 10).map((m) => `${m.questionId}: ${m.code}`),
+      ]);
+      return;
+    }
+    if (loadActiveSession(app.store, bank.subjectId)) {
+      alertDialog('Ada ujian yang sedang berjalan', ['Pembaruan menunggu sampai ujian dikumpulkan.']);
+      return;
+    }
+    const ok = await confirmDialog({
+      title: 'Perbarui daftar topik dan kompetensi?',
+      body: [
+        `Bank soal dan pack ujian di perangkat ini memakai ${source.topics.length} topik dan ${source.competencies.length} kompetensi dari versi terbaru aplikasi.`,
+        'Soal, status, kode topik soal, dan versi pack tidak berubah.',
+      ],
+      confirmLabel: 'Perbarui',
+    });
+    if (!ok) return;
+    const entry = app.packs.find((p) => p.pack.subjectId === bank.subjectId);
+    try {
+      updateTaxonomy(bank, source, Date.now());
+      if (entry && entry.source === 'impor') saveImportedPack(app.store, withTaxonomy(entry.pack, source));
+    } catch (e) {
+      alertDialog('Pembaruan gagal', [e.message]);
+      return;
+    }
+    persist();
+    await app.reloadPacks();
+    toast('Daftar topik dan kompetensi diperbarui.');
+    render();
   }
 
   const statusBadge = (s) => h('span', { class: `badge status-${s.toLowerCase()}`, text: STATUS_LABELS[s] });
@@ -10244,6 +10341,7 @@ class App {
     this.root = root;
     this.current = null;
     this.packs = [];
+    this.builtInPacks = {};
     this.problems = [];
     this.notices = [];
     this.audio = null;
@@ -10270,8 +10368,9 @@ class App {
   }
 
   async reloadPacks() {
-    const { packs, problems } = await loadAllPacks({ store: this.store });
+    const { packs, builtIn, problems } = await loadAllPacks({ store: this.store });
     this.packs = packs;
+    this.builtInPacks = builtIn;
     this.problems = problems;
     const ids = packs.map((p) => p.pack.subjectId);
     this.subjectId = ids.includes(this.subjectId) ? this.subjectId

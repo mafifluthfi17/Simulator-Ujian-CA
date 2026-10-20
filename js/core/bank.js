@@ -113,6 +113,46 @@ export function findQuestion(bank, id) {
   return bank.pack.questions.find((q) => q.id === id) || null;
 }
 
+// ---------- Pembaruan taksonomi dari pack bawaan (D-87) ----------
+
+const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+// Bank menyimpan salinan pack sendiri, sehingga daftar topik/kompetensi yang
+// diperbarui di pack bawaan tidak ikut berubah. Hasil: null bila sama atau mata
+// ujian berbeda; selain itu { topics, competencies, missing } dengan missing =
+// kode yang dipakai soal bank tetapi tidak ada di pack sumber.
+export function taxonomyDiff(bank, sourcePack) {
+  if (!sourcePack || sourcePack.subjectId !== bank.subjectId) return null;
+  const topics = !sameList(bank.pack.topics, sourcePack.topics);
+  const competencies = !sameList(bank.pack.competencies, sourcePack.competencies);
+  if (!topics && !competencies) return null;
+  const topicIds = new Set(sourcePack.topics.map((t) => t.id));
+  const competencyIds = new Set(sourcePack.competencies.map((k) => k.id));
+  const missing = [];
+  for (const q of bank.pack.questions) {
+    for (const id of q.topicIds) if (!topicIds.has(id)) missing.push({ questionId: q.id, code: id });
+    for (const id of q.competencyIds) if (!competencyIds.has(id)) missing.push({ questionId: q.id, code: id });
+  }
+  return { topics, competencies, missing };
+}
+
+// Salinan pack dengan topik dan kompetensi dari pack sumber; soal, blueprint,
+// versi, dan changelog tidak berubah (contentHash tidak mencakup topik).
+export function withTaxonomy(pack, sourcePack) {
+  return { ...clone(pack), topics: clone(sourcePack.topics), competencies: clone(sourcePack.competencies) };
+}
+
+export function updateTaxonomy(bank, sourcePack, now) {
+  const diff = taxonomyDiff(bank, sourcePack);
+  if (!diff) throw new BankError('Daftar topik dan kompetensi bank sudah sama dengan pack bawaan.');
+  if (diff.missing.length) {
+    throw new BankError(`Kode berikut dipakai soal tetapi tidak ada di pack bawaan: ${diff.missing.map((m) => `${m.questionId} (${m.code})`).join(', ')}.`);
+  }
+  bank.pack = withTaxonomy(bank.pack, sourcePack);
+  log(bank, now, `Topik dan kompetensi diperbarui dari pack bawaan versi ${sourcePack.packVersion} (${sourcePack.topics.length} topik, ${sourcePack.competencies.length} kompetensi).`);
+  return diff;
+}
+
 // ---------- Impor batch (SPEC 5.3, 8) ----------
 
 // Teks dari penyusun: JSON murni, atau blok kode ```json ... ``` diikuti "Catatan penyusun".
