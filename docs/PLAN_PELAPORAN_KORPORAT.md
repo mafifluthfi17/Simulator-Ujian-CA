@@ -12,7 +12,8 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 | Menu "Pelaporan Korporat" di pemilih mata ujian beranda | **Selesai** (`packs/pk/`) |
 | Paket Training 1, Training 2, Simulasi, dan Kustom tampil | **Selesai**. Belum bisa dimulai karena bank soal masih kosong |
 | Taksonomi | **14 topik = 14 bab modul IAI** (cetakan 8, Okt 2025); 5 kompetensi, format nomor PSAK "baru (lama)". **Disetujui 2026-10-20** (`docs/pk_taksonomi.md`, D-80) |
-| Materi | Modul (foto bab 1-10, bab 5/7/8 belum lengkap; bab 11-14 belum ada), slide PSAK, dan 2 contoh ujian (2015, 2016-2017) di `Materi Pelaporan Korposat/` (tidak di-commit) |
+| Materi | Modul (foto bab 1-10, bab 5/7/8 belum lengkap; bab 11-14 belum ada), slide PSAK, 2 contoh ujian (2015, 2016-2017), dan PPL IAPI 3 Nov 2025 tentang LK konsolidasian di `Materi Pelaporan Korposat/` (tidak di-commit) |
+| Rujukan penyusun | `docs/pk_rujukan_penyusun.md`: tabel PSAK terbaru, materi usang, bahan pengetahuan konsolidasi (D-84) |
 | Blueprint paket | **Sementara**: disamakan dengan MSK |
 | Bank soal | Kosong (0 soal) |
 | Penyimpanan, riwayat, dan bank soal | Sudah terpisah otomatis per mata ujian (`caSim:pk:...`) |
@@ -58,7 +59,7 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
    aturan khusus PK (mis. menyebut nomor PSAK, format tabel jurnal di `caseData`,
    pembulatan Rupiah pada numerik), itu termasuk isi prompt dan **harus
    disetujui pemilik** (CLAUDE.md: isi prompts/*.md tidak diubah tanpa izin).
-6. ⬜ Unggah `docs/pk_taksonomi.md` ke kedua Project AI.
+6. ⬜ Unggah `docs/pk_taksonomi.md` dan `docs/pk_rujukan_penyusun.md` ke kedua Project AI.
 
 ### Tahap 3 — Produksi bank soal (di luar Claude Code)
 7. ⬜ Pasang pack PK di aplikasi (sudah otomatis setelah deploy), lalu buka **⋯ › Pengelola Bank Soal**.

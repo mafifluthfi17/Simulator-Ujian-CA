@@ -19,12 +19,12 @@ Prefiks ID soal: `PK-MCQ-nnn`, `PK-NUM-nnn`, `PK-ESA-nnn`, `PK-KAS-nnn`.
 | T02 | Etika dan tata kelola perusahaan | 2.1-2.2 | Kode Etik Profesi; pedoman tata kelola | K05 |
 | T03 | Penyajian laporan keuangan: kebijakan akuntansi, estimasi, kesalahan, mata uang fungsional, pihak berelasi, laba per saham, peristiwa setelah periode pelaporan, dan laporan interim | 3.1-3.9 | 201 (1), 208 (25), 221 (10), 224 (7), 233 (56), 210 (8), 234 (3) | K01, K02 |
 | T04 | Aset lancar: persediaan dan aset tidak lancar dikuasai untuk dijual | 4.1-4.3 | 202 (14), 105 (58) | K01 |
-| T05 | Aset tidak lancar: properti investasi, aset tetap, aset takberwujud, aset biologis, aset tambang, hibah pemerintah, aset dari pelanggan, dan penurunan nilai | 5.1-5.9 | 240 (13), 216 (16), 238 (19), 241 (69), 106 (64), 220 (61), 236 (48) | K01, K04 |
+| T05 | Aset tidak lancar: properti investasi, aset tetap, aset takberwujud, aset biologis, aset tambang, hibah pemerintah, aset dari pelanggan, dan penurunan nilai | 5.1-5.9 | 240 (13), 216 (16), 223 (26), 238 (19), 241 (69), 106 (64), 220 (61), 236 (48) | K01, K04 |
 | T06 | Sewa | 6.1-6.2 | 116 (73) | K01, K04 |
 | T07 | Instrumen keuangan | 7.1-7.9 | 232 (50), 109 (71), 107 (60) | K01, K04 |
 | T08 | Imbalan kerja, provisi, dan kontinjensi | 8.1-8.9 | 219 (24), 237 (57) | K01 |
-| T09 | Pajak penghasilan | 9.1-9.3 | 212 (46) | K01, K02 |
-| T10 | Kombinasi bisnis dan konsolidasi | 10.1-10.5 | 103 (22), 110 (65) | K02 |
+| T09 | Pajak penghasilan | 9.1-9.3 | 212 (46), 370 (70) | K01, K02 |
+| T10 | Kombinasi bisnis dan konsolidasi | 10.1-10.5 | 103 (22), 110 (65), 338 (38), 227 (4), 236 (48) untuk goodwill | K02 |
 | T11 | Investasi pada entitas lain: entitas asosiasi, ventura bersama, dan pengaturan bersama | 11.1-11.4 | 228 (15), 111 (66), 227 (4) | K02, K04 |
 | T12 | Pendapatan dari kontrak dengan pelanggan | 12.1-12.2 | 115 (72) | K01, K04 |
 | T13 | Analisis laporan keuangan: financial shenanigans dan deteksi fraud | 13.1-13.6 | Analisis rasio | K03 |
@@ -36,9 +36,9 @@ Prefiks ID soal: `PK-MCQ-nnn`, `PK-NUM-nnn`, `PK-ESA-nnn`, `PK-KAS-nnn`.
 - **Wajib** di soal: tulis nomor baru dengan nomor lama dalam kurung,
   mis. "PSAK 228 (15)". Format ini sama dengan slide kuliah FEB Untar PPAk 2026
   di folder materi.
-- Nomor di tabel di atas disusun dari aturan tersebut. Nomor yang tercantum di
-  judul slide (201, 202, 207, 221, 224, 228, 237, 240) cocok dengan tabel; nomor
-  lainnya **perlu dicek pemilik**.
+- Tabel lengkap dan daftar isi materi yang sudah usang ada di
+  `docs/pk_rujukan_penyusun.md`. Seri 300 adalah standar khas Indonesia, mis.
+  PSAK 338 (38) dan PSAK 370 (70).
 
 ### Catatan cakupan
 - **Laporan arus kas** (PSAK 207 (2)) ada di slide materi tetapi tidak menjadi
