@@ -22,10 +22,11 @@ export function mountCalculator(parent = document.body) {
   const fab = h('button', {
     type: 'button', class: 'calc-fab', 'aria-label': 'Buka kalkulator', 'aria-expanded': 'false', title: 'Kalkulator',
     onclick: () => setOpen(true),
-  }, '🖩');
+  }, h('span', { class: 'calc-fab-icon', 'aria-hidden': 'true' }, '🖩'), h('span', { class: 'calc-fab-label', text: 'Kalkulator' }));
   const panel = h('div', { class: 'calc-panel', role: 'dialog', 'aria-label': 'Kalkulator', hidden: true, tabindex: '-1' },
     h('div', { class: 'calc-head' },
-      h('span', { class: 'calc-title', text: 'Kalkulator' }),
+      h('span', { class: 'calc-title' }, 'Kalkulator ', h('small', { text: '· tarik untuk geser' })),
+      h('button', { type: 'button', class: 'calc-side', 'aria-label': 'Pindahkan kalkulator ke sisi seberang', title: 'Pindah kiri/kanan', onclick: flipSide }, '⇄'),
       h('button', { type: 'button', class: 'calc-close', 'aria-label': 'Tutup kalkulator', onclick: () => setOpen(false) }, '×')),
     h('div', { class: 'calc-screen' }, exprEl, resultEl),
     h('div', { class: 'calc-keys' },
@@ -33,6 +34,33 @@ export function mountCalculator(parent = document.body) {
         type: 'button', class: `calc-key ${kind || 'num'}`, dataset: { key: value }, onclick: () => press(value),
       }, label)),
       h('button', { type: 'button', class: 'calc-key eq', dataset: { key: '=' }, onclick: () => press('='), 'aria-label': 'Hitung' }, '=')));
+
+  // Geser panel: tarik bagian kepala (mouse atau sentuh); posisi tetap dalam layar.
+  function placePanel(left, top) {
+    const r = panel.getBoundingClientRect();
+    const x = Math.min(Math.max(0, left), window.innerWidth - r.width);
+    const y = Math.min(Math.max(0, top), window.innerHeight - r.height);
+    Object.assign(panel.style, { left: `${x}px`, top: `${y}px`, right: 'auto', bottom: 'auto' });
+  }
+  function flipSide() {
+    const r = panel.getBoundingClientRect();
+    placePanel(r.left < window.innerWidth / 2 ? window.innerWidth : 0, r.top);
+  }
+  let drag = null;
+  const head = panel.querySelector('.calc-head');
+  head.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button')) return;
+    const r = panel.getBoundingClientRect();
+    drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    head.setPointerCapture(e.pointerId);
+  });
+  head.addEventListener('pointermove', (e) => { if (drag) placePanel(e.clientX - drag.dx, e.clientY - drag.dy); });
+  const endDrag = () => { drag = null; };
+  head.addEventListener('pointerup', endDrag);
+  head.addEventListener('pointercancel', endDrag);
+  window.addEventListener('resize', () => {
+    if (!panel.hidden && panel.style.left) { const r = panel.getBoundingClientRect(); placePanel(r.left, r.top); }
+  });
 
   function setOpen(open) {
     panel.hidden = !open;

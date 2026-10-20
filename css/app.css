@@ -331,18 +331,27 @@ html.exam-focus, html.exam-focus body { overscroll-behavior: none; }
 /* ---------- Kalkulator mengambang ---------- */
 .calc-fab {
   position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
-  width: 52px; height: 52px; border-radius: 50%; border: 0; z-index: 900;
-  background: var(--accent); color: var(--accent-text); font-size: 1.5rem; line-height: 1;
+  display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 0 18px 0 14px;
+  border-radius: 26px; border: 0; z-index: 900; font: inherit; font-weight: 600;
+  background: var(--accent); color: var(--accent-text);
   box-shadow: 0 2px 8px rgba(0, 0, 0, .3); cursor: pointer;
 }
+.calc-fab-icon { font-size: 1.4rem; line-height: 1; }
 .calc-panel {
   position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
   width: min(300px, calc(100vw - 32px)); z-index: 901; padding: 10px;
   background: var(--surface); color: var(--text); border: 1px solid var(--border);
   border-radius: var(--radius); box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
 }
-.calc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-.calc-title { font-weight: 600; }
+.calc-head { cursor: grab; touch-action: none; user-select: none; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.calc-title { font-weight: 600; flex: 1; }
+.calc-title { white-space: nowrap; }
+.calc-title small { font-weight: 400; color: var(--muted); font-size: .75rem; }
+.calc-side {
+  min-width: var(--tap); min-height: var(--tap); border: 0; border-radius: 8px;
+  background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer;
+}
+.calc-side:hover { background: var(--surface-2); }
 .calc-close {
   min-width: var(--tap); min-height: var(--tap); border: 0; border-radius: 8px;
   background: transparent; color: var(--text); font-size: 1.6rem; line-height: 1; cursor: pointer;
