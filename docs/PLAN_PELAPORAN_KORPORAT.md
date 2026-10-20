@@ -5,13 +5,14 @@ Mesinnya sudah generik, jadi pekerjaan utamanya ada pada **isi** (taksonomi,
 blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 `docs/panduan_menambah_mata_ujian.md`.
 
-## Posisi saat ini (2026-10-18)
+## Posisi saat ini (2026-10-20)
 
 | Item | Status |
 |---|---|
 | Menu "Pelaporan Korporat" di pemilih mata ujian beranda | **Selesai** (`packs/pk/`) |
 | Paket Training 1, Training 2, Simulasi, dan Kustom tampil | **Selesai**. Belum bisa dimulai karena bank soal masih kosong |
-| Taksonomi 12 topik dan 5 kompetensi | **Usulan sementara** (`docs/pk_taksonomi.md`, D-80) |
+| Taksonomi | **14 topik = 14 bab modul IAI** (cetakan 8, Okt 2025); 5 kompetensi masih sementara. Menunggu persetujuan (`docs/pk_taksonomi.md`, D-80) |
+| Materi | Modul (foto bab 1-10, bab 5/7/8 belum lengkap; bab 11-14 belum ada), slide PSAK, dan 2 contoh ujian (2015, 2016-2017) di `Materi Pelaporan Korposat/` (tidak di-commit) |
 | Blueprint paket | **Sementara**: disamakan dengan MSK |
 | Bank soal | Kosong (0 soal) |
 | Penyimpanan, riwayat, dan bank soal | Sudah terpisah otomatis per mata ujian (`caSim:pk:...`) |
@@ -21,13 +22,16 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 ## A. Yang perlu disiapkan pemilik
 
 1. **Sumber materi resmi**
-   - RPS/silabus Pelaporan Korporat (bahan kajian dan CPMK), seperti RPS yang dipakai untuk MSK.
-   - Modul PK CA IAI terbaru dan daftar SAK yang diujikan beserta tanggal efektifnya.
-   - Informasi format ujian PK yang berlaku: durasi, jumlah PG/esai/kasus,
-     bobot, dan ada tidaknya soal hitungan.
+   - ✅ Modul PK CA IAI (daftar isi dan sebagian bab), slide PSAK, dan contoh ujian.
+   - ⬜ Foto bab 11-14 dan sisa bab 5, 7, 8. Ini berguna sebagai rujukan penyusun soal.
+   - ⬜ RPS/silabus PK yang memuat CPMK, bila ada, untuk kompetensi K01-K05.
+   - ⬜ Format ujian PK yang berlaku sekarang. Contoh ujian 2015-2017 memuat 80-90 PG,
+     8-9 esai (banyak hitungan), dan 3 studi kasus (mis. kertas kerja konsolidasi).
+     Format ujian CA saat ini belum diketahui; blueprint MSK (SPEC 6) dipakai sementara.
 2. **Keputusan isi**
-   - Persetujuan atau revisi taksonomi (topik T01-T12, kompetensi K01-K05).
-   - Penomoran PSAK yang dipakai di soal: baru (seri 100/200/300), lama, atau keduanya.
+   - Persetujuan atau revisi taksonomi (topik T01-T14, kompetensi K01-K05).
+   - Penomoran PSAK di soal. Usulan: nomor baru dengan nomor lama dalam kurung, mis. "PSAK 228 (15)".
+   - Topik syariah dan sektor publik dari contoh ujian lama. Usulan: tidak dimasukkan karena tidak ada di modul 2025.
    - Blueprint paket PK, termasuk apakah tipe **numerik** dipakai (lihat B-3).
    - Target ukuran bank soal v1.0 (usulan di bagian C).
 3. **Perangkat di luar repositori**
@@ -39,7 +43,8 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 
 ### Tahap 1 — Kerangka mata ujian (sebagian sudah selesai)
 1. ✅ Buat `packs/pk/pack.json` (subjectId `pk`) tanpa soal; build pack, service worker, dan versi offline.
-2. ⬜ Pemilik mencocokkan `docs/pk_taksonomi.md` dengan RPS/modul, lalu menyetujui atau merevisinya.
+2. ✅ Taksonomi diselaraskan dengan 14 bab modul (2026-10-20).
+   ⬜ Pemilik memeriksa dan menyetujui `docs/pk_taksonomi.md`, termasuk tabel nomor PSAK.
 3. ⬜ Pemilik menetapkan blueprint. Pilihan:
    - **(a)** sama dengan MSK (kondisi saat ini): PG/esai/kasus 20/40/40 dan SIM 17/50/33;
    - **(b)** dengan bagian **numerik**, misalnya T1: 6 PG + 4 numerik (20), 4 esai (40), 2 kasus mini (40).
@@ -93,7 +98,7 @@ mini LIVE yang memenuhi aturan kesulitan dan cakupan (≥ 6 topik). SIM butuh
 
 ## D. Risiko dan catatan
 
-- **Taksonomi belum resmi.** Mengubah kode topik setelah soal diimpor berarti
+- **Taksonomi belum disetujui.** Mengubah kode topik setelah soal diimpor berarti
   merevisi semua soal, jadi Tahap 1 langkah 2 harus selesai sebelum batch pertama.
 - **Perubahan SAK.** Penomoran PSAK baru dan standar yang belum efektif dapat
   membuat kunci jawaban salah. Cantumkan tanggal efektif yang berlaku di formulir batch.

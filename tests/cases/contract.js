@@ -145,14 +145,14 @@ export default {
       },
     },
     {
-      name: 'kerangka pack Pelaporan Korporat: valid, 12 topik, 5 kompetensi, blueprint sama dengan MSK, belum ada soal',
+      name: 'kerangka pack Pelaporan Korporat: valid, 14 topik (bab modul), 5 kompetensi, blueprint sama dengan MSK, belum ada soal',
       run: async () => {
         const pack = await loadJson('packs/pk/pack.json');
         const msk = await loadJson('packs/msk/pack.json');
         const result = validatePack(pack);
         assert.ok(result.ok, result.errors && result.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
         assert.equal(pack.subjectId, 'pk');
-        assert.equal(pack.topics.length, 12);
+        assert.equal(pack.topics.length, 14);
         assert.equal(pack.competencies.length, 5);
         assert.deepEqual(pack.packages, msk.packages);
         assert.equal(pack.questions.length, 0, 'soal Pelaporan Korporat tidak ditulis oleh Claude Code');
