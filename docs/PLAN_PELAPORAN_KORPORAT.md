@@ -13,7 +13,7 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 | Paket Training 1, Training 2, Simulasi, dan Kustom tampil | **Selesai**. Belum bisa dimulai karena bank soal masih kosong |
 | Taksonomi | **14 topik = 14 bab modul IAI** (cetakan 8, Okt 2025); 5 kompetensi, format nomor PSAK "baru (lama)". **Disetujui 2026-10-20** (`docs/pk_taksonomi.md`, D-80) |
 | Materi | Modul (foto bab 1-10, bab 5/7/8 belum lengkap; bab 11-14 belum ada), slide PSAK, 2 contoh ujian (2015, 2016-2017), dan PPL IAPI 3 Nov 2025 tentang LK konsolidasian di `Materi Pelaporan Korposat/` (tidak di-commit) |
-| Rujukan penyusun | `docs/pk_rujukan_penyusun.md`: tabel PSAK terbaru, materi usang, bahan pengetahuan konsolidasi (D-84) |
+| Rujukan penyusun | `docs/pk_rujukan_penyusun.md`: tabel PSAK terbaru, materi usang, bahan pengetahuan konsolidasi. **Disetujui 2026-10-20** (D-84) |
 | Blueprint paket | **Sementara**: disamakan dengan MSK |
 | Bank soal | Kosong (0 soal) |
 | Penyimpanan, riwayat, dan bank soal | Sudah terpisah otomatis per mata ujian (`caSim:pk:...`) |
