@@ -1,9 +1,8 @@
 # Taksonomi Pack PK — Pelaporan Korporat
 
-> **STATUS: MENUNGGU PERSETUJUAN PEMILIK (D-80).** Topik diselaraskan dengan
-> daftar isi Modul CA Pelaporan Korporat IAI (cetakan 8, Oktober 2025). Kompetensi
-> masih sementara karena belum ada RPS atau CPMK. Setelah soal pertama diimpor,
-> kode topik sebaiknya tidak diubah lagi.
+> **STATUS: DISETUJUI PEMILIK (D-80, 2026-10-20).** Topik mengikuti daftar isi
+> Modul CA Pelaporan Korporat IAI (cetakan 8, Oktober 2025). Setelah soal pertama
+> diimpor, kode topik dan kompetensi tidak diubah lagi.
 
 Berkas pack: `packs/pk/pack.json` (versi 1.0.0). Setelah disetujui, unggah
 dokumen ini ke pengetahuan Project Claude (penyusun) dan Project ChatGPT
@@ -34,7 +33,7 @@ Prefiks ID soal: `PK-MCQ-nnn`, `PK-NUM-nnn`, `PK-ESA-nnn`, `PK-KAS-nnn`.
 ### Aturan penomoran PSAK
 - Sejak 1 Januari 2024 berlaku penomoran baru: standar setara IAS *n* menjadi
   PSAK 200+*n*, dan standar setara IFRS *n* menjadi PSAK 100+*n*.
-- Usulan untuk soal: tulis **nomor baru dengan nomor lama dalam kurung**,
+- **Wajib** di soal: tulis nomor baru dengan nomor lama dalam kurung,
   mis. "PSAK 228 (15)". Format ini sama dengan slide kuliah FEB Untar PPAk 2026
   di folder materi.
 - Nomor di tabel di atas disusun dari aturan tersebut. Nomor yang tercantum di
@@ -51,7 +50,7 @@ Prefiks ID soal: `PK-MCQ-nnn`, `PK-NUM-nnn`, `PK-ESA-nnn`, `PK-KAS-nnn`.
 - Contoh ujian lama juga memakai istilah PSAK 55 dan kategori "pinjaman yang
   diberikan dan piutang" yang sudah diganti. Soal baru wajib mengikuti PSAK 109 (71).
 
-## Kompetensi (5, sementara)
+## Kompetensi (5)
 
 | Kode | Kompetensi |
 |---|---|
@@ -61,8 +60,7 @@ Prefiks ID soal: `PK-MCQ-nnn`, `PK-NUM-nnn`, `PK-ESA-nnn`, `PK-KAS-nnn`.
 | K04 | Mengevaluasi perlakuan akuntansi alternatif dan pertimbangan profesional beserta dampaknya pada laporan keuangan |
 | K05 | Menerapkan prinsip etika, tata kelola, serta pelaporan keberlanjutan dan terintegrasi |
 
-Bila RPS PK yang memuat CPMK tersedia, K01-K05 diganti dengan CPMK tersebut
-(seperti pack MSK, D-78) sebelum batch pertama.
+Kompetensi disusun tanpa RPS/CPMK dan sudah disetujui pemilik.
 
 ## Sumber
 - Modul CA Pelaporan Korporat, IAI, cetakan 8 (Oktober 2025): daftar isi dan

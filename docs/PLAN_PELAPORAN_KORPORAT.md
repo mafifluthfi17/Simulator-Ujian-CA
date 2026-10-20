@@ -11,7 +11,7 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 |---|---|
 | Menu "Pelaporan Korporat" di pemilih mata ujian beranda | **Selesai** (`packs/pk/`) |
 | Paket Training 1, Training 2, Simulasi, dan Kustom tampil | **Selesai**. Belum bisa dimulai karena bank soal masih kosong |
-| Taksonomi | **14 topik = 14 bab modul IAI** (cetakan 8, Okt 2025); 5 kompetensi masih sementara. Menunggu persetujuan (`docs/pk_taksonomi.md`, D-80) |
+| Taksonomi | **14 topik = 14 bab modul IAI** (cetakan 8, Okt 2025); 5 kompetensi, format nomor PSAK "baru (lama)". **Disetujui 2026-10-20** (`docs/pk_taksonomi.md`, D-80) |
 | Materi | Modul (foto bab 1-10, bab 5/7/8 belum lengkap; bab 11-14 belum ada), slide PSAK, dan 2 contoh ujian (2015, 2016-2017) di `Materi Pelaporan Korposat/` (tidak di-commit) |
 | Blueprint paket | **Sementara**: disamakan dengan MSK |
 | Bank soal | Kosong (0 soal) |
@@ -29,9 +29,9 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
      8-9 esai (banyak hitungan), dan 3 studi kasus (mis. kertas kerja konsolidasi).
      Format ujian CA saat ini belum diketahui; blueprint MSK (SPEC 6) dipakai sementara.
 2. **Keputusan isi**
-   - Persetujuan atau revisi taksonomi (topik T01-T14, kompetensi K01-K05).
-   - Penomoran PSAK di soal. Usulan: nomor baru dengan nomor lama dalam kurung, mis. "PSAK 228 (15)".
-   - Topik syariah dan sektor publik dari contoh ujian lama. Usulan: tidak dimasukkan karena tidak ada di modul 2025.
+   - ✅ Taksonomi (topik T01-T14, kompetensi K01-K05) disetujui 2026-10-20.
+   - ✅ Penomoran PSAK di soal: nomor baru dengan nomor lama dalam kurung, mis. "PSAK 228 (15)".
+   - ✅ Topik syariah dan sektor publik dari contoh ujian lama tidak dimasukkan (bagian dari D-80).
    - Blueprint paket PK, termasuk apakah tipe **numerik** dipakai (lihat B-3).
    - Target ukuran bank soal v1.0 (usulan di bagian C).
 3. **Perangkat di luar repositori**
@@ -44,7 +44,7 @@ blueprint, dan bank soal), bukan kode. Alur teknisnya mengikuti
 ### Tahap 1 — Kerangka mata ujian (sebagian sudah selesai)
 1. ✅ Buat `packs/pk/pack.json` (subjectId `pk`) tanpa soal; build pack, service worker, dan versi offline.
 2. ✅ Taksonomi diselaraskan dengan 14 bab modul (2026-10-20).
-   ⬜ Pemilik memeriksa dan menyetujui `docs/pk_taksonomi.md`, termasuk tabel nomor PSAK.
+   ✅ Pemilik menyetujui `docs/pk_taksonomi.md` dan format nomor PSAK (2026-10-20).
 3. ⬜ Pemilik menetapkan blueprint. Pilihan:
    - **(a)** sama dengan MSK (kondisi saat ini): PG/esai/kasus 20/40/40 dan SIM 17/50/33;
    - **(b)** dengan bagian **numerik**, misalnya T1: 6 PG + 4 numerik (20), 4 esai (40), 2 kasus mini (40).
@@ -98,7 +98,7 @@ mini LIVE yang memenuhi aturan kesulitan dan cakupan (≥ 6 topik). SIM butuh
 
 ## D. Risiko dan catatan
 
-- **Taksonomi belum disetujui.** Mengubah kode topik setelah soal diimpor berarti
+- **Taksonomi sudah dikunci.** Mengubah kode topik setelah soal diimpor berarti
   merevisi semua soal, jadi Tahap 1 langkah 2 harus selesai sebelum batch pertama.
 - **Perubahan SAK.** Penomoran PSAK baru dan standar yang belum efektif dapat
   membuat kunci jawaban salah. Cantumkan tanggal efektif yang berlaku di formulir batch.
