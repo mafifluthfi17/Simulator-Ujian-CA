@@ -145,7 +145,7 @@ export default {
       },
     },
     {
-      name: 'kerangka pack Pelaporan Korporat: valid, 14 topik (bab modul), 5 kompetensi, blueprint sama dengan MSK, belum ada soal',
+      name: 'pack Pelaporan Korporat: valid, 14 topik (bab modul), 5 kompetensi, blueprint sama dengan MSK, soal dari alur bank soal',
       run: async () => {
         const pack = await loadJson('packs/pk/pack.json');
         const msk = await loadJson('packs/msk/pack.json');
@@ -155,7 +155,11 @@ export default {
         assert.equal(pack.topics.length, 14);
         assert.equal(pack.competencies.length, 5);
         assert.deepEqual(pack.packages, msk.packages);
-        assert.equal(pack.questions.length, 0, 'soal Pelaporan Korporat tidak ditulis oleh Claude Code');
+        for (const q of pack.questions) {
+          assert.ok(q.id.startsWith('PK-'), `${q.id}: prefiks ID harus PK-`);
+          assert.ok(['LIVE', 'APPROVED', 'AI_REVIEWED', 'DRAFT', 'NEEDS_REVISION', 'REJECTED', 'RETIRED', 'CALIBRATION'].includes(q.lifecycle.status), q.id);
+          assert.ok(!q.stem.startsWith('[DEMO]'), `${q.id}: soal demo hanya di packs/demo/`);
+        }
       },
     },
     {

@@ -161,3 +161,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-85 | Kalkulator akuntansi mengambang: tombol bulat di pojok kanan bawah membuka panel kecil (angka, + − × ÷, kurung, %, hapus, =); tombol × menutup panel dan tombol bulat muncul lagi. Tampil di semua layar termasuk ruang ujian, tidak ikut tercetak, dan tidak menyimpan data apa pun. Angka memakai format Indonesia (1.234,56). Perhitungan memakai penghitung ekspresi sendiri tanpa `eval` (`js/core/calc.js`); UI di `js/ui/calculator.js`. | Permintaan pemilik 2026-10-20. SPEC tidak mengatur; kalkulator di ruang ujian perlu dipastikan pemilik sesuai aturan ujian. | USULAN |
+
+## Pack PK — sinkronisasi bank soal
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-86 | Hasil Ekspor Pack PK 1.2.0 dari aplikasi online (`Publikasi Soal/PK-RV007 pack.json`, 15 soal LIVE PK-MCQ-001–015) digabung ke `packs/pk/pack.json`: `questions` dan entri changelog 1.1.0/1.2.0 diambil dari ekspor; `topics`, `competencies`, dan changelog 1.0.0 tetap versi yang disetujui (D-80). Aplikasi online masih memuat kerangka 12 topik lama karena commit taksonomi belum di-push, sedangkan penyusun memakai kode 14 topik; `topicIds` soal diperiksa cocok dengan taksonomi baru. Tes pack PK kini memeriksa prefiks `PK-` dan larangan soal demo, bukan bank kosong. | Mencegah nama topik salah di aplikasi online dan kehilangan soal yang hanya tersimpan di browser. `contentHash` tidak mencakup topik sehingga status LIVE tetap sah (diperiksa build-pack). | TEKNIS |
