@@ -8,5 +8,6 @@ import exportQa from './export-qa.js';
 import bank from './bank.js';
 import pwa from './pwa.js';
 import ui from './ui.js';
+import calc from './calc.js';
 
-export default [contract, core, grading, exportSuite, exportQa, bank, pwa, ui];
+export default [contract, core, grading, exportSuite, exportQa, bank, pwa, ui, calc];

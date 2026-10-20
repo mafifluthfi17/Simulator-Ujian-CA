@@ -338,6 +338,44 @@ html.exam-focus, html.exam-focus body { overscroll-behavior: none; }
 .badge-seb { background: var(--ok); color: #fff; white-space: nowrap; }
 @media print { .update-banner { display: none !important; } }
 
+/* ---------- Kalkulator mengambang ---------- */
+.calc-fab {
+  position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  width: 52px; height: 52px; border-radius: 50%; border: 0; z-index: 900;
+  background: var(--accent); color: var(--accent-text); font-size: 1.5rem; line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3); cursor: pointer;
+}
+.calc-panel {
+  position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  width: min(300px, calc(100vw - 32px)); z-index: 901; padding: 10px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+}
+.calc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.calc-title { font-weight: 600; }
+.calc-close {
+  min-width: var(--tap); min-height: var(--tap); border: 0; border-radius: 8px;
+  background: transparent; color: var(--text); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.calc-close:hover { background: var(--surface-2); }
+.calc-screen {
+  background: var(--surface-2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;
+  text-align: right; overflow: hidden;
+}
+.calc-expr { min-height: 1.5em; color: var(--muted); font-size: .95rem; overflow-x: auto; white-space: nowrap; }
+.calc-result { min-height: 1.6em; font-size: 1.5rem; font-weight: 600; overflow-x: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.calc-result.error { font-size: 1rem; color: var(--danger); }
+.calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.calc-key {
+  min-height: var(--tap); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--text); font: inherit; font-size: 1.15rem; cursor: pointer;
+}
+.calc-key:hover { background: var(--surface-2); }
+.calc-key.fn { background: var(--surface-2); }
+.calc-key.op { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.calc-key.eq { grid-column: 1 / -1; background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 700; }
+@media print { .calc-fab, .calc-panel { display: none !important; } }
+
 </style>
 <style media="print">
 /* Cetak / PDF (SPEC 11): laporan saja, tanpa tombol dan menu; warna terang. */
@@ -10430,6 +10468,235 @@ function createStore(notices) {
 
 });
 
+__define("js/core/calc.js", function (__exports, __require) {
+'use strict';
+Object.defineProperties(__exports, {
+  "CalcError": { enumerable: true, get: () => CalcError },
+  "evaluate": { enumerable: true, get: () => evaluate },
+  "formatNumber": { enumerable: true, get: () => formatNumber },
+  "displayExpression": { enumerable: true, get: () => displayExpression },
+  "resultToExpression": { enumerable: true, get: () => resultToExpression }
+});
+// Mesin kalkulator: penghitung ekspresi aman (tanpa eval). Angka memakai titik
+// desimal; tampilan ke peserta memakai format Indonesia (1.234,56).
+// Operator: + - * / ( ) dan % di belakang angka (50% = 0,5).
+
+class CalcError extends Error {}
+
+function tokenize(src) {
+  const tokens = [];
+  let i = 0;
+  while (i < src.length) {
+    const c = src[i];
+    if (c === ' ') { i += 1; continue; }
+    if (/[0-9.]/.test(c)) {
+      let j = i;
+      while (j < src.length && /[0-9.]/.test(src[j])) j += 1;
+      const text = src.slice(i, j);
+      if (!/^(\d+\.?\d*|\.\d+)$/.test(text)) throw new CalcError('Angka tidak valid');
+      tokens.push({ t: 'num', v: Number(text) });
+      i = j;
+    } else if ('+-*/()%'.includes(c)) {
+      tokens.push({ t: c });
+      i += 1;
+    } else {
+      throw new CalcError('Karakter tidak dikenal');
+    }
+  }
+  return tokens;
+}
+
+// Menghitung ekspresi. Melempar CalcError bila tidak valid atau hasil bukan angka.
+function evaluate(src) {
+  const tokens = tokenize(src);
+  let pos = 0;
+  const peek = () => (pos < tokens.length ? tokens[pos].t : null);
+
+  function expr() {
+    let v = term();
+    while (peek() === '+' || peek() === '-') {
+      const op = tokens[pos++].t;
+      const r = term();
+      v = op === '+' ? v + r : v - r;
+    }
+    return v;
+  }
+  function term() {
+    let v = unary();
+    while (peek() === '*' || peek() === '/') {
+      const op = tokens[pos++].t;
+      const r = unary();
+      if (op === '/' && r === 0) throw new CalcError('Tidak bisa dibagi nol');
+      v = op === '*' ? v * r : v / r;
+    }
+    return v;
+  }
+  function unary() {
+    if (peek() === '-') { pos += 1; return -unary(); }
+    if (peek() === '+') { pos += 1; return unary(); }
+    return postfix();
+  }
+  function postfix() {
+    let v = primary();
+    while (peek() === '%') { pos += 1; v /= 100; }
+    return v;
+  }
+  function primary() {
+    const tok = tokens[pos];
+    if (!tok) throw new CalcError('Perhitungan belum lengkap');
+    if (tok.t === 'num') { pos += 1; return tok.v; }
+    if (tok.t === '(') {
+      pos += 1;
+      const v = expr();
+      if (peek() !== ')') throw new CalcError('Kurung belum ditutup');
+      pos += 1;
+      return v;
+    }
+    throw new CalcError('Perhitungan tidak valid');
+  }
+
+  if (!tokens.length) throw new CalcError('Perhitungan kosong');
+  const result = expr();
+  if (pos < tokens.length) throw new CalcError('Perhitungan tidak valid');
+  if (!Number.isFinite(result)) throw new CalcError('Hasil terlalu besar');
+  // Buang sisa kesalahan pecahan biner (0,1 + 0,2).
+  return Number(result.toPrecision(14));
+}
+
+// Angka -> teks Indonesia: titik ribuan, koma desimal, maksimal 6 desimal.
+function formatNumber(n) {
+  const [int, frac] = Math.abs(n).toFixed(6).replace(/0+$/, '').replace(/\.$/, '').split('.');
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const sign = n < 0 && (Number(int) !== 0 || frac) ? '-' : '';
+  return `${sign}${grouped}${frac ? `,${frac}` : ''}`;
+}
+
+// Ekspresi internal -> tampilan (× ÷ − dan koma desimal).
+function displayExpression(src) {
+  return src.replace(/\*/g, '×').replace(/\//g, '÷').replace(/-/g, '−').replace(/\./g, ',');
+}
+
+// Hasil -> teks ekspresi bertitik desimal (untuk lanjut menghitung dari hasil).
+function resultToExpression(n) {
+  return n < 0 ? `(${Number(n.toFixed(6))})` : String(Number(n.toFixed(6)));
+}
+
+});
+
+__define("js/ui/calculator.js", function (__exports, __require) {
+'use strict';
+Object.defineProperties(__exports, {
+  "mountCalculator": { enumerable: true, get: () => mountCalculator }
+});
+// Kalkulator akuntansi mengambang: tombol di pojok kanan bawah membuka panel
+// kecil; tombol × menutup panel dan tombol kalkulator tetap ada untuk membuka lagi.
+
+const { h } = __require("js/ui/dom.js");
+const { CalcError, displayExpression, evaluate, formatNumber, resultToExpression } = __require("js/core/calc.js");
+
+const KEYS = [
+  ['C', 'clear', 'fn'], ['(', '(', 'fn'], [')', ')', 'fn'], ['⌫', 'back', 'fn'],
+  ['7', '7'], ['8', '8'], ['9', '9'], ['÷', '/', 'op'],
+  ['4', '4'], ['5', '5'], ['6', '6'], ['×', '*', 'op'],
+  ['1', '1'], ['2', '2'], ['3', '3'], ['−', '-', 'op'],
+  ['0', '0'], [',', '.'], ['%', '%', 'fn'], ['+', '+', 'op'],
+];
+
+function mountCalculator(parent = document.body) {
+  let expr = '';
+  let shown = null; // hasil terakhir (angka) setelah tombol =
+  let error = '';
+
+  const exprEl = h('div', { class: 'calc-expr', 'aria-hidden': 'true' });
+  const resultEl = h('div', { class: 'calc-result', role: 'status', 'aria-live': 'polite' });
+  const fab = h('button', {
+    type: 'button', class: 'calc-fab', 'aria-label': 'Buka kalkulator', 'aria-expanded': 'false', title: 'Kalkulator',
+    onclick: () => setOpen(true),
+  }, '🖩');
+  const panel = h('div', { class: 'calc-panel', role: 'dialog', 'aria-label': 'Kalkulator', hidden: true, tabindex: '-1' },
+    h('div', { class: 'calc-head' },
+      h('span', { class: 'calc-title', text: 'Kalkulator' }),
+      h('button', { type: 'button', class: 'calc-close', 'aria-label': 'Tutup kalkulator', onclick: () => setOpen(false) }, '×')),
+    h('div', { class: 'calc-screen' }, exprEl, resultEl),
+    h('div', { class: 'calc-keys' },
+      KEYS.map(([label, value, kind]) => h('button', {
+        type: 'button', class: `calc-key ${kind || 'num'}`, dataset: { key: value }, onclick: () => press(value),
+      }, label)),
+      h('button', { type: 'button', class: 'calc-key eq', dataset: { key: '=' }, onclick: () => press('='), 'aria-label': 'Hitung' }, '=')));
+
+  function setOpen(open) {
+    panel.hidden = !open;
+    fab.hidden = open;
+    fab.setAttribute('aria-expanded', String(open));
+    if (open) panel.focus();
+    else fab.focus();
+  }
+
+  function render() {
+    exprEl.textContent = displayExpression(expr) || '0';
+    if (error) resultEl.textContent = error;
+    else if (shown !== null) resultEl.textContent = formatNumber(shown);
+    else {
+      let preview = '';
+      try { if (expr && /[0-9)%]$/.test(expr)) preview = formatNumber(evaluate(expr)); } catch (e) { /* belum lengkap */ }
+      resultEl.textContent = preview;
+    }
+    resultEl.classList.toggle('error', Boolean(error));
+  }
+
+  function press(key) {
+    if (error && key !== 'back') expr = ''; // setelah pesan salah, mulai hitungan baru
+    error = '';
+    const isOperator = '+-*/'.includes(key);
+    if (shown !== null) {
+      // Setelah "=": operator melanjutkan dari hasil, angka memulai hitungan baru.
+      if (key !== '=' && key !== 'back' && key !== 'clear') expr = isOperator || key === '%' ? resultToExpression(shown) : '';
+      shown = null;
+    }
+    if (key === 'clear') expr = '';
+    else if (key === 'back') expr = expr.slice(0, -1);
+    else if (key === '=') {
+      if (expr) {
+        try {
+          shown = evaluate(expr);
+          expr = resultToExpression(shown);
+        } catch (e) {
+          if (!(e instanceof CalcError)) throw e;
+          error = e.message;
+        }
+      }
+    } else if (isOperator && /[+*/-]$/.test(expr)) {
+      expr = expr.slice(0, -1) + key; // ganti operator terakhir
+    } else if (key === '.') {
+      const lastNumber = expr.match(/[0-9.]*$/)[0];
+      if (!lastNumber.includes('.')) expr += lastNumber ? '.' : '0.';
+    } else expr += key;
+    render();
+  }
+
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { setOpen(false); return; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    let key = null;
+    if (/^[0-9+\-*/()%]$/.test(e.key)) key = e.key;
+    else if (e.key === '.' || e.key === ',') key = '.';
+    else if (e.key === 'Enter' || e.key === '=') key = '=';
+    else if (e.key === 'Backspace') key = 'back';
+    else if (e.key === 'Delete') key = 'clear';
+    if (key === null) return;
+    // Enter pada tombol yang sedang fokus menekan tombol itu sendiri.
+    if (e.key === 'Enter' && e.target.closest('button')) return;
+    e.preventDefault();
+    press(key);
+  });
+
+  render();
+  parent.append(fab, panel);
+  return { open: () => setOpen(true), close: () => setOpen(false), press, panel, fab };
+}
+
+});
+
 __define("js/main.js", function (__exports, __require) {
 'use strict';
 Object.defineProperties(__exports, {
@@ -10437,12 +10704,14 @@ Object.defineProperties(__exports, {
 });
 // Titik masuk. index.html?selftest menjalankan tes logika di browser.
 const { App } = __require("js/ui/app.js");
+const { mountCalculator } = __require("js/ui/calculator.js");
 
 const root = document.getElementById('app');
 
 if (new URLSearchParams(location.search).has('selftest')) {
   Promise.reject(new Error('Self-test hanya tersedia lewat http(s), bukan versi satu berkas.')).then((m) => m.runSelftest(root));
 } else {
+  mountCalculator();
   new App(root).start().catch((e) => {
     root.textContent = `Aplikasi gagal dimuat: ${e.message}`;
     console.error(e);

@@ -154,3 +154,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-84 | `docs/pk_rujukan_penyusun.md` menjadi bahan pengetahuan penyusun dan reviewer soal PK: tabel penomoran PSAK terbaru (pola IAS n → 200+n, IFRS n → 100+n, seri 300 khas Indonesia), daftar isi materi yang sudah usang beserta ketentuan yang berlaku, ringkasan T10 dari PPL IAPI 3 November 2025 (PSAK 103, 110, 227, 338, dan eliminasi konsolidasi) yang ditulis ulang, dan inventaris materi per topik. Kolom standar di `docs/pk_taksonomi.md` dilengkapi (223, 370, 338, 227, 236); kode dan nama topik tidak berubah. | Pemilik meminta materi dipakai sebagai pengetahuan pembuatan soal dengan penomoran PSAK terbaru. Materi asli berhak cipta sehingga tidak disalin ke repositori. | DISETUJUI (2026-10-20) |
+
+## Antarmuka
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-85 | Kalkulator akuntansi mengambang: tombol bulat di pojok kanan bawah membuka panel kecil (angka, + − × ÷, kurung, %, hapus, =); tombol × menutup panel dan tombol bulat muncul lagi. Tampil di semua layar termasuk ruang ujian, tidak ikut tercetak, dan tidak menyimpan data apa pun. Angka memakai format Indonesia (1.234,56). Perhitungan memakai penghitung ekspresi sendiri tanpa `eval` (`js/core/calc.js`); UI di `js/ui/calculator.js`. | Permintaan pemilik 2026-10-20. SPEC tidak mengatur; kalkulator di ruang ujian perlu dipastikan pemilik sesuai aturan ujian. | USULAN |
