@@ -127,7 +127,7 @@ export default {
       },
     },
     {
-      name: 'kerangka pack MSK: valid, 12 topik, 6 kompetensi, blueprint SPEC 6, belum ada soal',
+      name: 'pack MSK: valid, 12 topik, 6 kompetensi, blueprint SPEC 6, soal dari alur bank soal',
       run: async () => {
         const pack = await loadJson('packs/msk/pack.json');
         const result = validatePack(pack);
@@ -139,9 +139,15 @@ export default {
           ['T2', 120, 'mcq10:20 essay4:40 case2:40'],
           ['SIM', 180, 'mcq17:17 essay5:50 case2:33'],
         ]);
-        assert.equal(pack.questions.length, 0, 'soal MSK tidak ditulis oleh Claude Code');
-        const built = buildFromPackage(pack, pack.packages[0], createRng(1));
-        assert.ok(!built.ok && built.problems.includes('butuh 10 PG, tersedia 0 yang sesuai'), built.problems && built.problems.join('; '));
+        // Soal MSK hanya berasal dari Ekspor Pack bank soal (D-89), bukan ditulis Claude Code.
+        for (const q of pack.questions) {
+          assert.ok(q.id.startsWith('MSK-'), `${q.id}: prefiks ID harus MSK-`);
+          assert.ok(!q.stem.startsWith('[DEMO]') && !q.stem.startsWith('[UJI'), `${q.id}: soal demo/uji hanya di packs/demo/ dan tests/`);
+        }
+        for (const p of pack.packages) {
+          const built = buildFromPackage(pack, p, createRng(1));
+          assert.ok(built.ok, `${p.id}: ${built.problems && built.problems.join('; ')}`);
+        }
       },
     },
     {
