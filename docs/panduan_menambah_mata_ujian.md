@@ -153,7 +153,11 @@ Skala asli: mcq 1, numeric 1, essay 10, case 20. Field wajib per tipe: lihat
 7. **Revisi**: buka pratinjau soal *Perlu revisi* (atau pilih beberapa soal di
    Daftar Soal), tekan **Salin untuk penyusun**, lalu tempel ke Project
    penyusun. Teks itu memuat temuan reviewer dan JSON soal. Impor ulang
-   hasilnya dengan ID yang sama. Isi yang berubah kembali menjadi Draf.
+   hasilnya dengan ID yang sama. Soal *Perlu revisi* kembali menjadi Draf
+   bila ada isi yang berubah, termasuk pembahasan, alasan distraktor, atau
+   kesulitan. Bila revisi sudah diimpor tetapi status belum berubah, atau Anda
+   tidak setuju dengan temuan reviewer, tekan **Kembalikan ke Draf** di
+   pratinjau soal (inisial dan alasan wajib).
 8. **Setujui**: periksa pratinjau, lalu Setujui dengan inisial → *Disetujui*.
    Review ganda opsional: impor hasil reviewer kedua untuk paket yang sama. Bila
    pendapat berbeda, putuskan sendiri dengan alasan.

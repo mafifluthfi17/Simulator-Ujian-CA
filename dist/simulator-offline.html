@@ -8783,6 +8783,7 @@ Object.defineProperties(__exports, {
   "editQuestion": { enumerable: true, get: () => editQuestion },
   "approve": { enumerable: true, get: () => approve },
   "undoReject": { enumerable: true, get: () => undoReject },
+  "returnToDraft": { enumerable: true, get: () => returnToDraft },
   "retire": { enumerable: true, get: () => retire },
   "resolveConflict": { enumerable: true, get: () => resolveConflict },
   "nextMinorVersion": { enumerable: true, get: () => nextMinorVersion },
@@ -8803,7 +8804,7 @@ Object.defineProperties(__exports, {
 //   reviewRecords: [...], conflicts: { [questionId]: {...} }, calibrationStats: { [model]: {...} },
 //   log: [{ at, message }] }
 
-const { contentHash } = __require("js/core/hash.js");
+const { canonicalize, contentHash } = __require("js/core/hash.js");
 const { loadDocument, validateDocument } = __require("js/core/contract.js");
 const { keys } = __require("js/core/storage.js");
 const { SCHEMA_VERSION } = __require("js/core/version.js");
@@ -8828,7 +8829,7 @@ const STATUS_ORDER = ['DRAFT', 'AI_REVIEWED', 'APPROVED', 'LIVE', 'NEEDS_REVISIO
 const TRANSITIONS = {
   DRAFT: ['AI_REVIEWED', 'NEEDS_REVISION', 'REJECTED'],
   AI_REVIEWED: ['APPROVED', 'NEEDS_REVISION', 'REJECTED'],
-  NEEDS_REVISION: ['AI_REVIEWED', 'REJECTED'],
+  NEEDS_REVISION: ['DRAFT', 'AI_REVIEWED', 'REJECTED'],
   REJECTED: ['DRAFT', 'AI_REVIEWED', 'NEEDS_REVISION'],
   APPROVED: ['LIVE'],
   LIVE: ['RETIRED'],
@@ -8981,6 +8982,16 @@ function labelItemErrors(errors, items, root = '$.items') {
   });
 }
 
+// Soal Perlu revisi kembali ke Draf bila ADA field yang berubah, termasuk field di
+// luar contentHash (mis. alasan distraktor, kesulitan, topik) (D-88).
+function bodyChanged(existing, incoming) {
+  const body = (q) => {
+    const { lifecycle, authoring, ...rest } = q;
+    return JSON.stringify(canonicalize(rest));
+  };
+  return body(existing) !== body(incoming);
+}
+
 // Rencana impor tanpa mengubah bank. Hasil:
 // { ok, errors, notes, batch, calibration, entries: [{ question, hash, action: 'baru'|'revisi'|'sama', previousStatus }] }
 async function planBatchImport(bank, text) {
@@ -9018,7 +9029,9 @@ async function planBatchImport(bank, text) {
       errors.push({ path: `$.items[${i}].lifecycle.status`, message: `Soal ${question.id}: ID sudah dipakai soal ${isCalibration ? 'biasa' : 'kalibrasi'} di bank.` });
       continue;
     }
-    const action = !existing ? 'baru' : existing.lifecycle.contentHash === hash ? 'sama' : 'revisi';
+    const action = !existing ? 'baru'
+      : existing.lifecycle.contentHash !== hash || (existing.lifecycle.status === 'NEEDS_REVISION' && bodyChanged(existing, question)) ? 'revisi'
+      : 'sama';
     entries.push({ question, hash, action, previousStatus: existing ? existing.lifecycle.status : null });
   }
   if (errors.length) return { ok: false, errors };
@@ -9119,6 +9132,17 @@ function undoReject(bank, id, { by, reason }, now) {
   setStatus(q, 'DRAFT', now, { by: String(by ?? '').trim() || undefined, reason: requireReason(reason) });
   q.lifecycle.review = null;
   log(bank, now, `Penolakan soal ${id} dibatalkan: ${reason}`);
+}
+
+// Perlu revisi -> Draf oleh manusia dengan alasan tertulis (D-88), mis. revisi sudah
+// diimpor sebelum perbaikan D-88 atau pemilik tidak setuju dengan temuan reviewer.
+function returnToDraft(bank, id, { by, reason }, now) {
+  const q = findQuestion(bank, id);
+  if (!q || q.lifecycle.status !== 'NEEDS_REVISION') throw new BankError(`Soal ${id} tidak berstatus Perlu revisi.`);
+  setStatus(q, 'DRAFT', now, { by: String(by ?? '').trim() || undefined, reason: requireReason(reason) });
+  q.lifecycle.review = null;
+  delete bank.conflicts[id];
+  log(bank, now, `Soal ${id} dikembalikan ke Draf: ${reason}`);
 }
 
 function retire(bank, id, { by, reason }, now) {
@@ -9559,7 +9583,7 @@ const { getType } = __require("js/types/registry.js");
 const {
   BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
-  retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
+  retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } = __require("js/core/bank.js");
 const {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
@@ -9821,6 +9845,7 @@ function renderBank(app) {
     if (s === 'AI_REVIEWED' && !bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => approveIds([q.id]) }, 'Setujui'));
     if (bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => decideConflict(q.id) }, 'Putuskan hasil review'));
     if (review && s !== 'CALIBRATION') actions.push(h('button', { type: 'button', class: s === 'NEEDS_REVISION' ? 'btn btn-primary' : 'btn', onclick: () => copyRevision([q.id]) }, 'Salin untuk penyusun'));
+    if (s === 'NEEDS_REVISION') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Kembalikan ke Draf', returnToDraft) }, 'Kembalikan ke Draf'));
     if (s === 'REJECTED') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Batalkan penolakan', undoReject) }, 'Batalkan penolakan'));
     if (s === 'LIVE') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Pensiunkan soal', retire) }, 'Pensiunkan'));
     return h('div', { class: 'card preview-card' },
@@ -9957,7 +9982,7 @@ function renderBank(app) {
           h('thead', {}, h('tr', {}, ['ID', 'Tipe', 'Tindakan', 'Status sesudah impor'].map((t) => h('th', { text: t })))),
           h('tbody', {}, plan.entries.map((e) => h('tr', {},
             h('td', { text: e.question.id }), h('td', { text: TYPE_LABELS[e.question.type] }),
-            h('td', { text: e.action === 'baru' ? 'Soal baru' : e.action === 'revisi' ? `Revisi (isi berubah; sebelumnya ${STATUS_LABELS[e.previousStatus]})` : 'Isi sama (status tetap)' }),
+            h('td', { text: e.action === 'baru' ? 'Soal baru' : e.action === 'revisi' ? `Revisi (isi berubah; sebelumnya ${STATUS_LABELS[e.previousStatus]})` : e.previousStatus === 'NEEDS_REVISION' ? 'Tidak ada perubahan (tetap Perlu revisi)' : 'Isi sama (status tetap)' }),
             h('td', { text: STATUS_LABELS[e.action === 'sama' ? e.previousStatus : plan.calibration ? 'CALIBRATION' : 'DRAFT'] })))))),
         plan.notes ? h('p', { class: 'prose hint', text: plan.notes }) : null,
         h('button', { type: 'button', class: 'btn btn-primary', onclick: doImportBatch }, 'Impor ke bank')) : null);

@@ -8,7 +8,7 @@
 //   reviewRecords: [...], conflicts: { [questionId]: {...} }, calibrationStats: { [model]: {...} },
 //   log: [{ at, message }] }
 
-import { contentHash } from './hash.js';
+import { canonicalize, contentHash } from './hash.js';
 import { loadDocument, validateDocument } from './contract.js';
 import { keys } from './storage.js';
 import { SCHEMA_VERSION } from './version.js';
@@ -33,7 +33,7 @@ export const STATUS_ORDER = ['DRAFT', 'AI_REVIEWED', 'APPROVED', 'LIVE', 'NEEDS_
 const TRANSITIONS = {
   DRAFT: ['AI_REVIEWED', 'NEEDS_REVISION', 'REJECTED'],
   AI_REVIEWED: ['APPROVED', 'NEEDS_REVISION', 'REJECTED'],
-  NEEDS_REVISION: ['AI_REVIEWED', 'REJECTED'],
+  NEEDS_REVISION: ['DRAFT', 'AI_REVIEWED', 'REJECTED'],
   REJECTED: ['DRAFT', 'AI_REVIEWED', 'NEEDS_REVISION'],
   APPROVED: ['LIVE'],
   LIVE: ['RETIRED'],
@@ -186,6 +186,16 @@ export function labelItemErrors(errors, items, root = '$.items') {
   });
 }
 
+// Soal Perlu revisi kembali ke Draf bila ADA field yang berubah, termasuk field di
+// luar contentHash (mis. alasan distraktor, kesulitan, topik) (D-88).
+function bodyChanged(existing, incoming) {
+  const body = (q) => {
+    const { lifecycle, authoring, ...rest } = q;
+    return JSON.stringify(canonicalize(rest));
+  };
+  return body(existing) !== body(incoming);
+}
+
 // Rencana impor tanpa mengubah bank. Hasil:
 // { ok, errors, notes, batch, calibration, entries: [{ question, hash, action: 'baru'|'revisi'|'sama', previousStatus }] }
 export async function planBatchImport(bank, text) {
@@ -223,7 +233,9 @@ export async function planBatchImport(bank, text) {
       errors.push({ path: `$.items[${i}].lifecycle.status`, message: `Soal ${question.id}: ID sudah dipakai soal ${isCalibration ? 'biasa' : 'kalibrasi'} di bank.` });
       continue;
     }
-    const action = !existing ? 'baru' : existing.lifecycle.contentHash === hash ? 'sama' : 'revisi';
+    const action = !existing ? 'baru'
+      : existing.lifecycle.contentHash !== hash || (existing.lifecycle.status === 'NEEDS_REVISION' && bodyChanged(existing, question)) ? 'revisi'
+      : 'sama';
     entries.push({ question, hash, action, previousStatus: existing ? existing.lifecycle.status : null });
   }
   if (errors.length) return { ok: false, errors };
@@ -324,6 +336,17 @@ export function undoReject(bank, id, { by, reason }, now) {
   setStatus(q, 'DRAFT', now, { by: String(by ?? '').trim() || undefined, reason: requireReason(reason) });
   q.lifecycle.review = null;
   log(bank, now, `Penolakan soal ${id} dibatalkan: ${reason}`);
+}
+
+// Perlu revisi -> Draf oleh manusia dengan alasan tertulis (D-88), mis. revisi sudah
+// diimpor sebelum perbaikan D-88 atau pemilik tidak setuju dengan temuan reviewer.
+export function returnToDraft(bank, id, { by, reason }, now) {
+  const q = findQuestion(bank, id);
+  if (!q || q.lifecycle.status !== 'NEEDS_REVISION') throw new BankError(`Soal ${id} tidak berstatus Perlu revisi.`);
+  setStatus(q, 'DRAFT', now, { by: String(by ?? '').trim() || undefined, reason: requireReason(reason) });
+  q.lifecycle.review = null;
+  delete bank.conflicts[id];
+  log(bank, now, `Soal ${id} dikembalikan ke Draf: ${reason}`);
 }
 
 export function retire(bank, id, { by, reason }, now) {

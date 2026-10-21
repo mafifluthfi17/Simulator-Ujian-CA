@@ -4,7 +4,7 @@ import * as assert from './assert.js';
 import { loadJson } from './env.js';
 import {
   applyBatchImport, approve, bankStats, createBank, editQuestion, exportPackText, extractJson, findQuestion,
-  loadBank, planBatchImport, publish, resolveConflict, retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
+  loadBank, planBatchImport, publish, resolveConflict, retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
 } from '../../js/core/bank.js';
 import {
   applyReviewResult, buildReviewPackage, checkReviewSelection, decide, reviewPromptText, revisionRequestText, validateReviewResult,
@@ -246,6 +246,55 @@ export default {
         undoReject(bank, ids[3], { by: 'LMA', reason: 'Reviewer keliru membaca stem.' }, T);
         assert.equal(findQuestion(bank, ids[3]).lifecycle.status, 'DRAFT');
         assert.deepEqual(validatePack(bank.pack).errors, undefined);
+      },
+    },
+    {
+      name: 'revisi soal Perlu revisi di luar contentHash kembali Draf; tanpa perubahan tetap; Kembalikan ke Draf manual',
+      run: async () => {
+        const { pack, bank, ids } = await bankWithDrafts(3);
+        const pkg = await buildReviewPackage(bank, ids, { includeCalibration: true, rng: createRng(5), now: T });
+        const pending = bank.pendingReviews.at(-1);
+        applyReviewResult(bank, validateReviewResult(bank, makeReviewResult(pkg, {
+          verdictFor: (i) => (i.reviewKey === pending.calibrationKey ? { verdict: 'REJECT', findings: [finding('kritis', 'keyCorrectness')] }
+            : pending.keyMap[i.reviewKey].questionId === ids[2] ? { verdict: 'APPROVE' } : { verdict: 'REVISE', findings: [finding('mayor', 'distractorQuality')] }),
+        })), T);
+        assert.deepEqual(ids.map((id) => findQuestion(bank, id).lifecycle.status), ['NEEDS_REVISION', 'NEEDS_REVISION', 'AI_REVIEWED']);
+
+        // Revisi hanya alasan distraktor dan kesulitan (di luar contentHash), authoring.revision naik.
+        const revised = clone(findQuestion(bank, ids[0]));
+        const wrong = Object.keys(revised.distractorRationale)[0];
+        revised.distractorRationale[wrong] = 'Alasan distraktor diperjelas.';
+        revised.difficulty = 'sulit';
+        revised.authoring.revision = 2;
+        // Soal kedua: hanya authoring berubah -> bukan revisi isi.
+        const untouched = clone(findQuestion(bank, ids[1]));
+        untouched.authoring.revision = 2;
+        // Soal Lolos review AI: perubahan di luar hash tetap tidak menurunkan status (D-63).
+        const reviewed = clone(findQuestion(bank, ids[2]));
+        reviewed.explanation = 'Pembahasan diperbarui.';
+        const asBatchItem = (q) => ({ ...q, lifecycle: { status: 'DRAFT', contentHash: '', review: null, approvedBy: null, approvedAt: null } });
+        const plan = await planBatchImport(bank, makeBatch(pack, [revised, untouched, reviewed].map(asBatchItem), 'DEMO-B01'));
+        assert.ok(plan.ok, plan.errors && messages(plan.errors));
+        assert.deepEqual(plan.entries.map((e) => e.action), ['revisi', 'sama', 'sama']);
+        applyBatchImport(bank, plan, T);
+        const q0 = findQuestion(bank, ids[0]);
+        assert.equal(q0.lifecycle.status, 'DRAFT');
+        assert.equal(q0.lifecycle.review, null);
+        assert.equal(q0.difficulty, 'sulit');
+        assert.equal(findQuestion(bank, ids[1]).lifecycle.status, 'NEEDS_REVISION');
+        assert.equal(findQuestion(bank, ids[2]).lifecycle.status, 'AI_REVIEWED');
+        assert.equal(findQuestion(bank, ids[2]).explanation, 'Pembahasan diperbarui.');
+        assert.deepEqual(checkReviewSelection(bank, [ids[0]]), []);
+
+        // Kembalikan ke Draf manual: alasan wajib, hanya untuk Perlu revisi.
+        await assert.rejects(async () => returnToDraft(bank, ids[1], { by: 'LMA', reason: ' ' }, T), /Alasan/);
+        await assert.rejects(async () => returnToDraft(bank, ids[2], { by: 'LMA', reason: 'x' }, T), /tidak berstatus Perlu revisi/);
+        returnToDraft(bank, ids[1], { by: 'LMA', reason: 'Revisi sudah diimpor sebelum perbaikan.' }, T);
+        const q1 = findQuestion(bank, ids[1]);
+        assert.equal(q1.lifecycle.status, 'DRAFT');
+        assert.equal(q1.lifecycle.review, null);
+        assert.equal(q1.lifecycle.history.at(-1).by, 'LMA');
+        assert.ok(validatePack(bank.pack).ok);
       },
     },
     {

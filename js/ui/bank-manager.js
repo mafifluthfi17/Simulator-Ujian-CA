@@ -9,7 +9,7 @@ import { getType } from '../types/registry.js';
 import {
   BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
-  retire, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
+  retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } from '../core/bank.js';
 import {
   REVIEWABLE, applyReviewResult, buildReviewPackage, calibrationTable, checkReviewSelection,
@@ -271,6 +271,7 @@ export function renderBank(app) {
     if (s === 'AI_REVIEWED' && !bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => approveIds([q.id]) }, 'Setujui'));
     if (bank.conflicts[q.id]) actions.push(h('button', { type: 'button', class: 'btn btn-primary', onclick: () => decideConflict(q.id) }, 'Putuskan hasil review'));
     if (review && s !== 'CALIBRATION') actions.push(h('button', { type: 'button', class: s === 'NEEDS_REVISION' ? 'btn btn-primary' : 'btn', onclick: () => copyRevision([q.id]) }, 'Salin untuk penyusun'));
+    if (s === 'NEEDS_REVISION') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Kembalikan ke Draf', returnToDraft) }, 'Kembalikan ke Draf'));
     if (s === 'REJECTED') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Batalkan penolakan', undoReject) }, 'Batalkan penolakan'));
     if (s === 'LIVE') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Pensiunkan soal', retire) }, 'Pensiunkan'));
     return h('div', { class: 'card preview-card' },
@@ -407,7 +408,7 @@ export function renderBank(app) {
           h('thead', {}, h('tr', {}, ['ID', 'Tipe', 'Tindakan', 'Status sesudah impor'].map((t) => h('th', { text: t })))),
           h('tbody', {}, plan.entries.map((e) => h('tr', {},
             h('td', { text: e.question.id }), h('td', { text: TYPE_LABELS[e.question.type] }),
-            h('td', { text: e.action === 'baru' ? 'Soal baru' : e.action === 'revisi' ? `Revisi (isi berubah; sebelumnya ${STATUS_LABELS[e.previousStatus]})` : 'Isi sama (status tetap)' }),
+            h('td', { text: e.action === 'baru' ? 'Soal baru' : e.action === 'revisi' ? `Revisi (isi berubah; sebelumnya ${STATUS_LABELS[e.previousStatus]})` : e.previousStatus === 'NEEDS_REVISION' ? 'Tidak ada perubahan (tetap Perlu revisi)' : 'Isi sama (status tetap)' }),
             h('td', { text: STATUS_LABELS[e.action === 'sama' ? e.previousStatus : plan.calibration ? 'CALIBRATION' : 'DRAFT'] })))))),
         plan.notes ? h('p', { class: 'prose hint', text: plan.notes }) : null,
         h('button', { type: 'button', class: 'btn btn-primary', onclick: doImportBatch }, 'Impor ke bank')) : null);
