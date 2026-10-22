@@ -3,6 +3,22 @@
 Catatan perubahan prompt (`prompts/*.md`) dan kontrak data. Setiap
 perubahan prompt dirujuk ke docs/PROMPT_ALIGNMENT.md.
 
+## 2026-10-22 — Prompt C v4.2: pemeriksaan fakta ekonomi dan regulasi
+Disetujui pemilik. Isi substansi berubah; format output tidak berubah
+(reviewVersion tetap "4.1"). Rujukan: PROMPT_ALIGNMENT C-5, D-91.
+
+### prompts/prompt_reviewer_soal.md (Prompt C)
+- Judul v4.1 → v4.2.
+- Langkah baru 8 "Fakta ekonomi dan regulasi": fakta keliru atau periode tidak
+  jelas, fakta tak terpastikan yang disajikan sebagai kejadian nyata, jawaban
+  yang bergantung pada informasi di luar soal, dan kebijakan yang berubah wajib
+  dikaitkan dengan periode kasus. Fakta nyata yang benar tidak perlu dibuat
+  hipotetis. Pemetaan temuan ke dimensi keyCorrectness, fairness, stemClarity.
+  Langkah skor dan verdict menjadi langkah 9.
+- Tingkat temuan: kritis ditambah fakta keliru yang mengubah kunci; mayor
+  ditambah fakta tak terpastikan sebagai kejadian nyata, ketergantungan pada
+  informasi di luar soal, dan periode kebijakan tidak jelas.
+
 ## 2026-10-16 — Penyelarasan prompt dengan kontrak v4.1 (Fase A0)
 Disetujui pemilik. Hanya bagian format data yang diubah; peran, aturan
 substansi, dan langkah kerja tidak berubah.

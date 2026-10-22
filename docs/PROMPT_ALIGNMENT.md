@@ -51,3 +51,9 @@ data), jadi bentuk keluarannya harus lengkap di dalam prompt itu sendiri.
 | B-11 | Penyusun | ID, tipe, skala, rubrik, kasus | Pola ID, maxScore per tipe, aturan konsistensi 1-6 | Selaras |
 | B-12 | Penyusun | `lifecycle`, `authoring`, format batch | `batch.schema.json` (DRAFT/CALIBRATION, contentHash "", revision >= 1) | Selaras |
 | B-13 | Penyusun | Contoh `distractorRationale = {"B","C","D"}` | Konsistensi: tepat tiga opsi selain kunci | Contoh hanya berlaku bila kunci A; bila AI keliru, impor menolak dengan pesan ber-ID. Tidak diubah (isi disetujui pemilik apa adanya) |
+
+## Prompt C v4.2 (2026-10-22, disetujui pemilik)
+
+| No | Prompt | Bagian | Perubahan | Dampak pada kontrak |
+|---|---|---|---|---|
+| C-5 | Reviewer | Langkah 8 baru dan Tingkat temuan | Pemeriksaan fakta ekonomi dan regulasi; temuan dipetakan ke dimensi keyCorrectness, fairness, stemClarity | Tidak ada. Tidak ada field baru; enum dimension dan reviewVersion "4.1" tetap |
