@@ -8775,6 +8775,8 @@ Object.defineProperties(__exports, {
   "taxonomyDiff": { enumerable: true, get: () => taxonomyDiff },
   "withTaxonomy": { enumerable: true, get: () => withTaxonomy },
   "updateTaxonomy": { enumerable: true, get: () => updateTaxonomy },
+  "builtInLiveDiff": { enumerable: true, get: () => builtInLiveDiff },
+  "adoptBuiltInLive": { enumerable: true, get: () => adoptBuiltInLive },
   "extractJson": { enumerable: true, get: () => extractJson },
   "labelItemErrors": { enumerable: true, get: () => labelItemErrors },
   "planBatchImport": { enumerable: true, get: () => planBatchImport },
@@ -8947,6 +8949,76 @@ function updateTaxonomy(bank, sourcePack, now) {
   bank.pack = withTaxonomy(bank.pack, sourcePack);
   log(bank, now, `Topik dan kompetensi diperbarui dari pack bawaan versi ${sourcePack.packVersion} (${sourcePack.topics.length} topik, ${sourcePack.competencies.length} kompetensi).`);
   return diff;
+}
+
+// ---------- Soal LIVE pack bawaan yang belum ada di bank (D-90) ----------
+
+const versionParts = (v) => v.split('.').map(Number);
+const newerVersion = (a, b) => {
+  const [x, y] = [versionParts(a), versionParts(b)];
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i] ? a : b;
+  return a;
+};
+
+// Mis. soal yang digabung ke repositori dari ekspor bank lama (D-89). Hasil: null bila
+// tidak ada yang dapat diambil atau mata ujian berbeda; selain itu
+// { add: [soal], skipped: [{ id, reason }], missing: [{ questionId, code }] }.
+// Soal yang ID-nya sudah ada di bank tidak pernah ditimpa.
+async function builtInLiveDiff(bank, sourcePack) {
+  if (!sourcePack || sourcePack.subjectId !== bank.subjectId) return null;
+  const topicIds = new Set(bank.pack.topics.map((t) => t.id));
+  const competencyIds = new Set(bank.pack.competencies.map((k) => k.id));
+  const add = [];
+  const skipped = [];
+  const missing = [];
+  for (const q of sourcePack.questions) {
+    if (q.lifecycle.status !== 'LIVE') continue;
+    const existing = findQuestion(bank, q.id);
+    const hash = await contentHash(q);
+    if (existing) {
+      if (existing.lifecycle.contentHash !== hash) skipped.push({ id: q.id, reason: `ID sudah dipakai soal lain di bank (${STATUS_LABELS[existing.lifecycle.status]})` });
+      continue;
+    }
+    if (q.lifecycle.contentHash !== hash) {
+      skipped.push({ id: q.id, reason: 'isi soal tidak cocok dengan contentHash' });
+      continue;
+    }
+    for (const id of q.topicIds) if (!topicIds.has(id)) missing.push({ questionId: q.id, code: id });
+    for (const id of q.competencyIds) if (!competencyIds.has(id)) missing.push({ questionId: q.id, code: id });
+    add.push(q);
+  }
+  return add.length || skipped.length ? { add, skipped, missing } : null;
+}
+
+// Menambahkan soal LIVE pack bawaan ke bank (status tetap LIVE), versi pack naik minor
+// dari versi tertinggi bank/pack bawaan, changelog diperbarui. Hasil seperti publish():
+// { pack (salinan tervalidasi untuk ujian di perangkat), added: [id], version }.
+async function adoptBuiltInLive(bank, sourcePack, now) {
+  const diff = await builtInLiveDiff(bank, sourcePack);
+  if (!diff || !diff.add.length) throw new BankError('Tidak ada soal tayang di pack bawaan yang belum ada di bank.');
+  if (diff.missing.length) {
+    throw new BankError(`Kode berikut dipakai soal pack bawaan tetapi tidak ada di daftar topik/kompetensi bank: ${diff.missing.map((m) => `${m.questionId} (${m.code})`).join(', ')}. Perbarui daftar topik lebih dulu.`);
+  }
+  // Dikerjakan pada salinan agar bank tidak berubah bila validasi gagal.
+  const pack = clone(bank.pack);
+  const reason = `diambil dari pack bawaan versi ${sourcePack.packVersion}`;
+  for (const q of diff.add) {
+    const copy = clone(q);
+    pushHistory(copy, 'LIVE', 'LIVE', now, undefined, reason);
+    pack.questions.push(copy);
+  }
+  const added = diff.add.map((q) => q.id);
+  const version = nextMinorVersion(newerVersion(pack.packVersion, sourcePack.packVersion));
+  const notes = `${added.length} soal tayang diambil dari pack bawaan versi ${sourcePack.packVersion}: ${added.join(', ')}.`;
+  pack.packVersion = version;
+  pack.changelog.push({ version, date: localDate(now), notes });
+  const checked = loadDocument('pack', clone(pack));
+  if (!checked.ok) {
+    throw new BankError(`Pack tidak valid setelah soal diambil: ${checked.errors.slice(0, 3).map((e) => `${e.path}: ${e.message}`).join('; ')}`);
+  }
+  bank.pack = pack;
+  log(bank, now, `Versi ${version}: ${notes}`);
+  return { pack: checked.data, added, version };
 }
 
 // ---------- Impor batch (SPEC 5.3, 8) ----------
@@ -9581,7 +9653,7 @@ const { h, append, clear, confirmDialog, alertDialog, formDialog, toast } = __re
 const { disclaimer, header } = __require("js/ui/layout.js");
 const { getType } = __require("js/types/registry.js");
 const {
-  BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
+  BankError, STATUS_LABELS, STATUS_ORDER, adoptBuiltInLive, applyBatchImport, approve, bankStats, builtInLiveDiff, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
   retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } = __require("js/core/bank.js");
@@ -9607,7 +9679,7 @@ const pinHash = (pin) => sha256Hex(`${PIN_SALT}${pin}`);
 
 function renderBank(app) {
   const el = h('div', { class: 'screen bank-screen' });
-  const state = { tab: 'soal', filters: {}, selected: new Set(), preview: null, batchPlan: null, batchText: '', batchErrors: [], reviewText: '', reviewCheck: null, lastPackage: null, statsScope: 'LIVE' };
+  const state = { tab: 'soal', filters: {}, selected: new Set(), preview: null, batchPlan: null, batchText: '', batchErrors: [], reviewText: '', reviewCheck: null, lastPackage: null, statsScope: 'LIVE', builtInLive: null };
   let bank = null;
   start();
 
@@ -9634,7 +9706,12 @@ function renderBank(app) {
     }
     bank = loaded ? loaded.bank : await createBank(app.pack, Date.now());
     if (!loaded) persist();
+    await refreshBuiltInLive();
     render();
+  }
+
+  async function refreshBuiltInLive() {
+    state.builtInLive = await builtInLiveDiff(bank, app.builtInPacks && app.builtInPacks[bank.subjectId]);
   }
 
   // ---------- PIN ----------
@@ -9714,6 +9791,7 @@ function renderBank(app) {
     bank = await createBank(app.pack, Date.now());
     persist();
     state.selected.clear();
+    await refreshBuiltInLive();
     render();
   }
 
@@ -9727,6 +9805,7 @@ function renderBank(app) {
       h('p', { class: 'hint', text: `${bank.pack.subjectName} · bank versi ${bank.pack.packVersion} · ${bank.pack.questions.length} soal · pack ujian versi ${app.pack.packVersion}` }),
       differs ? h('p', { class: 'notice', text: `Pack yang dipakai ujian (versi ${app.pack.packVersion}) berbeda dengan bank (versi ${bank.pack.packVersion}). Perubahan bank baru berlaku untuk ujian setelah Publikasikan.` }) : null,
       taxonomyNotice(),
+      builtInLiveNotice(),
       h('div', { class: 'tabs', role: 'tablist' }, TABS.map(([id, label]) => h('button', {
         type: 'button', role: 'tab', 'aria-selected': String(state.tab === id), class: state.tab === id ? 'tab active' : 'tab',
         onclick: () => { state.tab = id; render(); },
@@ -9783,6 +9862,62 @@ function renderBank(app) {
     persist();
     await app.reloadPacks();
     toast('Daftar topik dan kompetensi diperbarui.');
+    render();
+  }
+
+  // Soal tayang di pack bawaan aplikasi yang belum ada di bank perangkat ini,
+  // mis. soal bank lama yang digabung ke repositori (D-89, D-90).
+  function builtInLiveNotice() {
+    const diff = state.builtInLive;
+    if (!diff || !diff.add.length) return null;
+    const source = app.builtInPacks[bank.subjectId];
+    const ids = diff.add.map((q) => q.id);
+    return h('div', { class: 'notice' },
+      h('p', { text: `Versi terbaru aplikasi (pack versi ${source.packVersion}) memuat ${ids.length} soal tayang yang belum ada di bank soal perangkat ini: ${ids.length > 12 ? `${ids.slice(0, 12).join(', ')}, dan ${ids.length - 12} lainnya` : ids.join(', ')}.` }),
+      diff.skipped.length ? h('p', { class: 'hint', text: `Tidak diambil: ${diff.skipped.map((s) => `${s.id} (${s.reason})`).join('; ')}.` }) : null,
+      h('button', { type: 'button', class: 'btn', onclick: doAdoptBuiltInLive }, `Ambil ${ids.length} soal ke bank`));
+  }
+
+  async function doAdoptBuiltInLive() {
+    const source = app.builtInPacks[bank.subjectId];
+    const diff = await builtInLiveDiff(bank, source);
+    if (!diff || !diff.add.length) {
+      await refreshBuiltInLive();
+      render();
+      return;
+    }
+    if (diff.missing.length) {
+      alertDialog('Soal belum dapat diambil', [
+        'Soal berikut memakai kode topik atau kompetensi yang tidak ada di bank. Perbarui daftar topik lebih dulu:',
+        ...diff.missing.slice(0, 10).map((m) => `${m.questionId}: ${m.code}`),
+      ]);
+      return;
+    }
+    if (loadActiveSession(app.store, bank.subjectId)) {
+      alertDialog('Ada ujian yang sedang berjalan', ['Pengambilan soal menunggu sampai ujian dikumpulkan.']);
+      return;
+    }
+    const ok = await confirmDialog({
+      title: `Ambil ${diff.add.length} soal ke bank?`,
+      body: [
+        `Soal masuk ke bank dengan status ${STATUS_LABELS.LIVE} dan langsung dapat muncul di ujian perangkat ini. Versi pack naik satu tingkat.`,
+        'Soal yang sudah ada di bank tidak diubah. Setelah itu, Ekspor Pack sudah memuat semua soal.',
+      ],
+      confirmLabel: 'Ambil soal',
+    });
+    if (!ok) return;
+    let result;
+    try {
+      result = await adoptBuiltInLive(bank, source, Date.now());
+      saveImportedPack(app.store, result.pack);
+    } catch (e) {
+      alertDialog('Pengambilan gagal', [e.message]);
+      return;
+    }
+    persist();
+    await app.reloadPacks();
+    await refreshBuiltInLive();
+    toast(`${result.added.length} soal diambil ke bank. Versi ${result.version}.`);
     render();
   }
 

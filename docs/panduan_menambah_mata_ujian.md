@@ -172,6 +172,12 @@ Skala asli: mcq 1, numeric 1, essay 10, case 20. Field wajib per tipe: lihat
     pemberitahuan dengan tombol **Perbarui daftar topik dan kompetensi**.
     Soal, status, dan versi pack tidak berubah. Pembaruan ditolak bila ada soal
     yang memakai kode yang tidak ada lagi di daftar baru.
+12. **Soal tayang di repositori belum ada di bank perangkat** (mis. soal bank
+    lama yang digabung ke repositori): Pengelola Bank Soal menampilkan
+    pemberitahuan dengan tombol **Ambil N soal ke bank**. Soal masuk dengan
+    status Tayang tanpa review ulang, versi pack naik satu tingkat, dan soal
+    yang sudah ada di bank tidak diubah. Setelah itu Ekspor Pack sudah memuat
+    semua soal, sehingga tidak perlu digabung manual lagi.
 
 Target bank, misalnya jumlah soal per topik atau posisi kunci PG maksimal 35%
 per huruf, dapat dipantau di tab **Statistik**.

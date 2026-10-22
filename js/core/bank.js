@@ -153,6 +153,76 @@ export function updateTaxonomy(bank, sourcePack, now) {
   return diff;
 }
 
+// ---------- Soal LIVE pack bawaan yang belum ada di bank (D-90) ----------
+
+const versionParts = (v) => v.split('.').map(Number);
+const newerVersion = (a, b) => {
+  const [x, y] = [versionParts(a), versionParts(b)];
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i] ? a : b;
+  return a;
+};
+
+// Mis. soal yang digabung ke repositori dari ekspor bank lama (D-89). Hasil: null bila
+// tidak ada yang dapat diambil atau mata ujian berbeda; selain itu
+// { add: [soal], skipped: [{ id, reason }], missing: [{ questionId, code }] }.
+// Soal yang ID-nya sudah ada di bank tidak pernah ditimpa.
+export async function builtInLiveDiff(bank, sourcePack) {
+  if (!sourcePack || sourcePack.subjectId !== bank.subjectId) return null;
+  const topicIds = new Set(bank.pack.topics.map((t) => t.id));
+  const competencyIds = new Set(bank.pack.competencies.map((k) => k.id));
+  const add = [];
+  const skipped = [];
+  const missing = [];
+  for (const q of sourcePack.questions) {
+    if (q.lifecycle.status !== 'LIVE') continue;
+    const existing = findQuestion(bank, q.id);
+    const hash = await contentHash(q);
+    if (existing) {
+      if (existing.lifecycle.contentHash !== hash) skipped.push({ id: q.id, reason: `ID sudah dipakai soal lain di bank (${STATUS_LABELS[existing.lifecycle.status]})` });
+      continue;
+    }
+    if (q.lifecycle.contentHash !== hash) {
+      skipped.push({ id: q.id, reason: 'isi soal tidak cocok dengan contentHash' });
+      continue;
+    }
+    for (const id of q.topicIds) if (!topicIds.has(id)) missing.push({ questionId: q.id, code: id });
+    for (const id of q.competencyIds) if (!competencyIds.has(id)) missing.push({ questionId: q.id, code: id });
+    add.push(q);
+  }
+  return add.length || skipped.length ? { add, skipped, missing } : null;
+}
+
+// Menambahkan soal LIVE pack bawaan ke bank (status tetap LIVE), versi pack naik minor
+// dari versi tertinggi bank/pack bawaan, changelog diperbarui. Hasil seperti publish():
+// { pack (salinan tervalidasi untuk ujian di perangkat), added: [id], version }.
+export async function adoptBuiltInLive(bank, sourcePack, now) {
+  const diff = await builtInLiveDiff(bank, sourcePack);
+  if (!diff || !diff.add.length) throw new BankError('Tidak ada soal tayang di pack bawaan yang belum ada di bank.');
+  if (diff.missing.length) {
+    throw new BankError(`Kode berikut dipakai soal pack bawaan tetapi tidak ada di daftar topik/kompetensi bank: ${diff.missing.map((m) => `${m.questionId} (${m.code})`).join(', ')}. Perbarui daftar topik lebih dulu.`);
+  }
+  // Dikerjakan pada salinan agar bank tidak berubah bila validasi gagal.
+  const pack = clone(bank.pack);
+  const reason = `diambil dari pack bawaan versi ${sourcePack.packVersion}`;
+  for (const q of diff.add) {
+    const copy = clone(q);
+    pushHistory(copy, 'LIVE', 'LIVE', now, undefined, reason);
+    pack.questions.push(copy);
+  }
+  const added = diff.add.map((q) => q.id);
+  const version = nextMinorVersion(newerVersion(pack.packVersion, sourcePack.packVersion));
+  const notes = `${added.length} soal tayang diambil dari pack bawaan versi ${sourcePack.packVersion}: ${added.join(', ')}.`;
+  pack.packVersion = version;
+  pack.changelog.push({ version, date: localDate(now), notes });
+  const checked = loadDocument('pack', clone(pack));
+  if (!checked.ok) {
+    throw new BankError(`Pack tidak valid setelah soal diambil: ${checked.errors.slice(0, 3).map((e) => `${e.path}: ${e.message}`).join('; ')}`);
+  }
+  bank.pack = pack;
+  log(bank, now, `Versi ${version}: ${notes}`);
+  return { pack: checked.data, added, version };
+}
+
 // ---------- Impor batch (SPEC 5.3, 8) ----------
 
 // Teks dari penyusun: JSON murni, atau blok kode ```json ... ``` diikuti "Catatan penyusun".

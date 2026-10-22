@@ -3,7 +3,7 @@
 import * as assert from './assert.js';
 import { loadJson } from './env.js';
 import {
-  applyBatchImport, approve, bankStats, createBank, editQuestion, exportPackText, extractJson, findQuestion,
+  adoptBuiltInLive, applyBatchImport, approve, bankStats, builtInLiveDiff, createBank, editQuestion, exportPackText, extractJson, findQuestion,
   loadBank, planBatchImport, publish, resolveConflict, retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
 } from '../../js/core/bank.js';
 import {
@@ -246,6 +246,60 @@ export default {
         undoReject(bank, ids[3], { by: 'LMA', reason: 'Reviewer keliru membaca stem.' }, T);
         assert.equal(findQuestion(bank, ids[3]).lifecycle.status, 'DRAFT');
         assert.deepEqual(validatePack(bank.pack).errors, undefined);
+      },
+    },
+    {
+      name: 'ambil soal LIVE pack bawaan ke bank: hanya ID baru, hash diperiksa, versi naik, bank tidak berubah bila gagal',
+      run: async () => {
+        const { pack, bank } = await freshBank();
+        bank.pack.packVersion = '1.4.0';
+        const source = clone(pack);
+        source.packVersion = '1.4.1';
+        const liveFrom = async (id, stemSuffix) => {
+          const q = clone(pack.questions.find((x) => x.type === 'mcq'));
+          q.id = id;
+          q.stem = `${q.stem} ${stemSuffix}`;
+          q.lifecycle = { ...q.lifecycle, contentHash: await contentHash(q) };
+          return q;
+        };
+        const a = await liveFrom('DEMO-MCQ-150', '[UJI-D90 a]');
+        const b = await liveFrom('DEMO-MCQ-151', '[UJI-D90 b]');
+        const badHash = await liveFrom('DEMO-MCQ-152', '[UJI-D90 c]');
+        badHash.stem += ' diubah';
+        const clash = await liveFrom('DEMO-MCQ-001', '[UJI-D90 d]'); // ID sama, isi beda
+        const draft = await liveFrom('DEMO-MCQ-153', '[UJI-D90 e]');
+        draft.lifecycle.status = 'DRAFT';
+        source.questions = source.questions.filter((q) => q.id !== 'DEMO-MCQ-001').concat([a, b, badHash, clash, draft]);
+
+        const diff = await builtInLiveDiff(bank, source);
+        assert.deepEqual(diff.add.map((q) => q.id), ['DEMO-MCQ-150', 'DEMO-MCQ-151']);
+        assert.deepEqual(diff.skipped.map((s) => s.id), ['DEMO-MCQ-152', 'DEMO-MCQ-001']);
+        assert.equal(await builtInLiveDiff(bank, { ...source, subjectId: 'lain' }), null);
+
+        // Kode topik tidak dikenal: ditolak, bank tidak berubah.
+        const before = JSON.stringify(bank);
+        const unknown = clone(source);
+        unknown.questions.find((q) => q.id === 'DEMO-MCQ-150').topicIds = ['T99'];
+        assert.deepEqual((await builtInLiveDiff(bank, unknown)).missing, [{ questionId: 'DEMO-MCQ-150', code: 'T99' }]);
+        await assert.rejects(() => adoptBuiltInLive(bank, unknown, T), /T99/);
+        assert.equal(JSON.stringify(bank), before);
+
+        const out = await adoptBuiltInLive(bank, source, T);
+        assert.deepEqual(out.added, ['DEMO-MCQ-150', 'DEMO-MCQ-151']);
+        assert.equal(out.version, '1.5.0', 'naik dari versi tertinggi bank/pack bawaan');
+        assert.equal(bank.pack.packVersion, '1.5.0');
+        assert.ok(bank.pack.changelog.at(-1).notes.includes('DEMO-MCQ-150, DEMO-MCQ-151'));
+        const q = findQuestion(bank, 'DEMO-MCQ-150');
+        assert.equal(q.lifecycle.status, 'LIVE');
+        assert.equal(q.lifecycle.history.at(-1).reason, 'diambil dari pack bawaan versi 1.4.1');
+        assert.ok(findQuestion(bank, 'DEMO-MCQ-001').stem !== clash.stem, 'soal bank tidak ditimpa');
+        assert.equal(findQuestion(bank, 'DEMO-MCQ-153'), null, 'hanya soal LIVE yang diambil');
+        assert.ok(validatePack(out.pack).ok);
+        const again = await builtInLiveDiff(bank, source);
+        assert.deepEqual(again.add, []);
+        await assert.rejects(() => adoptBuiltInLive(bank, source, T), /Tidak ada soal tayang/);
+        // Ekspor Pack kini memuat soal yang diambil.
+        assert.ok(JSON.parse(exportPackText(bank)).questions.some((x) => x.id === 'DEMO-MCQ-151'));
       },
     },
     {

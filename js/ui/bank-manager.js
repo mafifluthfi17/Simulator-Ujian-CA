@@ -7,7 +7,7 @@ import { h, append, clear, confirmDialog, alertDialog, formDialog, toast } from 
 import { disclaimer, header } from './layout.js';
 import { getType } from '../types/registry.js';
 import {
-  BankError, STATUS_LABELS, STATUS_ORDER, applyBatchImport, approve, bankStats, createBank, exportPackText,
+  BankError, STATUS_LABELS, STATUS_ORDER, adoptBuiltInLive, applyBatchImport, approve, bankStats, builtInLiveDiff, createBank, exportPackText,
   filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
   retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } from '../core/bank.js';
@@ -33,7 +33,7 @@ const pinHash = (pin) => sha256Hex(`${PIN_SALT}${pin}`);
 
 export function renderBank(app) {
   const el = h('div', { class: 'screen bank-screen' });
-  const state = { tab: 'soal', filters: {}, selected: new Set(), preview: null, batchPlan: null, batchText: '', batchErrors: [], reviewText: '', reviewCheck: null, lastPackage: null, statsScope: 'LIVE' };
+  const state = { tab: 'soal', filters: {}, selected: new Set(), preview: null, batchPlan: null, batchText: '', batchErrors: [], reviewText: '', reviewCheck: null, lastPackage: null, statsScope: 'LIVE', builtInLive: null };
   let bank = null;
   start();
 
@@ -60,7 +60,12 @@ export function renderBank(app) {
     }
     bank = loaded ? loaded.bank : await createBank(app.pack, Date.now());
     if (!loaded) persist();
+    await refreshBuiltInLive();
     render();
+  }
+
+  async function refreshBuiltInLive() {
+    state.builtInLive = await builtInLiveDiff(bank, app.builtInPacks && app.builtInPacks[bank.subjectId]);
   }
 
   // ---------- PIN ----------
@@ -140,6 +145,7 @@ export function renderBank(app) {
     bank = await createBank(app.pack, Date.now());
     persist();
     state.selected.clear();
+    await refreshBuiltInLive();
     render();
   }
 
@@ -153,6 +159,7 @@ export function renderBank(app) {
       h('p', { class: 'hint', text: `${bank.pack.subjectName} · bank versi ${bank.pack.packVersion} · ${bank.pack.questions.length} soal · pack ujian versi ${app.pack.packVersion}` }),
       differs ? h('p', { class: 'notice', text: `Pack yang dipakai ujian (versi ${app.pack.packVersion}) berbeda dengan bank (versi ${bank.pack.packVersion}). Perubahan bank baru berlaku untuk ujian setelah Publikasikan.` }) : null,
       taxonomyNotice(),
+      builtInLiveNotice(),
       h('div', { class: 'tabs', role: 'tablist' }, TABS.map(([id, label]) => h('button', {
         type: 'button', role: 'tab', 'aria-selected': String(state.tab === id), class: state.tab === id ? 'tab active' : 'tab',
         onclick: () => { state.tab = id; render(); },
@@ -209,6 +216,62 @@ export function renderBank(app) {
     persist();
     await app.reloadPacks();
     toast('Daftar topik dan kompetensi diperbarui.');
+    render();
+  }
+
+  // Soal tayang di pack bawaan aplikasi yang belum ada di bank perangkat ini,
+  // mis. soal bank lama yang digabung ke repositori (D-89, D-90).
+  function builtInLiveNotice() {
+    const diff = state.builtInLive;
+    if (!diff || !diff.add.length) return null;
+    const source = app.builtInPacks[bank.subjectId];
+    const ids = diff.add.map((q) => q.id);
+    return h('div', { class: 'notice' },
+      h('p', { text: `Versi terbaru aplikasi (pack versi ${source.packVersion}) memuat ${ids.length} soal tayang yang belum ada di bank soal perangkat ini: ${ids.length > 12 ? `${ids.slice(0, 12).join(', ')}, dan ${ids.length - 12} lainnya` : ids.join(', ')}.` }),
+      diff.skipped.length ? h('p', { class: 'hint', text: `Tidak diambil: ${diff.skipped.map((s) => `${s.id} (${s.reason})`).join('; ')}.` }) : null,
+      h('button', { type: 'button', class: 'btn', onclick: doAdoptBuiltInLive }, `Ambil ${ids.length} soal ke bank`));
+  }
+
+  async function doAdoptBuiltInLive() {
+    const source = app.builtInPacks[bank.subjectId];
+    const diff = await builtInLiveDiff(bank, source);
+    if (!diff || !diff.add.length) {
+      await refreshBuiltInLive();
+      render();
+      return;
+    }
+    if (diff.missing.length) {
+      alertDialog('Soal belum dapat diambil', [
+        'Soal berikut memakai kode topik atau kompetensi yang tidak ada di bank. Perbarui daftar topik lebih dulu:',
+        ...diff.missing.slice(0, 10).map((m) => `${m.questionId}: ${m.code}`),
+      ]);
+      return;
+    }
+    if (loadActiveSession(app.store, bank.subjectId)) {
+      alertDialog('Ada ujian yang sedang berjalan', ['Pengambilan soal menunggu sampai ujian dikumpulkan.']);
+      return;
+    }
+    const ok = await confirmDialog({
+      title: `Ambil ${diff.add.length} soal ke bank?`,
+      body: [
+        `Soal masuk ke bank dengan status ${STATUS_LABELS.LIVE} dan langsung dapat muncul di ujian perangkat ini. Versi pack naik satu tingkat.`,
+        'Soal yang sudah ada di bank tidak diubah. Setelah itu, Ekspor Pack sudah memuat semua soal.',
+      ],
+      confirmLabel: 'Ambil soal',
+    });
+    if (!ok) return;
+    let result;
+    try {
+      result = await adoptBuiltInLive(bank, source, Date.now());
+      saveImportedPack(app.store, result.pack);
+    } catch (e) {
+      alertDialog('Pengambilan gagal', [e.message]);
+      return;
+    }
+    persist();
+    await app.reloadPacks();
+    await refreshBuiltInLive();
+    toast(`${result.added.length} soal diambil ke bank. Versi ${result.version}.`);
     render();
   }
 
