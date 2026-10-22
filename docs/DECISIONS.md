@@ -189,3 +189,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-91 | Prompt C v4.2 menambah langkah pemeriksaan fakta ekonomi dan regulasi (terverifikasi boleh dipakai sebagai fakta nyata, tak terpastikan menjadi temuan dan diusulkan hipotetis, informasi untuk menjawab wajib ada di soal, kebijakan dikaitkan dengan periode kasus) beserta tingkat temuannya. Format output tidak berubah. Selaras dengan blok KONTEKS EKONOMI di `docs/formulir/*_gelombang2.md`. | Formulir gelombang 2 mengaitkan soal dengan peristiwa ekonomi 2023-2026; reviewer perlu kriteria yang sama dengan penyusun. | DISETUJUI (2026-10-22) |
+
+## Formulir gelombang 3
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-92 | Formulir gelombang 3 (`docs/formulir/pk_gelombang3_siap_tempel.md` dan `msk_gelombang3_siap_tempel.md`) melanjutkan nomor gelombang 2: PK-B22 s.d. B34 dan MSK-B25 s.d. B37, masing-masing 40 PG, 15 esai, 5 kasus mini (sedang 2, sulit 2, sangat sulit 1), dan 6 kasus komprehensif (sedang 2, sulit 2, sangat sulit 2). PG per batch: mudah 2, sedang 4, sulit 3, sangat sulit 1, dengan 4 soal teori dan 6 soal analisis. Esai per batch: mudah 1, sedang 2, sulit 1, sangat sulit 1, dengan 2 esai teori dan 3 esai analisis. Level kognitif C2 diizinkan hanya untuk soal teori yang mudah (Prompt B: C2 hanya bila formulir memintanya). Bentuk soal ditulis di baris pertama `authoring.notes` karena skema tidak memiliki field bentuk. Konteks ekonomi memakai blok gelombang 2 dengan rentang "tiga tahun terakhir (2023-2026)". | Permintaan pemilik 2026-10-22: PG dan esai mencakup kesulitan mudah s.d. sangat sulit serta bentuk teori dan analisis. | USULAN |
