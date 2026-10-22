@@ -3,6 +3,17 @@
 Catatan perubahan prompt (`prompts/*.md`) dan kontrak data. Setiap
 perubahan prompt dirujuk ke docs/PROMPT_ALIGNMENT.md.
 
+## 2026-10-23 — Prompt D v1.0: penyusun soal kalibrasi
+Disetujui pemilik. Prompt baru; prompt lain tidak berubah. Format output = batch soal biasa
+(schemaVersion "4.1") dengan status CALIBRATION dan objek `calibration`.
+Rujukan: D-93.
+
+### prompts/prompt_kalibrasi_soal.md (Prompt D)
+- Peran penyusun soal bercacat sengaja satu per soal, katalog 8 kode cacat
+  dengan defectDimension dan tingkat sesuai Prompt C, aturan penyamaran,
+  larangan cacat yang tertangkap lint, langkah periksa diri, output JSON plus
+  tabel "Kunci kalibrasi", dan aturan revisi.
+
 ## 2026-10-22 — Prompt C v4.2: pemeriksaan fakta ekonomi dan regulasi
 Disetujui pemilik. Isi substansi berubah; format output tidak berubah
 (reviewVersion tetap "4.1"). Rujukan: PROMPT_ALIGNMENT C-5, D-91.
