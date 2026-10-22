@@ -57,7 +57,7 @@ Konteks ekonomi (wajib):
 - Konteks hanya latar skenario. Semua angka (suku bunga, kurs, inflasi, harga komoditas, tarif) adalah angka asumsi dan ditulis "diasumsikan"; jangan menyajikannya sebagai statistik resmi.
 - Jangan menyebut nama perusahaan, BUMN, atau tokoh nyata. Kebijakan publik boleh disebut secara umum (mis. "kebijakan tarif impor Amerika Serikat tahun 2025") hanya bila Anda yakin faktanya; bila ragu, jadikan skenario hipotetis.
 - Kunci jawaban tidak boleh bergantung pada fakta ekonomi di luar soal. Semua data yang dibutuhkan ada di stem atau caseData.
-- Jangan menjadikan ketentuan yang belum efektif per 1 Januari 2026 (mis. standar pengungkapan keberlanjutan yang baru diadopsi) sebagai dasar kunci jawaban.
+- Jangan menjadikan ketentuan yang belum efektif per 1 Januari 2026 sebagai dasar kunci jawaban. Contoh: PSPK 1 dan PSPK 2 (standar pengungkapan keberlanjutan berbasis IFRS S1/S2) disahkan DSK IAI 1 Juli 2025 dan baru efektif 1 Januari 2027. Penerapan dini diperbolehkan, jadi jangan membuat kunci yang menganggap entitas dilarang menerapkannya.
 Tema:
 1. Suku bunga tinggi 2023-2024 lalu turun bertahap: tingkat diskonto PSAK 219 (24) dan PSAK 237 (57), suku bunga pinjaman inkremental PSAK 116 (73), biaya pinjaman PSAK 223 (26), nilai wajar PSAK 113 (68), kerugian kredit ekspektasian PSAK 109 (71).
 2. Pelemahan dan volatilitas rupiah: transaksi valuta asing dan penjabaran entitas luar negeri PSAK 221 (10), utang valas, lindung nilai.
@@ -67,7 +67,7 @@ Tema:
 6. Normalisasi harga komoditas (batu bara, CPO) setelah lonjakan 2022: penurunan nilai aset, agrikultur PSAK 241 (69).
 7. Restrukturisasi dan konsolidasi grup BUMN/holding di bawah badan pengelola investasi negara (2025): kombinasi bisnis entitas sepengendali PSAK 338 (38), pengendalian PSAK 110 (65), laporan keuangan tersendiri PSAK 227 (4).
 8. Ekonomi digital dan e-commerce: prinsipal vs agen, program loyalitas, imbalan variabel PSAK 115 (72); aset takberwujud PSAK 238 (19) dan biaya situs web ISAK 232.
-9. Reformasi pajak internasional (pajak minimum global/Pilar Dua) dan ketidakpastian perlakuan pajak: PSAK 212 (46), ISAK 123. Bila ragu tentang ketentuan Pilar Dua, jadikan latar saja, bukan dasar kunci.
+9. Reformasi pajak internasional (pajak minimum global/Pilar Dua, diterapkan di Indonesia sejak 1 Januari 2025) dan ketidakpastian perlakuan pajak: PSAK 212 (46), ISAK 123. Amendemen PSAK 212 (46) tentang Ketentuan Model Pilar Dua sudah efektif (berlaku surut 1 Januari 2023) dan boleh menjadi dasar kunci: pengecualian wajib atas pengakuan dan pengungkapan aset dan liabilitas pajak tangguhan terkait pajak penghasilan Pilar Dua, serta pengungkapan terpisah beban pajak kini Pilar Dua. Jangan menguji perhitungan tarif efektif GloBE atau ketentuan PMK secara rinci.
 10. Melemahnya daya beli kelas menengah: penurunan penjualan, diskon dan retur, piutang bermasalah, persediaan usang.
 11. Kasus salah saji laporan keuangan dan gagal bayar emiten serta lembaga keuangan nonbank: financial shenanigans dan red flags fraud (T13), etika dan tata kelola (T02).
 12. Transisi energi dan tuntutan keberlanjutan dari investor dan regulator: pelaporan keberlanjutan dan terintegrasi (T14), provisi lingkungan.
@@ -141,7 +141,7 @@ Level kognitif: C3-C6
 Catatan khusus:
 - Sebaran kunci: setiap huruf A-D paling banyak 3.
 - Setiap soal memakai tema ekonomi yang berbeda.
-- T09: pengakuan aset pajak tangguhan saat prospek laba menurun (tema 3, 10) atau ketidakpastian perlakuan pajak ISAK 123 (tema 9).
+- T09: pengakuan aset pajak tangguhan saat prospek laba menurun (tema 3, 10), ketidakpastian perlakuan pajak ISAK 123, atau pengecualian pajak tangguhan Pilar Dua pada grup multinasional (tema 9).
 - T13: red flags pengakuan pendapatan dini menjelang gagal bayar (tema 11).
 ```
 
@@ -180,7 +180,7 @@ Catatan khusus:
 - T02: dilema etis akuntan manajemen yang ditekan memenuhi covenant pinjaman (tema 1, 11).
 - T03: perubahan estimasi vs koreksi kesalahan, atau pengungkapan kelangsungan usaha setelah tarif impor (tema 3).
 - T13: analisis rasio dan arus kas untuk mendeteksi rekayasa laba sebelum gagal bayar (tema 11).
-- T14: kebutuhan informasi investor tentang risiko transisi energi dan cara laporan terintegrasi menjawabnya (tema 12); jangan menjadikan standar yang belum efektif sebagai dasar kunci.
+- T14: kebutuhan informasi investor tentang risiko transisi energi dan cara laporan terintegrasi menjawabnya (tema 12). Boleh membahas kesiapan menuju PSPK 1 dan 2 (efektif 1 Januari 2027, penerapan dini diperbolehkan), tetapi kunci tidak bergantung pada ketentuan rinci PSPK.
 - 3-6 kriteria rubrik berjumlah 10; acceptableAlternatives wajib.
 ```
 

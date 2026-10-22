@@ -18,6 +18,12 @@ tidak disalin dan tetap di folder lokal `Materi Pelaporan Korposat/` (tidak di-c
 4. Tidak ada soal akuntansi syariah atau sektor publik (D-80).
 5. **Standar berlaku**: SAK Indonesia yang efektif per **1 Januari 2026**. Jangan memakai
    standar atau amendemen yang belum efektif pada tanggal itu (D-84b).
+   - Sudah efektif dan boleh menjadi dasar kunci: amendemen PSAK 212 (46) Reformasi Pajak
+     Internasional – Ketentuan Model Pilar Dua (disahkan 1 Desember 2023, berlaku surut
+     1 Januari 2023): pengecualian pengakuan dan pengungkapan pajak tangguhan Pilar Dua serta
+     pengungkapan terpisah beban pajak kini Pilar Dua.
+   - Belum efektif: PSPK 1 dan PSPK 2 (DSK IAI, disahkan 1 Juli 2025, efektif 1 Januari 2027,
+     penerapan dini diperbolehkan). Soal T14 tidak boleh bergantung pada ketentuan rincinya.
 
 ## 2. Tabel penomoran PSAK
 
