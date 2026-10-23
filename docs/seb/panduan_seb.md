@@ -11,7 +11,7 @@ hanya menampilkan lencana **"Berjalan di SEB"** bila user agent browser memuat
 
 ## 1. Yang perlu disiapkan
 
-- Alamat aplikasi (GitHub Pages): `https://mafifluthfi17.github.io/Simulator-Ujian-CA/`.
+- Alamat aplikasi (GitHub Pages): `https://tryoutca.github.io/`.
 - Buka alamat itu sekali di browser biasa agar terlihat berfungsi.
 - Berkas contoh pengaturan: [`contoh-pengaturan-seb.xml`](contoh-pengaturan-seb.xml).
 

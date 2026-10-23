@@ -3,7 +3,7 @@
 Aplikasi latihan ujian CA (PWA statis, tanpa backend). Simulator belajar, bukan
 ujian resmi, dan tidak berafiliasi dengan IAI. Spesifikasi: `docs/SPEC.md`.
 
-**Aplikasi:** https://mafifluthfi17.github.io/Simulator-Ujian-CA/ (GitHub Pages; dapat dipasang sebagai aplikasi dan berjalan
+**Aplikasi:** https://tryoutca.github.io/ (GitHub Pages; dapat dipasang sebagai aplikasi dan berjalan
 offline setelah kunjungan pertama).
 
 Panduan: `docs/panduan_penggunaan.md` (pengguna), `docs/panduan_menambah_mata_ujian.md`
