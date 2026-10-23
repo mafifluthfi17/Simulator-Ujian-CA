@@ -2,7 +2,7 @@
   "schemaVersion": "4.1",
   "subjectId": "pk",
   "subjectName": "Pelaporan Korporat",
-  "packVersion": "1.7.0",
+  "packVersion": "1.7.1",
   "language": "id",
   "passingGrade": 70,
   "topics": [
@@ -168,7 +168,7 @@
     },
     {
       "id": "SIM",
-      "name": "Simulasi Ujian",
+      "name": "Simulasi Ujian (Advanced Level)",
       "durationMinutes": 180,
       "strictMode": true,
       "sections": [
@@ -15695,6 +15695,11 @@
       "version": "1.7.0",
       "date": "2026-10-22",
       "notes": "66 soal tayang: PK-MCQ-036, PK-MCQ-037, PK-MCQ-038, PK-MCQ-039, PK-MCQ-040, PK-MCQ-041, PK-MCQ-042, PK-MCQ-043, PK-MCQ-044, PK-MCQ-045, PK-MCQ-046, PK-MCQ-047, PK-MCQ-048, PK-MCQ-049, PK-MCQ-050, PK-MCQ-051, PK-MCQ-052, PK-MCQ-053, PK-MCQ-054, PK-MCQ-055, PK-MCQ-056, PK-MCQ-057, PK-MCQ-058, PK-MCQ-059, PK-MCQ-060, PK-MCQ-061, PK-MCQ-062, PK-MCQ-063, PK-MCQ-064, PK-MCQ-065, PK-MCQ-066, PK-MCQ-067, PK-MCQ-068, PK-MCQ-069, PK-MCQ-070, PK-MCQ-071, PK-MCQ-072, PK-MCQ-073, PK-MCQ-074, PK-MCQ-075, PK-ESA-006, PK-ESA-007, PK-ESA-008, PK-ESA-009, PK-ESA-010, PK-ESA-011, PK-ESA-012, PK-ESA-013, PK-ESA-014, PK-ESA-015, PK-ESA-016, PK-ESA-017, PK-ESA-018, PK-ESA-019, PK-ESA-020, PK-KAS-006, PK-KAS-007, PK-KAS-008, PK-KAS-009, PK-KAS-010, PK-KAS-011, PK-KAS-012, PK-KAS-013, PK-KAS-014, PK-KAS-015, PK-KAS-016."
+    },
+    {
+      "version": "1.7.1",
+      "date": "2026-10-23",
+      "notes": "Nama paket SIM menjadi \"Simulasi Ujian (Advanced Level)\" sesuai jenjang Tingkat Lanjutan (Advanced Level) pada pathway CA Indonesia IAI (D-95). Soal, blueprint, dan contentHash tidak berubah."
     }
   ]
 }
