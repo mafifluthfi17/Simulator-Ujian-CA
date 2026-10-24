@@ -25,7 +25,9 @@ export const WORD_LIMITS = {
   komprehensif: { sulit: { reading: 700, answer: 600 }, sangat_sulit: { reading: 900, answer: 650 } },
 };
 
-const standardKey = (q) => (q.type === 'case' ? q.caseSize : q.type);
+// Kasus tanpa ukuran (bagian paket Level, D-101): ukuran mengikuti tingkat kesulitan.
+const sizeFor = (difficulty) => (difficulty === 'mudah' || difficulty === 'sedang' ? 'mini' : 'komprehensif');
+const standardKey = (q) => (q.type === 'case' ? q.caseSize || sizeFor(q.difficulty) : q.type);
 
 export function countWords(value) {
   if (value === null || value === undefined) return 0;
@@ -53,9 +55,11 @@ export function measureWords(q) {
   return { reading: countWords(q.stem), answer: 0 };
 }
 
-// Daftar pesan peringatan (kosong bila sesuai standar). Soal kalibrasi tidak diperiksa.
+// Daftar pesan peringatan (kosong bila sesuai standar). Soal kalibrasi tidak
+// diperiksa; soal yang sudah tayang (LIVE/RETIRED) dipertahankan apa adanya (D-101).
+const UNCHECKED = ['CALIBRATION', 'LIVE', 'RETIRED'];
 export function timeStandardIssues(q) {
-  if (q.lifecycle && q.lifecycle.status === 'CALIBRATION') return [];
+  if (q.lifecycle && UNCHECKED.includes(q.lifecycle.status)) return [];
   const issues = [];
   const level = DIFFICULTY_NAMES[q.difficulty] || q.difficulty;
   if (q.type === 'case') {

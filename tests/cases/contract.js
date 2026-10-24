@@ -138,10 +138,10 @@ export default {
         const short = { mudah: 'm', sedang: 's', sulit: 'su', sangat_sulit: 'ss' };
         assert.deepEqual(pack.packages.map((p) => [p.id, p.durationMinutes, p.strictMode,
           p.sections.map((s) => `${s.type}${s.count}${s.caseSize ? `/${s.caseSize}` : ''}/${short[s.difficulty]}:${s.weight}`).join(' ')]), [
-          ['L1', 45, false, 'mcq10/m:20 essay3/m:40 case1/mini/m:40'],
-          ['L2', 65, false, 'mcq10/s:20 essay3/s:40 case1/mini/s:40'],
-          ['L3', 110, false, 'mcq10/su:20 essay3/su:40 case1/komprehensif/su:40'],
-          ['L4', 140, false, 'mcq10/ss:20 essay3/ss:40 case1/komprehensif/ss:40'],
+          ['L1', 45, false, 'mcq10/m:20 essay3/m:40 case1/m:40'],
+          ['L2', 65, false, 'mcq10/s:20 essay3/s:40 case1/s:40'],
+          ['L3', 110, false, 'mcq10/su:20 essay3/su:40 case1/su:40'],
+          ['L4', 140, false, 'mcq10/ss:20 essay3/ss:40 case1/ss:40'],
           ['SIM', 180, true, 'mcq2/m:2.28 mcq3/s:3.42 mcq6/su:6.78 mcq4/ss:4.52 essay1/s:12.5 essay2/su:25 essay1/ss:12.5 case1/komprehensif/su:16.5 case1/komprehensif/ss:16.5'],
         ]);
         // Durasi = jumlah standar waktu soal (SPEC 6.2), dibulatkan ke 5 menit terdekat (D-99).
@@ -159,6 +159,19 @@ export default {
         for (const p of pack.packages) {
           const built = buildFromPackage(pack, p, createRng(1));
           if (!built.ok) assert.ok(built.problems.every((m) => m.startsWith('butuh ')), `${p.id}: ${built.problems.join('; ')}`);
+        }
+      },
+    },
+    {
+      name: 'soal LIVE lama MSK dan PK: setiap soal dapat masuk minimal satu paket sesuai tingkatnya (D-101)',
+      run: async () => {
+        for (const id of ['msk', 'pk']) {
+          const pack = await loadJson(`packs/${id}/pack.json`);
+          const fits = (q, s) => q.type === s.type && (!s.caseSize || q.caseSize === s.caseSize) && (!s.difficulty || q.difficulty === s.difficulty);
+          const orphan = pack.questions
+            .filter((q) => q.lifecycle.status === 'LIVE' && !pack.packages.some((p) => p.sections.some((s) => fits(q, s))))
+            .map((q) => `${q.id} (${q.type} ${q.caseSize || ''} ${q.difficulty})`);
+          assert.deepEqual(orphan, [], `${id}: soal LIVE tanpa paket`);
         }
       },
     },

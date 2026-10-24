@@ -192,11 +192,15 @@ soal di dalamnya, dibulatkan ke 5 menit (D-99). Setiap bagian memilih soal
 dengan tingkat kesulitan tertentu.
 
 | Paket | Durasi | PG (m/s/su/ss) | Esai (m/s/su/ss) | Kasus | Bobot PG/Esai/Kasus | Mode |
-| Level 1 | 45 | 10 mudah | 3 mudah | 1 mini mudah | 20/40/40 | latihan |
-| Level 2 | 65 | 10 sedang | 3 sedang | 1 mini sedang | 20/40/40 | latihan |
-| Level 3 | 110 | 10 sulit | 3 sulit | 1 komprehensif sulit | 20/40/40 | latihan |
-| Level 4 | 140 | 10 sangat sulit | 3 sangat sulit | 1 komprehensif sangat sulit | 20/40/40 | latihan |
+| Level 1 | 45 | 10 mudah | 3 mudah | 1 mudah* | 20/40/40 | latihan |
+| Level 2 | 65 | 10 sedang | 3 sedang | 1 sedang* | 20/40/40 | latihan |
+| Level 3 | 110 | 10 sulit | 3 sulit | 1 sulit* | 20/40/40 | latihan |
+| Level 4 | 140 | 10 sangat sulit | 3 sangat sulit | 1 sangat sulit* | 20/40/40 | latihan |
 | Simulasi Ujian (Advanced Level) | 180 | 15 (2/3/6/4) | 4 (0/1/2/1) | 2 komprehensif (sulit 1, sangat sulit 1) | 17/50/33 | ketat |
+- \* Kasus Level 1-4 dipilih menurut tingkat kesulitan saja, tanpa syarat
+  ukuran, agar kasus lama (mis. mini sulit, komprehensif sedang) tetap tayang
+  di level yang sesuai (D-101). Simulasi tetap memakai kasus komprehensif.
+  Durasi memakai standar ukuran yang sesuai tingkat (6.2).
 - Perhitungan durasi: Level 1 = 10×1 + 3×6 + 15 = 43; Level 2 = 15 + 30 + 20
   = 65; Level 3 = 25 + 45 + 40 = 110; Level 4 = 35 + 60 + 45 = 140;
   Simulasi = 35,5 + 60 + 85 = 180,5.
@@ -228,6 +232,9 @@ dengan tingkat kesulitan tertentu.
 ### 6.2 Standar waktu dan kriteria tingkat kesulitan (D-99)
 - `estimatedMinutes` WAJIB sama dengan standar waktu untuk tipe, ukuran
   kasus, dan tingkat kesulitan soal. Penyusun tidak menebak waktu.
+- Standar ini berlaku untuk soal baru. Soal yang sudah LIVE sebelum standar
+  ini dipertahankan apa adanya (isi, perkiraan waktu, ukuran kasus) dan
+  ditempatkan di paket menurut tingkat kesulitannya (D-101).
 
 | Tipe | Mudah | Sedang | Sulit | Sangat sulit |
 | PG | 1 | 1,5 | 2,5 | 3,5 |

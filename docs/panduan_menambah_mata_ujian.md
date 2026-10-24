@@ -64,7 +64,7 @@ Setiap paket (`packages[]`) menjadi satu kartu di beranda:
   "sections": [
     { "type": "mcq", "count": 10, "difficulty": "mudah", "weight": 20 },
     { "type": "essay", "count": 3, "difficulty": "mudah", "weight": 40 },
-    { "type": "case", "count": 1, "caseSize": "mini", "difficulty": "mudah", "weight": 40 }
+    { "type": "case", "count": 1, "difficulty": "mudah", "weight": 40 }
   ],
   "difficultyTarget": { "levels": ["mudah"], "minScoreShare": 1 },
   "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.4 }
@@ -78,7 +78,7 @@ Setiap paket (`packages[]`) menjadi satu kartu di beranda:
 | `strictMode` | `true` = mode ketat tanpa jeda (Simulasi) |
 | `sections[].type` | `mcq`, `numeric`, `essay`, atau `case` |
 | `sections[].count` | Jumlah soal bagian itu |
-| `sections[].caseSize` | Wajib untuk `case`: `mini` atau `komprehensif` |
+| `sections[].caseSize` | Untuk `case`: `mini` atau `komprehensif`. Boleh dikosongkan bila `difficulty` diisi; kasus ukuran apa pun dengan tingkat itu dapat dipilih |
 | `sections[].difficulty` | Opsional: bagian hanya memakai soal tingkat ini (`mudah`, `sedang`, `sulit`, `sangat_sulit`). Satu tipe boleh dipecah menjadi beberapa bagian per tingkat, seperti Simulasi |
 | `sections[].weight` | Total skor bagian (skala 100). Jumlah semua bagian **tepat 100** |
 | `sections[].itemScores` | Opsional, skor per butir bila tidak dibagi rata (mis. `[16, 17]`); jumlahnya = `weight` |

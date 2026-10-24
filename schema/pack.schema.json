@@ -126,7 +126,10 @@
         }
       },
       "if": { "properties": { "type": { "const": "case" } }, "required": ["type"] },
-      "then": { "required": ["caseSize"] },
+      "then": {
+        "$comment": "Bagian kasus menyebut caseSize, difficulty, atau keduanya. Tanpa caseSize, kasus ukuran apa pun dengan tingkat itu dapat dipilih (D-101).",
+        "anyOf": [{ "required": ["caseSize"] }, { "required": ["difficulty"] }]
+      },
       "else": { "properties": { "caseSize": false } }
     }
   }

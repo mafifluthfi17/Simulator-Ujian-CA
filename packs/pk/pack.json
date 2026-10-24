@@ -2,7 +2,7 @@
   "schemaVersion": "4.1",
   "subjectId": "pk",
   "subjectName": "Pelaporan Korporat",
-  "packVersion": "1.7.2",
+  "packVersion": "1.7.3",
   "language": "id",
   "passingGrade": 70,
   "topics": [
@@ -107,7 +107,6 @@
         {
           "type": "case",
           "count": 1,
-          "caseSize": "mini",
           "difficulty": "mudah",
           "weight": 40
         }
@@ -144,7 +143,6 @@
         {
           "type": "case",
           "count": 1,
-          "caseSize": "mini",
           "difficulty": "sedang",
           "weight": 40
         }
@@ -181,7 +179,6 @@
         {
           "type": "case",
           "count": 1,
-          "caseSize": "komprehensif",
           "difficulty": "sulit",
           "weight": 40
         }
@@ -218,7 +215,6 @@
         {
           "type": "case",
           "count": 1,
-          "caseSize": "komprehensif",
           "difficulty": "sangat_sulit",
           "weight": 40
         }
@@ -15804,6 +15800,11 @@
       "version": "1.7.2",
       "date": "2026-10-24",
       "notes": "Paket T1/T2/SIM diganti Level 1-4 (mudah/sedang/sulit/sangat sulit; 10 PG, 3 esai, 1 kasus; 45/65/110/140 menit) dan Simulasi Ujian (Advanced Level) 180 menit (15 PG, 4 esai, 2 kasus komprehensif) sesuai standar waktu D-99. Soal tidak berubah."
+    },
+    {
+      "version": "1.7.3",
+      "date": "2026-10-24",
+      "notes": "Bagian kasus Level 1-4 memakai kasus ukuran apa pun sesuai tingkat kesulitannya (D-101), sehingga kasus lama (mini sulit, komprehensif sedang) ikut tayang di Level 2 dan 3. Soal tidak berubah."
     }
   ]
 }

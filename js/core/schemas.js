@@ -838,8 +838,18 @@ export const SCHEMAS = {
           ]
         },
         "then": {
-          "required": [
-            "caseSize"
+          "$comment": "Bagian kasus menyebut caseSize, difficulty, atau keduanya. Tanpa caseSize, kasus ukuran apa pun dengan tingkat itu dapat dipilih (D-101).",
+          "anyOf": [
+            {
+              "required": [
+                "caseSize"
+              ]
+            },
+            {
+              "required": [
+                "difficulty"
+              ]
+            }
           ]
         },
         "else": {

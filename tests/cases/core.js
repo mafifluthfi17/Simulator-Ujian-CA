@@ -119,6 +119,11 @@ export default {
         };
         assert.deepEqual(timeStandardIssues(kasus), ['kasus sulit harus berukuran komprehensif, bukan mini']);
         assert.deepEqual(timeStandardIssues({ ...kasus, lifecycle: { status: 'CALIBRATION' } }), [], 'soal kalibrasi tidak diperiksa');
+        assert.deepEqual(timeStandardIssues({ ...kasus, lifecycle: { status: 'LIVE' } }), [], 'soal tayang lama dipertahankan (D-101)');
+        assert.equal(timeStandardIssues({ ...kasus, lifecycle: { status: 'DRAFT' } }).length, 1);
+        // Bagian kasus tanpa ukuran: standar mengikuti tingkat (mudah/sedang mini, sulit+ komprehensif).
+        assert.equal(standardMinutes({ type: 'case', difficulty: 'sedang' }), 20);
+        assert.equal(standardMinutes({ type: 'case', difficulty: 'sangat_sulit' }), 45);
         assert.deepEqual(measureWords({ ...kasus, caseData: { columns: ['A', 'B'], rows: [['x', 1]] } }), { reading: 114, answer: 50 });
       },
     },
