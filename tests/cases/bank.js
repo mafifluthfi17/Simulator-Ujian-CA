@@ -4,7 +4,7 @@ import * as assert from './assert.js';
 import { loadJson } from './env.js';
 import {
   adoptBuiltInLive, applyBatchImport, approve, bankStats, builtInLiveDiff, createBank, editQuestion, exportPackText, extractJson, findQuestion,
-  loadBank, planBatchImport, publish, resolveConflict, retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
+  loadBank, planBatchImport, previewNeighbors, publish, resolveConflict, retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy,
 } from '../../js/core/bank.js';
 import {
   applyReviewResult, buildReviewPackage, checkReviewSelection, decide, reviewPromptText, revisionRequestText, validateReviewResult,
@@ -552,6 +552,17 @@ export default {
         const { packs, builtIn } = await loadAllPacks({ store, win });
         assert.equal(packs.find((p) => p.pack.subjectId === pack.subjectId).source, 'impor');
         assert.deepEqual(builtIn[pack.subjectId].topics, pack.topics);
+      },
+    },
+    {
+      name: 'pratinjau Sebelumnya/Berikutnya mengikuti urutan daftar yang tampil (D-96)',
+      run: () => {
+        const ids = ['A-1', 'A-2', 'A-3'];
+        assert.deepEqual(previewNeighbors(ids, 'A-1'), { index: 0, total: 3, prev: null, next: 'A-2' });
+        assert.deepEqual(previewNeighbors(ids, 'A-2'), { index: 1, total: 3, prev: 'A-1', next: 'A-3' });
+        assert.deepEqual(previewNeighbors(ids, 'A-3'), { index: 2, total: 3, prev: 'A-2', next: null });
+        assert.deepEqual(previewNeighbors(ids, 'X-9'), { index: -1, total: 3, prev: null, next: null }, 'di luar filter: tombol nonaktif');
+        assert.deepEqual(previewNeighbors([], 'A-1'), { index: -1, total: 0, prev: null, next: null });
       },
     },
   ],

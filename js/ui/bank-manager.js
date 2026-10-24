@@ -8,7 +8,7 @@ import { disclaimer, header } from './layout.js';
 import { getType } from '../types/registry.js';
 import {
   BankError, STATUS_LABELS, STATUS_ORDER, adoptBuiltInLive, applyBatchImport, approve, bankStats, builtInLiveDiff, createBank, exportPackText,
-  filterQuestions, findQuestion, loadBank, pendingPublication, planBatchImport, publish, resolveConflict,
+  filterQuestions, findQuestion, loadBank, previewNeighbors, pendingPublication, planBatchImport, publish, resolveConflict,
   retire, returnToDraft, saveBank, taxonomyDiff, undoReject, updateTaxonomy, withTaxonomy, KEY_SHARE_LIMIT,
 } from '../core/bank.js';
 import {
@@ -292,7 +292,7 @@ export function renderBank(app) {
         type: 'checkbox', checked: state.selected.has(q.id), 'aria-label': `Pilih ${q.id}`,
         onchange: (e) => { if (e.target.checked) state.selected.add(q.id); else state.selected.delete(q.id); render(); },
       })),
-      h('td', {}, h('button', { type: 'button', class: 'btn-link', onclick: () => { state.preview = q.id; render(); el.querySelector('.preview-card')?.scrollIntoView({ block: 'start' }); } }, q.id)),
+      h('td', {}, h('button', { type: 'button', class: 'btn-link', onclick: () => showPreview(q.id) }, q.id)),
       h('td', { text: TYPE_LABELS[q.type] + (q.caseSize ? ` ${q.caseSize}` : '') }),
       h('td', { text: q.topicIds.join(', ') }),
       h('td', { text: DIFFICULTY_LABELS[q.difficulty] }),
@@ -322,10 +322,25 @@ export function renderBank(app) {
         h('thead', {}, h('tr', {}, h('th', {}, allBox), ['ID', 'Tipe', 'Topik', 'Kesulitan', 'Status'].map((t) => h('th', { text: t })))),
         h('tbody', {}, rows))),
       list.length ? null : h('p', { class: 'hint', text: 'Tidak ada soal yang cocok dengan filter.' }),
-      state.preview && findQuestion(bank, state.preview) ? previewCard(findQuestion(bank, state.preview)) : null);
+      state.preview && findQuestion(bank, state.preview) ? previewCard(findQuestion(bank, state.preview), list) : null);
   }
 
-  function previewCard(q) {
+  function showPreview(id) {
+    state.preview = id;
+    render();
+    el.querySelector('.preview-card')?.scrollIntoView({ block: 'start' });
+  }
+
+  // Sebelumnya/Berikutnya mengikuti urutan dan filter daftar soal (D-96).
+  function previewNav(q, list) {
+    const nav = previewNeighbors(list.map((x) => x.id), q.id);
+    return h('div', { class: 'row preview-nav' },
+      h('button', { type: 'button', class: 'btn', disabled: !nav.prev, onclick: () => showPreview(nav.prev) }, '‹ Sebelumnya'),
+      h('span', { class: 'hint', style: 'flex:1;text-align:center', text: nav.index >= 0 ? `Soal ${nav.index + 1} dari ${nav.total}` : 'Soal ini tidak termasuk filter yang dipilih' }),
+      h('button', { type: 'button', class: 'btn', disabled: !nav.next, onclick: () => showPreview(nav.next) }, 'Berikutnya ›'));
+  }
+
+  function previewCard(q, list) {
     const item = { questionId: q.id, type: q.type, optionOrder: ['A', 'B', 'C', 'D'] };
     const view = getType(q.type).render(q, { item, value: null, readOnly: true, onChange: () => {} });
     const s = q.lifecycle.status;
@@ -338,6 +353,7 @@ export function renderBank(app) {
     if (s === 'REJECTED') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Batalkan penolakan', undoReject) }, 'Batalkan penolakan'));
     if (s === 'LIVE') actions.push(h('button', { type: 'button', class: 'btn', onclick: () => withReason(q.id, 'Pensiunkan soal', retire) }, 'Pensiunkan'));
     return h('div', { class: 'card preview-card' },
+      previewNav(q, list),
       h('div', { class: 'row' }, h('h2', { style: 'margin:0;flex:1', text: `Pratinjau ${q.id}` }), statusBadge(s),
         h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Tutup pratinjau', onclick: () => { state.preview = null; render(); } }, '×')),
       h('p', { class: 'hint', text: `${TYPE_LABELS[q.type]} · ${q.topicIds.join(', ')} · ${q.competencyIds.join(', ')} · ${DIFFICULTY_LABELS[q.difficulty]} · ${q.cognitiveLevel} · ${formatNumber(q.estimatedMinutes)} menit` }),

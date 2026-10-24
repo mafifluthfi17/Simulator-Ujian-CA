@@ -208,3 +208,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-95 | Nama paket `SIM` pada pack MSK (1.4.2) dan PK (1.7.1) menjadi **"Simulasi Ujian (Advanced Level)"**; ejaan mengikuti "Tingkat Lanjutan (Advanced Level)" pada pathway CA Indonesia IAI. Pack demo dan teks panduan ("Simulasi Ujian") tidak diubah. Bank soal di perangkat menyimpan `packages` sendiri, sehingga ekspor bank berikutnya masih membawa nama lama: saat menyinkronkan ekspor ke repositori (D-86, D-89), `packages` dari repositori yang dipakai. | Permintaan pemilik 2026-10-23: MSK dan PK adalah mata ujian Tingkat Lanjutan. | DISETUJUI (2026-10-23) |
+
+## Bank soal — navigasi pratinjau
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-96 | Pratinjau soal di Pengelola Bank Soal punya baris navigasi di bagian atas: **‹ Sebelumnya**, "Soal n dari N", **Berikutnya ›**. Urutan mengikuti daftar yang sedang tampil (sesudah filter status/topik/tipe/kesulitan); tombol nonaktif di ujung daftar; bila soal yang dipratinjau tidak termasuk filter, kedua tombol nonaktif dengan keterangan. Setiap pindah soal, layar digulir ke awal pratinjau. Logika urutan di `previewNeighbors` (`js/core/bank.js`). | Permintaan pemilik 2026-10-24: memeriksa banyak soal tidak harus selalu kembali ke tabel. | TEKNIS |

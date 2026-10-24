@@ -113,6 +113,18 @@ export function findQuestion(bank, id) {
   return bank.pack.questions.find((q) => q.id === id) || null;
 }
 
+// Navigasi pratinjau Sebelumnya/Berikutnya mengikuti urutan daftar yang tampil
+// (sesudah filter). index -1 bila soal tidak ada di daftar (D-96).
+export function previewNeighbors(ids, id) {
+  const index = ids.indexOf(id);
+  return {
+    index,
+    total: ids.length,
+    prev: index > 0 ? ids[index - 1] : null,
+    next: index >= 0 && index < ids.length - 1 ? ids[index + 1] : null,
+  };
+}
+
 // ---------- Pembaruan taksonomi dari pack bawaan (D-87) ----------
 
 const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
