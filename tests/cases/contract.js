@@ -12,7 +12,7 @@ import { makeSyntheticPack } from '../fixtures/make-pack.js';
 import { packScript, packIndexJson, promptsModule } from '../../tools/generate.mjs';
 import { PROMPTS } from '../../js/core/prompts.js';
 
-const PROMPT_FILES = ['prompt_penilai_ai.md', 'prompt_penyusun_soal.md', 'prompt_reviewer_soal.md'];
+const PROMPT_FILES = ['prompt_kalibrasi_soal.md', 'prompt_penilai_ai.md', 'prompt_penyusun_soal.md', 'prompt_reviewer_soal.md'];
 
 const EXAMPLES = [
   'batch.example.json', 'grading-export.example.json', 'grading-result.example.json', 'pack.example.json',

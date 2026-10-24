@@ -42,6 +42,32 @@ export function packageQuestionCount(pkg) {
   return pkg.sections.reduce((n, s) => n + s.count, 0);
 }
 
+// Perkiraan waktu paket (D-98): per bagian, jumlah soal × rata-rata estimatedMinutes
+// soal yang memenuhi bagian itu (tipe dan ukuran kasus) dari `questions`.
+// Hasil: { sections: [{ label, count, available, minutes, suggested }], minutes,
+// durationMinutes, over, incomplete }. minutes bagian null bila tidak ada soal.
+export function packageTimeEstimate(questions, pkg) {
+  const sections = pkg.sections.map((s) => {
+    const pool = questions.filter((q) => q.type === s.type && (!s.caseSize || q.caseSize === s.caseSize));
+    const avg = pool.length ? pool.reduce((n, q) => n + q.estimatedMinutes, 0) / pool.length : null;
+    return {
+      label: sectionLabel(s),
+      count: s.count,
+      available: pool.length,
+      minutes: avg === null ? null : Math.round(s.count * avg),
+      suggested: pkg.suggestedMinutes ? pkg.suggestedMinutes[s.type] ?? null : null,
+    };
+  });
+  const minutes = sections.reduce((n, s) => n + (s.minutes || 0), 0);
+  return {
+    sections,
+    minutes,
+    durationMinutes: pkg.durationMinutes,
+    over: minutes > pkg.durationMinutes,
+    incomplete: sections.some((s) => s.minutes === null),
+  };
+}
+
 // ---------- Paket dari blueprint pack (T1, T2, SIM, ...) ----------
 
 export function buildFromPackage(pack, pkg, rng, { attempts = DEFAULT_ATTEMPTS } = {}) {

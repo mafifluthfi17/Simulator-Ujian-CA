@@ -4,7 +4,7 @@ import { loadJson } from './env.js';
 import { canonicalize, contentHash, sha256Fallback, sha256Hex } from '../../js/core/hash.js';
 import { formatScore, parseDecimalInput } from '../../js/core/format.js';
 import {
-  allocatePoints, buildCustom, buildFromPackage, orderItems, sumCents, validateCustom,
+  allocatePoints, buildCustom, buildFromPackage, orderItems, packageTimeEstimate, sumCents, validateCustom,
 } from '../../js/core/blueprint.js';
 import { createRng } from '../../js/core/random.js';
 import {
@@ -71,6 +71,26 @@ export default {
       run: () => {
         const cases = [['47,8', 47.8], ['47.8', 47.8], ['1.200', 1200], ['1.200,5', 1200.5], ['-3,25', -3.25], ['12', 12], ['abc', null], ['1,2,3', null], ['', null]];
         for (const [input, expected] of cases) assert.equal(parseDecimalInput(input), expected, `"${input}"`);
+      },
+    },
+    {
+      name: 'perkiraan waktu paket: rata-rata per bagian (ukuran kasus dihormati), melebihi durasi ditandai',
+      run: () => {
+        const q = (type, estimatedMinutes, caseSize) => ({ type, estimatedMinutes, ...(caseSize ? { caseSize } : {}) });
+        const questions = [q('mcq', 1), q('mcq', 2), q('essay', 20), q('case', 30, 'mini'), q('case', 90, 'komprehensif')];
+        const pkg = {
+          durationMinutes: 60,
+          suggestedMinutes: { mcq: 15, essay: 20, case: 25 },
+          sections: [{ type: 'mcq', count: 10 }, { type: 'essay', count: 1 }, { type: 'case', count: 1, caseSize: 'mini' }],
+        };
+        const t = packageTimeEstimate(questions, pkg);
+        assert.deepEqual(t.sections.map((s) => [s.label, s.minutes, s.suggested, s.available]), [['PG', 15, 15, 2], ['esai', 20, 20, 1], ['kasus mini', 30, 25, 1]]);
+        assert.equal(t.minutes, 65);
+        assert.ok(t.over && !t.incomplete);
+        assert.ok(!packageTimeEstimate(questions, { ...pkg, durationMinutes: 65 }).over, 'sama dengan durasi tidak dianggap melebihi');
+        const empty = packageTimeEstimate([q('mcq', 1)], pkg);
+        assert.ok(empty.incomplete && !empty.over);
+        assert.equal(empty.sections[1].minutes, null);
       },
     },
     {

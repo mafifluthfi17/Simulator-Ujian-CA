@@ -16,6 +16,7 @@ import {
   reviewPromptText, revisionRequestText, validateReviewResult,
 } from '../core/review-io.js';
 import { DIFFICULTY_LABELS } from '../core/report.js';
+import { packageTimeEstimate } from '../core/blueprint.js';
 import { formatErrors, loadActiveSession } from '../core/session-store.js';
 import { saveImportedPack } from '../core/pack-loader.js';
 import { sha256Hex } from '../core/hash.js';
@@ -737,12 +738,25 @@ export function renderBank(app) {
     const table = (head, rows) => h('div', { class: 'table-wrap' }, h('table', { class: 'data-table' },
       h('thead', {}, h('tr', {}, head.map((t) => h('th', { text: t })))), h('tbody', {}, rows)));
     const num = (n) => h('td', { class: 'num', text: String(n) });
+    // Perkiraan waktu paket dibanding durasinya (D-98).
+    const scoped = bank.pack.questions.filter((q) => scopes[state.statsScope].includes(q.lifecycle.status));
+    const times = bank.pack.packages.map((p) => ({ p, t: packageTimeEstimate(scoped, p) }));
+    const over = times.filter(({ t }) => t.over);
+    const sectionText = (x) => `${x.count} ${x.label}: ${x.minutes === null ? 'belum ada soal' : `±${x.minutes} mnt`}${x.suggested !== null ? ` (saran ${x.suggested})` : ''}`;
     return h('div', {},
       h('div', { class: 'card' },
         h('h3', { style: 'margin-top:0', text: 'Jumlah soal per status' }),
         table(['Status', 'Jumlah'], STATUS_ORDER.map((st) => h('tr', {}, h('td', { text: STATUS_LABELS[st] }), num(s.byStatus[st]))))),
       h('div', { class: 'card' },
         h('div', { class: 'field' }, h('label', { for: 'stat-scope', text: 'Hitung untuk' }), scopeSel),
+        h('h3', { text: 'Perkiraan waktu paket' }),
+        over.length
+          ? h('p', { class: 'notice', text: `Perkiraan waktu mengerjakan melebihi durasi pada paket ${over.map(({ p, t }) => `${p.name} (±${t.minutes} dari ${t.durationMinutes} menit)`).join(', ')}. Peserta kemungkinan tidak sempat menyelesaikan semua soal. Periksa perkiraan waktu soal atau durasi paket.` })
+          : h('p', { class: 'hint', text: 'Perkiraan waktu semua paket masih dalam durasinya.' }),
+        table(['Paket', 'Durasi', 'Perkiraan', 'Rincian'], times.map(({ p, t }) => h('tr', { class: t.over ? 'warn-row' : null },
+          h('td', { text: p.name }), num(`${t.durationMinutes} mnt`), num(`±${t.minutes} mnt${t.incomplete ? '*' : ''}`),
+          h('td', { text: t.sections.map(sectionText).join('; ') })))),
+        h('p', { class: 'hint', text: 'Perkiraan = jumlah soal × rata-rata perkiraan waktu soal yang dapat dipilih untuk bagian itu. Tanda * berarti ada bagian yang belum punya soal.' }),
         h('h3', { text: `Cakupan topik (${s.total} soal)` }),
         table(['Topik', 'PG', 'Numerik', 'Esai', 'Kasus', 'Total'], s.topics.map((t) => h('tr', {},
           h('td', { text: `${t.id} ${t.name}` }), num(t.mcq), num(t.numeric), num(t.essay), num(t.case), num(t.total)))),
