@@ -214,3 +214,9 @@ Status: **DISETUJUI** (oleh pemilik), **USULAN** (menunggu persetujuan),
 | ID | Keputusan | Alasan | Status |
 |---|---|---|---|
 | D-96 | Pratinjau soal di Pengelola Bank Soal punya baris navigasi di bagian atas: **‹ Sebelumnya**, "Soal n dari N", **Berikutnya ›**. Urutan mengikuti daftar yang sedang tampil (sesudah filter status/topik/tipe/kesulitan); tombol nonaktif di ujung daftar; bila soal yang dipratinjau tidak termasuk filter, kedua tombol nonaktif dengan keterangan. Setiap pindah soal, layar digulir ke awal pratinjau. Logika urutan di `previewNeighbors` (`js/core/bank.js`). | Permintaan pemilik 2026-10-24: memeriksa banyak soal tidak harus selalu kembali ke tabel. | TEKNIS |
+
+## Sinkronisasi ekspor 2026-10-24
+
+| ID | Keputusan | Alasan | Status |
+|---|---|---|---|
+| D-97 | Ekspor Pack 2026-10-24 disinkronkan seperti D-86/D-89, **tanpa soal berstatus CALIBRATION** (D-93). **MSK** 1.4.2 → 1.5.0: tambah MSK-KAS-015 dan MSK-KAS-016 (LIVE, komprehensif) dari `2 soal tayang MSK-KAS-015, MSK-KAS-016 pack.json`; 50 soal lama identik; changelog repo adalah awalan changelog ekspor. **PK** tetap 1.7.1: ekspor `1.7.1 (2026-10-23) …` hanya menambah 12 soal kalibrasi, 111 soal LIVE identik. Ekspor MSK memuat 64 soal, sedangkan bank di alamat lama `mafifluthfi17.github.io` sempat menampilkan 102 soal; selisihnya belum diketahui. | Pindah alamat (D-94) membuat data browser alamat lama tidak terbawa; soal LIVE baru harus masuk repositori agar tayang di alamat baru. Pack publik tidak boleh memuat soal bercacat sengaja. | TEKNIS |

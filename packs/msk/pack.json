@@ -2,7 +2,7 @@
   "schemaVersion": "4.1",
   "subjectId": "msk",
   "subjectName": "Manajemen Stratejik dan Kepemimpinan",
-  "packVersion": "1.4.2",
+  "packVersion": "1.5.0",
   "language": "id",
   "passingGrade": 70,
   "topics": [
@@ -7312,6 +7312,897 @@
         "revision": 1,
         "notes": "Angka dihitung ulang: pendapatan 720 + 450 + 270 + 360 = 1.800, porsi 40% + 25% + 15% + 20% = 100%; EBITDA 108 + 54 + 27 + 18 = 207, margin 11,5%; pembeli UE dan AS 65% pendapatan dan 162/207 = 78% EBITDA; EBITDA setelah biaya satu kali A 110 - 25 = 85, B 150 - 60 = 90, C 95 - 0 = 95; kapal 12 + 28 + 310 = 350, pasokan 25% + 45% + 30% = 100%, porsi tertelusur 30% = nelayan kecil. Uji tuntas hak asasi dan ketentuan pasar ekspor disebut secara umum tanpa merujuk peraturan tertentu."
       }
+    },
+    {
+      "id": "MSK-KAS-015",
+      "type": "case",
+      "caseSize": "komprehensif",
+      "topicIds": [
+        "T07",
+        "T09",
+        "T10",
+        "T11"
+      ],
+      "competencyIds": [
+        "K03",
+        "K04",
+        "K05"
+      ],
+      "difficulty": "sangat_sulit",
+      "cognitiveLevel": "C6",
+      "estimatedMinutes": 70,
+      "maxScore": 20,
+      "stem": "Bacalah kasus PT Graha Finansial Nusantara beserta data pendukungnya, lalu jawab seluruh sub-pertanyaan. Sebagian informasi belum lengkap; nyatakan asumsi yang Anda pakai dan tunjukkan perhitungan Anda.",
+      "caseNarrative": "Setelah peluncuran BPI Danantara pada 24 Februari 2025, PT Graha Finansial Nusantara (GFN, fiktif), sebuah holding BUMN jasa keuangan fiktif, diminta merestrukturisasi lima anak usahanya: asuransi jiwa, pembiayaan UMKM, penjaminan kredit, modal ventura, dan asuransi umum (Tabel 1). Biaya ekuitas grup diasumsikan 12%. Pada 2026 anak usaha asuransi jiwa gagal membayar sebagian manfaat produk asuransi berbalut investasi yang jatuh tempo. Pemeriksaan awal menemukan bahwa sebagian dana investasi ditempatkan pada saham dan reksa dana perusahaan yang terkait dengan pengurus lama, komisaris anak usaha itu merangkap sebagai direktur manajer investasi terafiliasi, komite investasi tidak memiliki anggota independen, dan holding tidak memiliki fungsi manajemen risiko terpusat maupun kebijakan transaksi pihak berelasi. Penilaian aktuaria dan penilaian wajar aset belum final, sehingga nilai aset hanya tersedia dalam rentang (Tabel 2). Data pemegang polis ada di Tabel 3. Diasumsikan ketentuan kontrak polis dan peraturan yang berlaku tidak membolehkan perusahaan mengubah jangka waktu atau imbal hasil polis secara sepihak; perubahan hanya dapat dilakukan melalui rencana restrukturisasi yang disetujui oleh mayoritas pemegang polis terdampak dan oleh otoritas pengawas, dan pemegang polis yang tidak menyetujui tetap berhak atas manfaat sesuai kontrak awal. Diasumsikan pula, berdasarkan estimasi aktuaria yang telah memperhitungkan nilai waktu uang, penurunan imbal hasil yang dijanjikan menurunkan nilai kewajiban polis di atas Rp100 juta sekitar Rp0,6 triliun bila seluruh pemegang polis kelompok tersebut menyetujui restrukturisasi; bila sebagian menolak, penurunan itu berkurang sebanding dengan porsi nilai kewajiban polis yang menolak, dan kewajiban kepada pemegang polis yang menolak tetap mengikuti kontrak awal. Sementara itu, perpanjangan jangka waktu saja hanya menggeser jadwal pembayaran dan tidak mengubah jumlah kewajiban. Kas holding yang dapat dipakai paling banyak Rp1,5 triliun, anak usaha modal ventura diperkirakan dapat dijual sekitar Rp0,8 triliun, dan anak usaha asuransi umum tumpang tindih dengan anak usaha asuransi umum milik holding BUMN fiktif lain sehingga penggabungan sedang dijajaki. Kelima anak usaha memiliki budaya berbeda (Tabel 4): unit pembiayaan UMKM berorientasi target penjualan dan cepat, unit penjaminan birokratis dan berhati-hati, dan unit asuransi jiwa selama ini mengejar volume premi. Direktur utama holding yang baru ingin menyatukan budaya grup di sekitar integritas dan pengelolaan risiko, tetapi para direktur anak usaha khawatir kehilangan otonomi.",
+      "caseData": [
+        {
+          "title": "Tabel 1. Ekuitas dan laba bersih anak usaha (diasumsikan, Rp triliun)",
+          "columns": [
+            "Anak usaha",
+            "Ekuitas tercatat 2026",
+            "Laba bersih 2024",
+            "Laba bersih 2025",
+            "Laba bersih 2026"
+          ],
+          "rows": [
+            [
+              "Asuransi jiwa",
+              2,
+              0.1,
+              -0.4,
+              -1.2
+            ],
+            [
+              "Pembiayaan UMKM",
+              6,
+              0.7,
+              0.78,
+              0.84
+            ],
+            [
+              "Penjaminan kredit",
+              5,
+              0.25,
+              0.28,
+              0.3
+            ],
+            [
+              "Modal ventura",
+              1,
+              -0.05,
+              -0.06,
+              -0.08
+            ],
+            [
+              "Asuransi umum",
+              3,
+              0.27,
+              0.29,
+              0.3
+            ],
+            [
+              "Total",
+              17,
+              1.27,
+              0.89,
+              0.16
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 2. Aset investasi dan kewajiban polis asuransi jiwa (diasumsikan, Rp triliun)",
+          "columns": [
+            "Pos",
+            "Nilai buku",
+            "Nilai wajar skenario rendah",
+            "Nilai wajar skenario tinggi"
+          ],
+          "rows": [
+            [
+              "Obligasi negara",
+              6,
+              6,
+              6
+            ],
+            [
+              "Saham dan reksa dana terkait pengurus lama",
+              5,
+              1.5,
+              2.5
+            ],
+            [
+              "Properti investasi",
+              3,
+              2,
+              2.4
+            ],
+            [
+              "Total aset investasi",
+              14,
+              9.5,
+              10.9
+            ],
+            [
+              "Kewajiban polis",
+              12,
+              12,
+              12
+            ],
+            [
+              "Selisih aset dikurangi kewajiban",
+              2,
+              -2.5,
+              -1.1
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 3. Profil pemegang polis asuransi jiwa (diasumsikan)",
+          "columns": [
+            "Kelompok nilai polis",
+            "Jumlah pemegang polis",
+            "Porsi pemegang polis (%)",
+            "Nilai kewajiban (Rp triliun)",
+            "Porsi kewajiban (%)"
+          ],
+          "rows": [
+            [
+              "Sampai Rp100 juta",
+              340000,
+              85,
+              3.6,
+              30
+            ],
+            [
+              "Di atas Rp100 juta",
+              60000,
+              15,
+              8.4,
+              70
+            ],
+            [
+              "Total",
+              400000,
+              100,
+              12,
+              100
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 4. Survei budaya (diasumsikan, persentase karyawan yang setuju)",
+          "columns": [
+            "Pernyataan",
+            "Asuransi jiwa",
+            "Pembiayaan UMKM",
+            "Penjaminan kredit",
+            "Modal ventura",
+            "Asuransi umum"
+          ],
+          "rows": [
+            [
+              "Risiko dibahas terbuka sebelum keputusan diambil",
+              18,
+              55,
+              40,
+              35,
+              50
+            ],
+            [
+              "Target penjualan lebih diutamakan daripada kepatuhan",
+              81,
+              62,
+              20,
+              45,
+              38
+            ],
+            [
+              "Saya merasa aman melaporkan pelanggaran",
+              22,
+              48,
+              51,
+              40,
+              46
+            ]
+          ]
+        }
+      ],
+      "subQuestions": [
+        {
+          "id": "a",
+          "prompt": "Hitung ROE 2026 dan laba ekonomi ((ROE - biaya ekuitas) x ekuitas) setiap anak usaha serta totalnya, analisis tren laba 2024-2026, lalu tetapkan keputusan portofolio untuk setiap anak usaha (dikembangkan, dipertahankan dengan perbaikan, digabung, direstrukturisasi, atau dilepas). Jelaskan keterbatasan angka asuransi jiwa.",
+          "maxScore": 5,
+          "modelAnswer": "ROE dan laba ekonomi 2026 (Rp triliun): asuransi jiwa -1,2 / 2,0 = -60%, laba ekonomi (-60% - 12%) x 2,0 = -1,44; pembiayaan UMKM 14%, +0,12; penjaminan 6%, -0,30; modal ventura -8%, -0,20; asuransi umum 10%, -0,06. Total laba ekonomi berdasarkan ekuitas tercatat -1,88; angka ini mengikuti formula yang diminta dan bukan ukuran nilai ekonomi grup yang sepenuhnya sebanding, karena ekuitas tercatat asuransi jiwa tidak mencerminkan nilai wajarnya. Laba bersih grup turun dari 1,27 (2024) menjadi 0,16 (2026), terutama karena asuransi jiwa.\nKeterbatasan (analisis terpisah berbasis nilai wajar): ekuitas asuransi jiwa 2,0 masih berdasarkan nilai buku; bila aset dinilai wajar, ekuitasnya negatif (-1,1 sampai -2,5), sehingga ROE dan laba ekonomi berbasis ekuitas tidak bermakna untuk unit ini dan masalah sesungguhnya adalah kecukupan modal, yaitu defisit 1,1 sampai 2,5 yang harus ditutup. Angka ini tidak dijumlahkan dengan laba ekonomi berbasis ekuitas tercatat karena keduanya ukuran yang berbeda.\nKeputusan: pembiayaan UMKM dikembangkan (satu-satunya yang menciptakan nilai dan tumbuh stabil); penjaminan dipertahankan dengan perbaikan efisiensi karena memiliki mandat publik, dengan biaya mandat dihitung terpisah; asuransi umum digabung dengan anak usaha sejenis milik holding lain untuk skala dan menghapus duplikasi; modal ventura dilepas (rugi berturut-turut, kecil, tidak bersinergi) untuk memperoleh sekitar Rp0,8 triliun; asuransi jiwa direstrukturisasi terlebih dahulu (bukan langsung dijual) karena menyangkut perlindungan pemegang polis dan nilai jualnya saat ini sangat rendah.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Perhitungan ROE dan laba ekonomi",
+              "maxScore": 2,
+              "full": "Menghitung ROE dan laba ekonomi kelima anak usaha berdasarkan ekuitas tercatat (-1,44; +0,12; -0,30; -0,20; -0,06; total -1,88), menyebut bahwa total itu berbasis ekuitas tercatat, dan menjelaskan tren laba grup.",
+              "partial": "Sebagian besar perhitungan benar dengan satu atau dua kesalahan, atau tren tidak dianalisis.",
+              "zero": "Tidak menghitung."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Keterbatasan angka asuransi jiwa",
+              "maxScore": 1,
+              "full": "Menjelaskan secara terpisah bahwa ekuitas tercatat tidak mencerminkan nilai wajar sehingga ekuitas asuransi jiwa sebenarnya negatif (-1,1 sampai -2,5) dan isu utamanya kecukupan modal, tanpa mencampurkannya dengan total laba ekonomi berbasis ekuitas tercatat.",
+              "partial": "Menyebut keterbatasan tanpa kaitan dengan Tabel 2.",
+              "zero": "Tidak membahas."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Keputusan portofolio",
+              "maxScore": 2,
+              "full": "Menetapkan keputusan yang konsisten dengan perhitungan, sinergi, dan mandat untuk kelima anak usaha, termasuk alasan merestrukturisasi asuransi jiwa sebelum keputusan lain.",
+              "partial": "Keputusan untuk tiga atau empat anak usaha konsisten, atau tanpa alasan.",
+              "zero": "Tidak menetapkan keputusan."
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "prompt": "Hitung rentang kekurangan dana asuransi jiwa berdasarkan Tabel 2, lalu bedakan masalah solvabilitas (nilai aset lebih kecil daripada kewajiban) dari masalah likuiditas (kas untuk membayar manfaat yang jatuh tempo). Evaluasi tiga opsi penanganan: (X) holding menyuntikkan modal sebesar kekurangan ditambah penyangga Rp1 triliun; (Y) rencana restrukturisasi yang diajukan untuk persetujuan pemegang polis dan otoritas pengawas: pemegang polis sampai Rp100 juta dibayar penuh sesuai jadwal, polis di atas Rp100 juta dibayar penuh tetapi jangka waktunya diperpanjang lima tahun dengan imbal hasil lebih rendah, holding menyuntikkan Rp1 triliun, dan dana hasil penjualan modal ventura ditambahkan; (Z) mengalihkan seluruh portofolio polis kepada perusahaan asuransi lain dengan pemotongan nilai 20% bagi semua pemegang polis. Nyatakan asumsi Anda, nilai dari sisi solvabilitas, likuiditas, kelayakan hukum dan persetujuan, serta keadilan, lalu pilih opsi.",
+          "maxScore": 5,
+          "modelAnswer": "Kekurangan dana: skenario rendah 12,0 - 9,5 = 2,5; skenario tinggi 12,0 - 10,9 = 1,1; titik tengah sekitar 1,8 (Rp triliun). Asumsi: penilaian final berada di dalam rentang, dan pemulihan dari pihak terkait pengurus lama melalui jalur hukum belum dapat dihitung sehingga tidak dimasukkan.\nSolvabilitas dan likuiditas: kekurangan 1,1 sampai 2,5 adalah masalah solvabilitas, yaitu aset tidak cukup menutup kewajiban, dan hanya dapat ditutup dengan tambahan modal atau penurunan kewajiban yang sah. Gagal bayar manfaat jatuh tempo adalah masalah likuiditas. Perpanjangan jangka waktu hanya memperbaiki likuiditas karena menggeser jadwal pembayaran; perpanjangan itu sendiri tidak menutup kekurangan aset.\nX: kebutuhan 2,1 sampai 3,5, melampaui kas holding 1,5 (masih kurang 0,6 sampai 2,0) dan mengalihkan modal dari anak usaha yang sehat; menyelesaikan solvabilitas dan likuiditas serta adil bagi pemegang polis, tetapi tidak dapat didanai sepenuhnya dan menimbulkan moral hazard karena kerugian akibat tata kelola buruk sepenuhnya ditanggung grup.\nY: dari sisi solvabilitas, dana baru 1,0 + 0,8 = 1,8 ditambah penurunan kewajiban 0,6 dari imbal hasil yang lebih rendah, sehingga kapasitas penutupan sekitar 2,4; ini cukup untuk skenario tinggi dan titik tengah, tetapi pada skenario rendah (2,5) masih kurang sekitar 0,1 sehingga perlu cadangan, misalnya dividen dari pembiayaan UMKM. Dari sisi likuiditas, perpanjangan jangka waktu polis besar mengurangi kebutuhan kas jangka pendek. Kelayakan hukum: perubahan polis tidak dapat dilakukan sepihak, sehingga Y hanya berlaku bila disetujui mayoritas pemegang polis terdampak dan otoritas pengawas; pemegang polis yang menolak tetap dibayar sesuai kontrak awal. Angka 0,6 adalah estimasi aktuaria dengan persetujuan penuh; misalnya bila polis yang menolak mewakili 20% nilai kewajiban kelompok tersebut, penurunan kewajiban hanya 0,48 sehingga kapasitas menjadi 2,28 dan celah pada skenario rendah menjadi sekitar 0,22. Karena itu dana kontingensi perlu disesuaikan dengan tingkat persetujuan. Dari sisi keadilan, 85% pemegang polis kecil (30% kewajiban) dilindungi penuh, sedangkan pemegang polis besar menanggung penundaan dan imbal hasil lebih rendah tetapi tidak kehilangan pokok.\nZ: pemotongan 20% x 12,0 = 2,4 menurunkan kewajiban menjadi 9,6. Pada skenario rendah (aset 9,5) masih terdapat defisit 0,1, sedangkan pada skenario tinggi (aset 10,9) terdapat surplus 1,3, sehingga kecukupan solvabilitas Z bergantung pada hasil penilaian aset final dan Z tidak menjamin defisit tertutup pada seluruh rentang. Selain itu, pemotongan dibebankan juga kepada pemegang polis kecil yang paling rentan, merusak kepercayaan publik terhadap grup BUMN, dan pada skenario tinggi memotong lebih banyak daripada yang diperlukan; Z juga memerlukan persetujuan pemegang polis dan otoritas pengawas yang sama.\nPilihan: Y, dengan syarat persetujuan pemegang polis dan otoritas pengawas diperoleh, disertai dana kontingensi untuk skenario terburuk dan bagi pemegang polis yang menolak, serta upaya pemulihan aset dari pihak terkait.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Rentang kekurangan dan asumsi",
+              "maxScore": 1,
+              "full": "Menghitung kekurangan 1,1 sampai 2,5 (titik tengah sekitar 1,8) dan menyatakan asumsi yang dipakai.",
+              "partial": "Menghitung satu skenario saja atau tanpa asumsi.",
+              "zero": "Tidak menghitung."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Pembedaan solvabilitas dan likuiditas",
+              "maxScore": 1,
+              "full": "Membedakan kekurangan aset terhadap kewajiban (solvabilitas) dari kebutuhan kas jatuh tempo (likuiditas) dan menjelaskan bahwa perpanjangan jangka waktu saja tidak menutup kekurangan aset tanpa penurunan kewajiban yang sah atau tambahan modal.",
+              "partial": "Menyebut kedua istilah tanpa menerapkannya pada opsi.",
+              "zero": "Tidak membedakan."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Evaluasi pendanaan, kelayakan hukum, dan keadilan ketiga opsi",
+              "maxScore": 2,
+              "full": "Mengevaluasi ketiga opsi terhadap kas holding dan dana yang tersedia, prasyarat persetujuan pemegang polis dan otoritas pengawas, serta dampak keadilan bagi pemegang polis kecil dan besar, termasuk moral hazard.",
+              "partial": "Mengevaluasi tanpa membahas kelayakan hukum dan persetujuan, atau hanya dua opsi.",
+              "zero": "Tidak mengevaluasi."
+            },
+            {
+              "criterionId": "C4",
+              "description": "Pemilihan opsi dan penanganan ketidakpastian",
+              "maxScore": 1,
+              "full": "Memilih opsi yang konsisten dengan evaluasi, menyatakan syarat persetujuan sebagai prasyarat, dan menyiapkan dana kontingensi untuk skenario terburuk atau pemegang polis yang menolak.",
+              "partial": "Memilih tanpa membahas prasyarat atau ketidakpastian.",
+              "zero": "Tidak memilih."
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "prompt": "Diagnosis kelemahan tata kelola grup yang memungkinkan masalah asuransi jiwa terjadi, lalu rancang struktur dan sistem tata kelola holding yang menyeimbangkan pengawasan terpusat dengan otonomi anak usaha.",
+          "maxScore": 5,
+          "modelAnswer": "Diagnosis: (1) benturan kepentingan karena komisaris anak usaha merangkap direktur manajer investasi terafiliasi; (2) komite investasi tanpa anggota independen sehingga penempatan pada pihak terkait tidak tertahan; (3) tidak ada kebijakan transaksi pihak berelasi; (4) holding tidak memiliki fungsi manajemen risiko terpusat sehingga konsentrasi risiko di anak usaha tidak terlihat; (5) budaya mengejar volume premi tanpa pengendalian.\nRancangan: holding berperan sebagai holding strategis yang menetapkan kerangka risiko, bukan mengelola operasi. Unsur: komite risiko dan komite audit di tingkat holding dengan anggota independen; fungsi manajemen risiko, kepatuhan, dan audit internal grup dengan garis pelaporan langsung ke holding (model tiga lini); kebijakan transaksi pihak berelasi dan larangan rangkap jabatan yang berbenturan; batas risiko grup (selera risiko, batas konsentrasi investasi, batas penempatan pada pihak terkait) yang wajib dipatuhi anak usaha; hal-hal yang memerlukan persetujuan holding (investasi besar, produk baru berisiko tinggi, penunjukan direksi dan komisaris); pelaporan risiko terpadu setiap bulan. Otonomi anak usaha tetap pada keputusan bisnis harian, penetapan harga, dan pemasaran di dalam batas risiko tersebut, sehingga unit yang sehat seperti pembiayaan UMKM tetap gesit.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Diagnosis kelemahan tata kelola",
+              "maxScore": 2,
+              "full": "Mengidentifikasi sedikitnya empat kelemahan tata kelola berdasarkan narasi dan menjelaskan bagaimana kelemahan itu memungkinkan kerugian.",
+              "partial": "Mengidentifikasi dua atau tiga kelemahan, atau tanpa penjelasan mekanismenya.",
+              "zero": "Tidak mendiagnosis."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Rancangan struktur dan sistem tata kelola",
+              "maxScore": 2,
+              "full": "Merancang unsur tata kelola yang konkret (komite independen, fungsi risiko terpusat, kebijakan pihak berelasi, batas risiko, hal yang memerlukan persetujuan holding, pelaporan).",
+              "partial": "Rancangan sebagian atau umum.",
+              "zero": "Tidak merancang."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Keseimbangan pengawasan dan otonomi",
+              "maxScore": 1,
+              "full": "Menjelaskan pembagian kewenangan yang menjaga kegesitan anak usaha sehat sambil memperkuat pengawasan risiko.",
+              "partial": "Disebut tanpa pembagian kewenangan yang jelas.",
+              "zero": "Tidak dibahas."
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "prompt": "Rancang strategi kepemimpinan dan integrasi budaya grup berdasarkan Tabel 4, termasuk cara menangani kekhawatiran direktur anak usaha, lalu susun urutan implementasi terpadu selama 24 bulan untuk seluruh keputusan di (a), (b), dan (c) beserta tiga indikator keberhasilan yang masing-masing memuat definisi operasional, baseline, target, dan tenggat waktu.",
+          "maxScore": 5,
+          "modelAnswer": "Kepemimpinan dan budaya: direktur utama holding menerapkan kepemimpinan transformasional dan etis dengan menetapkan nilai inti grup yang sedikit tetapi tegas (integritas, pengelolaan risiko, perlindungan nasabah), memberi teladan, dan menegakkan konsekuensi. Tidak semua budaya diseragamkan: kecepatan unit pembiayaan UMKM dipertahankan, kehati-hatian unit penjaminan dihargai, tetapi budaya mengejar volume di asuransi jiwa (81% mengutamakan target, hanya 18% membahas risiko terbuka) diubah. Direktur anak usaha dilibatkan dalam merumuskan nilai dan batas risiko, diberi kejelasan bahwa otonomi bisnis tetap berada di tangan mereka di dalam batas risiko, dan insentifnya dikaitkan dengan laba ekonomi serta kepatuhan, bukan hanya volume.\nUrutan implementasi:\n- Bulan 0-3: stabilisasi; komunikasi terbuka kepada pemegang polis, regulator, dan karyawan; menghentikan penempatan baru pada pihak terkait; mengganti pengurus yang berbenturan kepentingan; menyelesaikan penilaian aktuaria dan nilai wajar; memulai penjualan modal ventura.\n- Bulan 3-9: mengajukan rencana Opsi Y untuk persetujuan pemegang polis dan otoritas pengawas, lalu menjalankannya setelah disetujui; membentuk komite risiko dan audit independen, fungsi risiko grup, dan kebijakan pihak berelasi; memulai jalur hukum pemulihan aset.\n- Bulan 9-18: menyelesaikan penggabungan asuransi umum; menerapkan batas risiko dan pelaporan terpadu; meluncurkan nilai inti grup dan sistem insentif baru; program perubahan budaya di asuransi jiwa.\n- Bulan 18-24: mengalokasikan modal ke pembiayaan UMKM; mengevaluasi masa depan asuransi jiwa setelah stabil (dipertahankan atau dijual); melembagakan budaya melalui penilaian kinerja dan audit budaya.\nIndikator:\n(1) Keuangan: rasio pembayaran manfaat tepat jadwal = manfaat yang dibayar sesuai jadwal kontrak atau jadwal Opsi Y yang disetujui dibagi manfaat yang jatuh tempo pada periode itu; baseline di bawah 100% karena terjadi gagal bayar pada 2026 (diukur ulang pada bulan 0-3); target 100% setiap bulan mulai bulan 9 sampai bulan 24.\n(2) Budaya: persentase karyawan asuransi jiwa yang merasa aman melaporkan pelanggaran menurut survei budaya; baseline 22% (Tabel 4); target sedikitnya 45% pada survei bulan 24, mendekati unit lain.\n(3) Tata kelola: jumlah transaksi pihak berelasi yang melanggar kebijakan per triwulan menurut audit internal grup; baseline ditetapkan dari audit pada bulan 3-9 karena kebijakan belum ada; target nol setiap triwulan mulai bulan 9 sampai bulan 24.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Strategi kepemimpinan dan integrasi budaya",
+              "maxScore": 2,
+              "full": "Merancang pendekatan kepemimpinan dan integrasi budaya yang memakai data Tabel 4, membedakan unsur budaya yang dipertahankan dan diubah, serta menangani kekhawatiran direktur anak usaha.",
+              "partial": "Pendekatan umum tanpa data atau tanpa menangani kekhawatiran direktur.",
+              "zero": "Tidak merancang."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Urutan implementasi terpadu",
+              "maxScore": 2,
+              "full": "Menyusun urutan 24 bulan yang logis dan mengaitkan keputusan portofolio, penanganan asuransi jiwa, tata kelola, dan budaya, dengan stabilisasi dan perlindungan pemegang polis didahulukan.",
+              "partial": "Urutan ada tetapi tidak mencakup semua keputusan atau tidak logis.",
+              "zero": "Tidak menyusun urutan."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Indikator keberhasilan",
+              "maxScore": 1,
+              "full": "Menetapkan tiga indikator yang mencakup sisi keuangan, tata kelola, dan budaya, masing-masing dengan definisi operasional, baseline (atau cara menetapkannya), target, dan tenggat waktu.",
+              "partial": "Tiga indikator tetapi sebagian tanpa baseline, target, atau tenggat, atau kurang dari tiga, atau tidak mencakup budaya.",
+              "zero": "Tidak menetapkan indikator."
+            }
+          ]
+        }
+      ],
+      "acceptableAlternatives": "(a) C1: laba ekonomi asuransi jiwa yang dihitung dengan ekuitas wajar (mis. negatif) dinilai benar bila asumsinya dinyatakan; (a) C3: mempertahankan modal ventura sebagai unit inovasi yang dirampingkan dapat diterima bila peserta menjelaskan sinergi dengan pembiayaan UMKM dan batas kerugiannya; menjual asuransi jiwa segera dapat diterima sebagian bila perlindungan pemegang polis dijamin. (b) C1: menambahkan perkiraan pemulihan aset dari pihak terkait sebagai skenario terpisah dapat diterima; (b) C2: menyebut solvabilitas sebagai kecukupan modal atau ekuitas negatif dinilai setara; (b) C3: menghitung kapasitas Y tanpa penurunan kewajiban 0,6 (hanya 1,8) dinilai benar bila peserta menjelaskan bahwa kekurangan tetap ada pada skenario di atas titik tengah; memakai asumsi tingkat persetujuan lain dinilai benar bila penurunan kewajiban disesuaikan secara proporsional; (b) C3: menilai Z sebagai menutup solvabilitas pada seluruh rentang tidak dinilai penuh; menyatakan defisit 0,1 pada skenario rendah dan surplus 1,3 pada skenario tinggi dinilai benar; (b) C4: memilih X dapat memperoleh nilai sebagian bila peserta menunjukkan sumber dana tambahan dan cara mengatasi moral hazard; variasi Y dengan batas polis yang berbeda dinilai setara bila alasannya adil dan tetap mensyaratkan persetujuan. (c) C2: istilah lain seperti struktur holding strategis dengan pengendalian keuangan dinilai setara. (d) C1: gaya kepemimpinan situasional atau melayani dapat diterima bila dipadukan dengan ketegasan tata kelola; (d) C2: urutan berbeda dapat diterima bila stabilisasi dan perlindungan pemegang polis tetap didahulukan; (d) C3: indikator lain seperti rasio kecukupan modal asuransi jiwa atau laba ekonomi grup dapat diterima bila memuat definisi, baseline, target, dan tenggat; baseline yang tidak tersedia di data boleh ditetapkan sebagai hasil pengukuran awal pada bulan tertentu; indikator keempat tidak menambah nilai.",
+      "references": [
+        "Strategi korporat dan restrukturisasi portofolio",
+        "Tata kelola grup dan manajemen risiko terpusat",
+        "Budaya organisasi, kepemimpinan stratejik, dan manajemen perubahan"
+      ],
+      "lifecycle": {
+        "status": "LIVE",
+        "contentHash": "779f7b4a2986dd796d62facda4b3b8cc443ee8cddc814d7d03d2c0aeb98cb7f6",
+        "review": {
+          "batchId": "MSK-RV006",
+          "reviewerModel": "GPT-6",
+          "reviewedAt": "2026-10-24T07:38:00+07:00",
+          "result": {
+            "reviewKey": "R02",
+            "contentHash": "779f7b4a2986dd796d62facda4b3b8cc443ee8cddc814d7d03d2c0aeb98cb7f6",
+            "independentAnswer": "a) ROE 2026 dan laba ekonomi berdasarkan ekuitas tercatat: asuransi jiwa = -1,2/2 = -60%, laba ekonomi = (-60%-12%) × 2 = -1,44 triliun; pembiayaan UMKM = 0,84/6 = 14%, laba ekonomi = 0,12 triliun; penjaminan kredit = 0,3/5 = 6%, laba ekonomi = -0,30 triliun; modal ventura = -0,08/1 = -8%, laba ekonomi = -0,20 triliun; asuransi umum = 0,3/3 = 10%, laba ekonomi = -0,06 triliun. Total laba ekonomi berdasarkan ekuitas tercatat = -1,88 triliun. Laba bersih grup turun dari Rp1,27 triliun pada 2024 menjadi Rp0,16 triliun pada 2026. Ekuitas asuransi jiwa berdasarkan nilai wajar menjadi negatif Rp1,1–2,5 triliun, sehingga ROE berbasis ekuitas tercatat perlu ditafsirkan hati-hati. Keputusan portofolio yang masuk akal ialah mengembangkan pembiayaan UMKM, mempertahankan penjaminan dengan perbaikan, menjajaki penggabungan asuransi umum, melepas modal ventura, dan merestrukturisasi asuransi jiwa sambil melindungi pemegang polis. b) Kekurangan dana asuransi jiwa = kewajiban Rp12 triliun dikurangi aset wajar Rp9,5–10,9 triliun, sehingga defisit Rp1,1–2,5 triliun. Opsi X memerlukan Rp2,1–3,5 triliun setelah penyangga Rp1 triliun, melebihi kas holding maksimum Rp1,5 triliun. Opsi Y menyediakan Rp1 triliun dari holding dan Rp0,8 triliun hasil penjualan modal ventura, ditambah pengurangan kewajiban maksimal Rp0,6 triliun jika seluruh pemegang polis besar menyetujui; kapasitas penutupan maksimal Rp2,4 triliun. Pada defisit Rp2,5 triliun masih terdapat kekurangan Rp0,1 triliun, dan kesenjangan meningkat jika sebagian pemegang polis menolak. Perpanjangan jangka waktu saja mengurangi tekanan likuiditas, tetapi tidak menurunkan kewajiban. Opsi Z mengurangi kewajiban sebesar 20% × Rp12 triliun = Rp2,4 triliun, sehingga kewajiban menjadi Rp9,6 triliun. Pada aset Rp9,5 triliun masih terdapat defisit Rp0,1 triliun; pada aset Rp10,9 triliun terdapat surplus Rp1,3 triliun. Karena itu, Z tidak menjamin solvabilitas pada seluruh rentang nilai aset. Opsi Y dapat dipilih secara bersyarat dengan persetujuan yang diperlukan dan dana kontingensi memadai. c) Kelemahan tata kelola mencakup benturan kepentingan, tidak adanya anggota independen dalam komite investasi, ketiadaan kebijakan transaksi pihak berelasi, ketiadaan manajemen risiko terpusat, dan budaya yang mengutamakan volume premi. Perbaikan dapat mencakup komite risiko dan audit independen, fungsi risiko grup, batas risiko dan konsentrasi investasi, pengendalian transaksi pihak berelasi, pelaporan terpadu, serta pembagian kewenangan yang menjaga otonomi operasional anak usaha dalam batas risiko. d) Kepemimpinan perlu mengutamakan integritas, pengelolaan risiko, dan perlindungan nasabah tanpa menyeragamkan seluruh budaya operasional. Implementasi 24 bulan sebaiknya mendahulukan stabilisasi dan perlindungan pemegang polis, kemudian persetujuan restrukturisasi dan pembentukan tata kelola, dilanjutkan integrasi budaya serta evaluasi portofolio. Tiga KPI perlu memiliki definisi operasional, baseline atau cara menetapkannya, target, dan tenggat waktu, serta mencakup dimensi keuangan, tata kelola, dan budaya.",
+            "keyAgreement": "setuju",
+            "dimensionScores": {
+              "keyCorrectness": 5,
+              "singleBestAnswer": null,
+              "stemClarity": 5,
+              "distractorQuality": null,
+              "rubricQuality": 5,
+              "dataConsistency": 5,
+              "alignment": 5,
+              "timeEstimate": 4,
+              "originality": 5,
+              "fairness": 5
+            },
+            "findings": [],
+            "suggestedDifficulty": "sangat_sulit",
+            "verdict": "APPROVE",
+            "confidence": "tinggi",
+            "summary": "Perhitungan ROE, laba ekonomi berdasarkan ekuitas tercatat, rentang defisit, serta evaluasi opsi X, Y, dan Z konsisten setelah jawaban ideal membedakan ukuran berbasis ekuitas tercatat dari ekuitas wajar. Kesimpulan solvabilitas opsi Z kini akurat untuk kedua skenario nilai aset, dan rubrik mencakup perhitungan, tata kelola, kepemimpinan, implementasi, serta KPI secara terukur."
+          }
+        },
+        "approvedBy": "mal",
+        "approvedAt": "2026-10-24T00:40:04.541Z",
+        "history": [
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T10:57:21.960Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV001 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-23T11:02:44.236Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T11:04:17.999Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV002 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-23T11:08:52.306Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T11:28:07.198Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV005 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-24T00:36:42.679Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "AI_REVIEWED",
+            "at": "2026-10-24T00:39:26.825Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV006 oleh GPT-6: APPROVE"
+          },
+          {
+            "from": "AI_REVIEWED",
+            "to": "APPROVED",
+            "at": "2026-10-24T00:40:04.541Z",
+            "by": "mal"
+          },
+          {
+            "from": "APPROVED",
+            "to": "LIVE",
+            "at": "2026-10-24T00:40:26.715Z",
+            "by": "mal",
+            "reason": "dipublikasikan"
+          }
+        ]
+      },
+      "authoring": {
+        "createdBy": "AI",
+        "model": "claude-opus-5-5",
+        "createdAt": "2026-10-23",
+        "revision": 4,
+        "notes": "Revisi 4: model jawaban (b) memperbaiki Opsi Z, yaitu kewajiban setelah pemotongan 9,6 sehingga masih defisit 0,1 pada skenario aset 9,5 dan surplus 1,3 pada skenario aset 10,9; kecukupan Z bergantung pada penilaian final; acceptableAlternatives (b) C3 ditambah. Model jawaban (a) memberi label bahwa total -1,88 berbasis ekuitas tercatat dan menyajikan analisis nilai wajar asuransi jiwa secara terpisah; rubrik (a) C1 dan C2 disesuaikan. Revisi 3: narasi menegaskan bahwa penurunan kewajiban Rp0,6 triliun adalah estimasi aktuaria yang telah memperhitungkan nilai waktu uang dan berlaku bila seluruh polis di atas Rp100 juta menyetujui, berkurang proporsional bila sebagian menolak, dengan kewajiban kepada yang menolak tetap mengikuti kontrak awal; model jawaban (b) menambah ilustrasi persetujuan 80% (0,48; kapasitas 2,28; celah 0,22). Sub (d) kini meminta tiga indikator dengan definisi operasional, baseline, target, dan tenggat; model jawaban dipangkas menjadi tiga indikator terukur; rubrik (d) C3 dan acceptableAlternatives (b) C3 serta (d) C3 disesuaikan. Revisi 2: narasi menambahkan asumsi bahwa perubahan polis tidak boleh sepihak dan hanya dapat dilakukan melalui rencana restrukturisasi yang disetujui mayoritas pemegang polis terdampak dan otoritas pengawas, dengan hak pemegang polis yang menolak tetap dipenuhi; ditambahkan asumsi penurunan nilai kewajiban Rp0,6 triliun dari imbal hasil yang lebih rendah. Sub (b) kini meminta pembedaan solvabilitas dan likuiditas serta kelayakan hukum; model jawaban menunjukkan kapasitas Y 1,8 + 0,6 = 2,4 dibanding kekurangan 1,1-2,5; rubrik (b) menjadi C1 1, C2 1, C3 2, C4 1; acceptableAlternatives (b) disesuaikan; estimatedMinutes dinaikkan ke 70. Revisi 1: Tema 5 dan 11. Fakta nyata: peluncuran BPI Danantara 24 Februari 2025 (UU 1/2025, PP 10/2025) sebagai latar. Holding, anak usaha, kasus gagal bayar, dan semua angka fiktif atau asumsi; tidak merujuk peraturan perasuransian atau mekanisme penjaminan polis tertentu. Dibedakan dari MCQ-042, MCQ-058, dan ESA-028 karena berlatar holding jasa keuangan dengan gagal bayar asuransi, ketidakpastian nilai aset, keadilan bagi pemegang polis, dan integrasi budaya. Perhitungan: ROE -60%, 14%, 6%, -8%, 10%; laba ekonomi -1,44; 0,12; -0,30; -0,20; -0,06; total -1,88; 12,0 - 9,5 = 2,5; 12,0 - 10,9 = 1,1; titik tengah 1,8; X 2,1-3,5 dibanding kas 1,5; Y 1,0 + 0,8 = 1,8; Z 20% x 12 = 2,4, kewajiban 9,6, defisit 0,1 atau surplus 1,3; total ekuitas 17,0; laba 1,27; 0,89; 0,16."
+      }
+    },
+    {
+      "id": "MSK-KAS-016",
+      "type": "case",
+      "caseSize": "komprehensif",
+      "topicIds": [
+        "T04",
+        "T06",
+        "T12",
+        "T08",
+        "T03"
+      ],
+      "competencyIds": [
+        "K02",
+        "K03",
+        "K04",
+        "K06"
+      ],
+      "difficulty": "sangat_sulit",
+      "cognitiveLevel": "C6",
+      "estimatedMinutes": 80,
+      "maxScore": 20,
+      "stem": "Bacalah kasus PT Kakao Rasa Nusantara Tbk beserta data pendukungnya, lalu jawab seluruh sub-pertanyaan. Sebagian informasi belum lengkap; nyatakan asumsi yang Anda pakai dan tunjukkan perhitungan Anda.",
+      "caseNarrative": "PT Kakao Rasa Nusantara Tbk (KRN, fiktif) memproduksi cokelat batangan, wafer cokelat, dan minuman cokelat untuk pasar domestik dan ekspor. KRN membeli biji kakao dari sekitar 25.000 petani di Sulawesi; baru 30% pasokan yang dapat ditelusuri sampai kebun. Kapabilitas KRN meliputi resep dan fermentasi kakao yang menghasilkan cita rasa khas, jaringan distribusi ke 150.000 toko tradisional, dan merek yang dikenal luas. Setelah Amerika Serikat mengumumkan tarif resiprokal pada 2 April 2025, diasumsikan produk cokelat olahan asal Indonesia terkena tarif tambahan AS 19% atas nilai pabean untuk periode Agustus 2025 s.d. Desember 2026, dan tarif setelah 2026 belum diketahui. Diasumsikan pula rupiah melemah dari Rp15.500 menjadi Rp16.900 per dolar AS, sementara sekitar 45% biaya pokok (susu bubuk, perisa, dan kemasan) dibayar dalam dolar; daya beli kelas menengah melemah sehingga pembeli beralih ke kemasan kecil dan merek murah; merek cokelat digital yang menjual melalui social commerce tumbuh cepat; dan pembeli ritel di Timur Tengah, Eropa, dan AS mulai mensyaratkan ketertelusuran kakao serta jaminan bebas pekerja anak, sedangkan ritel modern domestik meminta pengurangan kemasan plastik. Kinerja tiga tahun dan data pasar ada di Tabel 1 sampai Tabel 3. Dana investasi yang tersedia untuk 2026-2028 paling banyak Rp400 miliar. Tabel 4 berisi empat opsi strategi; dampaknya diukur terhadap proyeksi laba operasi 2028 tanpa tindakan sebesar Rp120 miliar. Proyeksi itu diasumsikan turun dari Rp169,6 miliar pada 2026 karena tekanan margin pada segmen domestik reguler dan ekspor AS diperkirakan berlanjut. Investasi setiap opsi diasumsikan dikeluarkan pada 2026-2027, tambahan laba operasi di Tabel 4 dicapai penuh mulai 2028 dan bertahan pada tingkat yang sama sesudahnya, dan untuk keperluan perkiraan kasar tambahan laba operasi diperlakukan setara dengan tambahan arus kas tahunan yang diterima merata sepanjang tahun. Untuk menghitung periode pengembalian, seluruh investasi diperlakukan sebagai pengeluaran pada awal 2026, dan periode pengembalian dihitung sejak manfaat penuh mulai diterima pada 1 Januari 2028.",
+      "caseData": [
+        {
+          "title": "Tabel 1. Penjualan dan margin kotor per segmen (diasumsikan, Rp miliar)",
+          "columns": [
+            "Segmen",
+            "Penjualan 2024",
+            "Margin kotor 2024 (%)",
+            "Penjualan 2026",
+            "Margin kotor 2026 (%)"
+          ],
+          "rows": [
+            [
+              "Domestik premium",
+              1200,
+              45,
+              1140,
+              42
+            ],
+            [
+              "Domestik reguler",
+              2400,
+              30,
+              2280,
+              24
+            ],
+            [
+              "Ekspor ke AS",
+              900,
+              35,
+              540,
+              22
+            ],
+            [
+              "Ekspor ke pasar lain (ASEAN dan Timur Tengah)",
+              500,
+              32,
+              640,
+              32
+            ],
+            [
+              "Total",
+              5000,
+              "-",
+              4600,
+              "-"
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 2. Ringkasan laba rugi (diasumsikan, Rp miliar)",
+          "columns": [
+            "Pos",
+            "2024",
+            "2025",
+            "2026"
+          ],
+          "rows": [
+            [
+              "Penjualan",
+              5000,
+              4850,
+              4600
+            ],
+            [
+              "Laba kotor",
+              1735,
+              1560,
+              1349.6
+            ],
+            [
+              "Beban operasi",
+              1200,
+              1190,
+              1180
+            ],
+            [
+              "Laba operasi",
+              535,
+              370,
+              169.6
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 3. Data pasar cokelat domestik (diasumsikan)",
+          "columns": [
+            "Indikator",
+            "2024",
+            "2026"
+          ],
+          "rows": [
+            [
+              "Porsi penjualan melalui social commerce dan e-commerce (%)",
+              8,
+              20
+            ],
+            [
+              "Pangsa merek cokelat digital (%)",
+              3,
+              11
+            ],
+            [
+              "Porsi penjualan online KRN terhadap penjualan domestik KRN (%)",
+              3,
+              4
+            ],
+            [
+              "Porsi pembelian dalam kemasan kecil di toko tradisional (%)",
+              35,
+              52
+            ]
+          ]
+        },
+        {
+          "title": "Tabel 4. Opsi strategi 2026-2028 (diasumsikan, Rp miliar)",
+          "columns": [
+            "Opsi",
+            "Uraian",
+            "Investasi",
+            "Tambahan laba operasi 2028",
+            "Risiko utama"
+          ],
+          "rows": [
+            [
+              "A",
+              "Menurunkan harga produk reguler 10%, efisiensi pabrik, dan kemasan ekonomis",
+              50,
+              40,
+              "Margin reguler makin tipis; mengaburkan posisi merek"
+            ],
+            [
+              "B",
+              "Premiumisasi dan digital: lini cokelat asal tunggal yang dapat ditelusuri, penjualan langsung dan social commerce, serta pemanfaatan data pelanggan",
+              250,
+              150,
+              "Klaim keberlanjutan harus dapat dibuktikan; kemampuan digital belum ada"
+            ],
+            [
+              "C",
+              "Diversifikasi pasar ekspor ke ASEAN, Timur Tengah, dan India melalui perjanjian dagang, disertai sistem ketertelusuran dan sertifikasi bebas pekerja anak untuk seluruh pasokan",
+              150,
+              90,
+              "Biaya sertifikasi dan pendampingan petani; waktu membangun pembeli baru"
+            ],
+            [
+              "D",
+              "Mengakuisisi merek cokelat digital yang sedang tumbuh",
+              600,
+              110,
+              "Premi akuisisi tinggi; budaya dan sistem berbeda"
+            ]
+          ]
+        }
+      ],
+      "subQuestions": [
+        {
+          "id": "a",
+          "prompt": "Berdasarkan Tabel 1 dan Tabel 2, hitung laba kotor dan margin kotor total 2024 dan 2026, margin laba operasi, serta perubahan laba kotor per segmen 2024-2026. Tentukan segmen yang paling menjelaskan penurunan laba.",
+          "maxScore": 4,
+          "modelAnswer": "Laba kotor 2024: 540 + 720 + 315 + 160 = 1.735 (34,7%); 2026: 478,8 + 547,2 + 118,8 + 204,8 = 1.349,6 (29,3%). Margin laba operasi 2024 = 535 / 5.000 = 10,7%; 2026 = 169,6 / 4.600 = 3,7%.\nPerubahan laba kotor per segmen: domestik premium -61,2; domestik reguler -172,8; ekspor AS -196,2; ekspor lain +44,8; total -385,4.\nPenurunan terbesar berasal dari ekspor AS (penjualan turun 40% dan margin turun dari 35% menjadi 22% karena sebagian tarif ditanggung) dan domestik reguler (penjualan turun 5% dan margin turun dari 30% menjadi 24% karena biaya impor dalam dolar naik saat harga sulit dinaikkan). Ekspor ke pasar lain justru tumbuh 28% dengan margin stabil, sedangkan segmen premium relatif bertahan.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Laba kotor, margin kotor, dan margin operasi",
+              "maxScore": 1.5,
+              "full": "Menghitung laba kotor 1.735 dan 1.349,6, margin kotor 34,7% dan 29,3%, serta margin operasi 10,7% dan 3,7%.",
+              "partial": "Sebagian benar.",
+              "zero": "Tidak menghitung."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Perubahan laba kotor per segmen",
+              "maxScore": 1.5,
+              "full": "Menghitung perubahan laba kotor keempat segmen (-61,2; -172,8; -196,2; +44,8) dengan benar.",
+              "partial": "Dua atau tiga segmen benar.",
+              "zero": "Tidak menghitung."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Penjelasan penyebab",
+              "maxScore": 1,
+              "full": "Menyimpulkan bahwa ekspor AS dan domestik reguler paling menjelaskan penurunan, dengan penyebab yang dikaitkan dengan tarif, kurs, dan daya beli.",
+              "partial": "Menyebut segmen tanpa penyebab.",
+              "zero": "Tidak menyimpulkan."
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "prompt": "Identifikasi tekanan eksternal yang saling bertentangan bagi KRN (misalnya tuntutan harga murah di pasar domestik dan tuntutan ketertelusuran yang menaikkan biaya), lalu analisis sumber daya dan kapabilitas KRN dengan kerangka VRIO untuk menentukan dasar keunggulan bersaing yang dapat diandalkan.",
+          "maxScore": 4,
+          "modelAnswer": "Tekanan yang saling bertentangan: (1) daya beli melemah menuntut harga dan kemasan lebih murah, sementara kenaikan biaya impor dalam dolar dan biaya ketertelusuran menaikkan biaya; (2) pelemahan rupiah membuat ekspor lebih bersaing, tetapi pasar AS tertekan tarif 19% sampai akhir 2026 dengan arah setelahnya tidak pasti; (3) pertumbuhan social commerce menuntut kemampuan digital, sementara kekuatan KRN ada di 150.000 toko tradisional; (4) tuntutan ESG pembeli global dan ritel domestik menuntut investasi pada petani dan kemasan saat laba sedang turun.\nVRIO: resep dan fermentasi kakao bernilai, langka, dan sulit ditiru (keunggulan berkelanjutan, dasar diferensiasi); jaringan distribusi 150.000 toko tradisional bernilai, langka, dan sulit ditiru dalam waktu singkat (keunggulan, terutama untuk kemasan kecil yang porsinya naik menjadi 52%); merek yang dikenal luas bernilai dan relatif langka tetapi melemah di kanal digital; hubungan dengan 25.000 petani bernilai dan berpotensi langka bila dapat ditelusuri, tetapi saat ini belum terorganisasi (baru 30% dapat ditelusuri); kemampuan digital dan data belum dimiliki (kelemahan). Dasar keunggulan yang dapat diandalkan: cita rasa dan asal kakao, distribusi tradisional, serta pasokan petani yang dapat ditelusuri bila diorganisasi; bukan biaya terendah.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Tekanan yang saling bertentangan",
+              "maxScore": 1.5,
+              "full": "Mengidentifikasi sedikitnya tiga pasang tekanan yang saling bertentangan berdasarkan data kasus.",
+              "partial": "Mengidentifikasi tekanan tanpa menunjukkan pertentangannya, atau hanya satu atau dua.",
+              "zero": "Tidak mengidentifikasi."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Analisis VRIO",
+              "maxScore": 1.5,
+              "full": "Menilai sedikitnya empat sumber daya dengan VRIO secara tepat, termasuk pasokan petani yang belum terorganisasi dan kemampuan digital yang belum ada.",
+              "partial": "Menilai dua atau tiga sumber daya, atau penilaian sebagian keliru.",
+              "zero": "Tidak memakai VRIO."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Dasar keunggulan bersaing",
+              "maxScore": 1,
+              "full": "Menyimpulkan dasar keunggulan yang konsisten dengan VRIO dan menolak biaya terendah sebagai dasar keunggulan.",
+              "partial": "Kesimpulan tanpa kaitan dengan VRIO.",
+              "zero": "Tidak menyimpulkan."
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "prompt": "Evaluasi keempat opsi di Tabel 4 dan susun kombinasi opsi terbaik dalam batas investasi Rp400 miliar. Hitung tambahan laba operasi, laba operasi 2028 yang diproyeksikan, dan perkiraan periode pengembalian sederhana kombinasi tersebut yang dihitung sejak manfaat penuh dimulai pada 1 Januari 2028 sesuai asumsi di narasi, termasuk perkiraan waktu kalendernya (jelaskan keterbatasannya), serta jelaskan keterkaitan antaropsi dan risiko terjebak di tengah.",
+          "maxScore": 4,
+          "modelAnswer": "Imbal hasil per opsi (tambahan laba operasi / investasi): A 40 / 50 = 80%; B 150 / 250 = 60%; C 90 / 150 = 60%; D 110 / 600 = 18,3% dan D melampaui batas investasi.\nKombinasi dalam batas Rp400 miliar: B + C = 400 dengan tambahan 240; A + B = 300 dengan tambahan 190; A + C = 200 dengan tambahan 130; A + B + C = 450 melampaui batas. Kombinasi terbaik B + C: laba operasi 2028 = 120 + 240 = Rp360 miliar. Dengan asumsi di narasi (tambahan 240 per tahun diterima merata mulai 1 Januari 2028 dan diperlakukan setara arus kas), periode pengembalian sederhana = 400 / 240 = 1,67 tahun, atau sekitar 1 tahun 8 bulan sejak 1 Januari 2028, sehingga investasi kembali sekitar akhir Agustus 2029 (kuartal ketiga 2029). Bila dihitung sejak pengeluaran investasi pada awal 2026, periode pengembalian menjadi sekitar 2 + 1,67 = 3,7 tahun. Angka ini hanya perkiraan kasar: belum memperhitungkan manfaat parsial selama 2026-2027, pajak, modal kerja, maupun nilai waktu uang, sehingga bukan perhitungan berbasis arus kas terperinci.\nKeterkaitan: sistem ketertelusuran dan sertifikasi bebas pekerja anak dalam C menjadi dasar klaim lini cokelat asal tunggal pada B, sehingga keduanya saling memperkuat; sebaliknya, B tanpa C berisiko menjadi klaim keberlanjutan yang tidak dapat dibuktikan.\nTerjebak di tengah: A memiliki imbal hasil per rupiah tertinggi, tetapi penurunan harga 10% untuk produk reguler mendorong KRN bersaing harga tanpa basis biaya terendah dan bertentangan dengan posisi premium B. Kebutuhan pembeli domestik yang sensitif harga lebih baik dijawab dengan kemasan kecil melalui jaringan toko tradisional, tanpa memotong harga per gram secara besar-besaran.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Perhitungan imbal hasil dan kombinasi",
+              "maxScore": 1.5,
+              "full": "Menghitung imbal hasil setiap opsi, membandingkan kombinasi dalam batas investasi, laba operasi 2028 sebesar 360, serta periode pengembalian sekitar 1,7 tahun yang dihitung sejak manfaat penuh dimulai pada 1 Januari 2028 (sekitar kuartal ketiga 2029) beserta keterbatasan asumsinya.",
+              "partial": "Perhitungan sebagian benar atau tidak membandingkan kombinasi.",
+              "zero": "Tidak menghitung."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Keterkaitan antaropsi",
+              "maxScore": 1.5,
+              "full": "Menjelaskan keterkaitan C sebagai dasar klaim B dan risiko B tanpa C, serta mengapa D tidak dipilih.",
+              "partial": "Menyebut keterkaitan secara umum.",
+              "zero": "Tidak membahas."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Risiko terjebak di tengah",
+              "maxScore": 1,
+              "full": "Menjelaskan bahwa A bertentangan dengan posisi premium dan menawarkan cara lain menjawab pembeli yang sensitif harga.",
+              "partial": "Menyebut risiko tanpa alternatif.",
+              "zero": "Tidak membahas."
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "prompt": "Rancang strategi pasar ekspor KRN dengan mempertimbangkan ketidakpastian tarif AS setelah 2026, serta program ESG untuk ketertelusuran kakao, perlindungan anak, dan kemasan. Nyatakan asumsi Anda tentang tarif setelah 2026.",
+          "maxScore": 4,
+          "modelAnswer": "Asumsi tarif: karena tarif setelah 2026 belum diketahui, rencana disusun untuk dua skenario, yaitu tarif tetap sekitar 19% atau turun. Keputusan tidak boleh bergantung pada penurunan tarif.\nStrategi ekspor: menjadikan ASEAN, Timur Tengah, dan India sebagai pasar pertumbuhan (segmen ekspor lain sudah tumbuh 28% dengan margin 32%), memanfaatkan perjanjian dagang dan rupiah yang lemah; mempertahankan pembeli AS yang bersedia berbagi beban tarif atau membeli produk premium yang dapat ditelusuri, dengan target porsi AS turun dari sekitar 12% menjadi di bawah 10% penjualan; menyiapkan rencana meningkatkan kembali ekspor ke AS bila tarif turun; mengelola risiko kurs melalui pendapatan ekspor dalam dolar sebagai lindung nilai alami atas 45% biaya dalam dolar.\nProgram ESG: menaikkan pasokan yang dapat ditelusuri dari 30% menjadi 100% dalam tiga tahun melalui pemetaan kebun dan pendaftaran petani; sistem pemantauan dan penanganan pekerja anak yang berfokus pada pendampingan keluarga (mis. dukungan pendidikan dan peningkatan pendapatan petani), bukan sekadar memutus pembelian; premi harga bagi petani yang memenuhi standar; pelatihan budi daya untuk menaikkan produktivitas; pengurangan plastik dan kemasan yang dapat didaur ulang untuk ritel domestik; verifikasi pihak ketiga dan pelaporan berkala agar klaim dapat dipercaya.",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Asumsi tarif dan strategi pasar ekspor",
+              "maxScore": 1.5,
+              "full": "Menyatakan asumsi atau skenario tarif setelah 2026 dan menyusun strategi pasar yang tetap layak dalam beberapa skenario, berdasarkan data segmen ekspor.",
+              "partial": "Strategi ekspor tanpa asumsi tarif atau tanpa data.",
+              "zero": "Tidak menyusun strategi ekspor."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Program ESG",
+              "maxScore": 1.5,
+              "full": "Merancang program konkret untuk ketertelusuran, perlindungan anak yang tidak sekadar memutus pembelian, dan kemasan, dengan verifikasi.",
+              "partial": "Program umum atau hanya mencakup satu atau dua unsur.",
+              "zero": "Tidak merancang."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Pengelolaan risiko kurs dan keterkaitan dengan strategi",
+              "maxScore": 1,
+              "full": "Mengaitkan pendapatan ekspor dengan lindung nilai biaya dolar dan mengaitkan program ESG dengan akses pasar dan posisi premium.",
+              "partial": "Salah satu keterkaitan saja.",
+              "zero": "Tidak dibahas."
+            }
+          ]
+        },
+        {
+          "id": "e",
+          "prompt": "Susun rekomendasi strategi terintegrasi untuk KRN, termasuk strategi data dan digital, urutan implementasi 2026-2028, dan tiga indikator kinerja utama.",
+          "maxScore": 4,
+          "modelAnswer": "Rekomendasi: diferensiasi berbasis cita rasa dan asal kakao yang dapat ditelusuri (B + C), sambil mempertahankan jangkauan pasar reguler melalui kemasan kecil di jaringan toko tradisional tanpa perang harga.\nStrategi data dan digital: membangun kanal penjualan langsung dan kehadiran di social commerce untuk lini premium; mengumpulkan data pelanggan dengan persetujuan untuk pengembangan produk dan promosi yang tepat sasaran; memakai data penjualan toko tradisional untuk perencanaan distribusi kemasan kecil; merekrut atau bermitra untuk kemampuan digital yang belum dimiliki.\nUrutan implementasi:\n- 2026: memulai sistem ketertelusuran dan pendampingan petani (dasar bagi B dan C); melindungi margin reguler melalui kemasan kecil dan efisiensi tanpa memotong harga; menegosiasikan pembagian tarif dengan pembeli AS.\n- 2027: meluncurkan lini cokelat asal tunggal di kanal digital dan ritel modern setelah sebagian pasokan tersertifikasi; memperluas pembeli di ASEAN, Timur Tengah, dan India.\n- 2028: memperluas lini premium, mencapai ketertelusuran penuh, dan meninjau ulang porsi AS sesuai keputusan tarif.\nTiga indikator kinerja utama:\n(1) Keuangan: laba operasi 2028 sebesar Rp360 miliar (margin operasi sekitar 7,8%, dari 3,7% pada 2026).\n(2) Keberlanjutan: persentase pasokan kakao yang dapat ditelusuri, dari 30% menjadi 100% pada akhir 2028.\n(3) Digital: porsi penjualan online terhadap penjualan domestik KRN, dari 4% menjadi sedikitnya 10% pada 2028 (target diasumsikan).",
+          "rubric": [
+            {
+              "criterionId": "C1",
+              "description": "Rekomendasi terintegrasi",
+              "maxScore": 1.5,
+              "full": "Menyusun rekomendasi yang konsisten dengan (a) sampai (d), menggabungkan pilihan strategi generik, pasar, ESG, dan digital tanpa saling bertentangan.",
+              "partial": "Rekomendasi masuk akal tetapi tidak mencakup semua unsur atau ada pertentangan.",
+              "zero": "Tidak memberi rekomendasi."
+            },
+            {
+              "criterionId": "C2",
+              "description": "Strategi data dan urutan implementasi",
+              "maxScore": 1.5,
+              "full": "Merancang strategi data dan digital yang konkret serta urutan 2026-2028 yang logis, dengan ketertelusuran didahulukan sebagai dasar lini premium.",
+              "partial": "Strategi digital atau urutan bersifat umum.",
+              "zero": "Tidak dibahas."
+            },
+            {
+              "criterionId": "C3",
+              "description": "Indikator kinerja utama",
+              "maxScore": 1,
+              "full": "Menetapkan tiga indikator terukur yang mencakup sisi keuangan, keberlanjutan, dan pasar atau digital.",
+              "partial": "Kurang dari tiga indikator atau tidak mencakup keberlanjutan.",
+              "zero": "Tidak menetapkan indikator."
+            }
+          ]
+        }
+      ],
+      "acceptableAlternatives": "(a) C1: margin kotor 2026 dibulatkan 29,34% dinilai benar. (b) C2: menilai merek sebagai keunggulan sementara dapat diterima bila dikaitkan dengan pelemahan di kanal digital. (c) C1: menghitung periode pengembalian sejak awal investasi (sekitar 3,7 tahun dari awal 2026) dinilai setara bila titik awalnya dinyatakan; konvensi waktu lain (mis. investasi dikeluarkan bertahap pada 2026-2027) dinilai benar bila asumsinya dinyatakan dan perhitungannya konsisten; menyebut 1,67 tahun atau sekitar Agustus atau September 2029 dinilai setara; memilih A + B dapat memperoleh nilai sebagian bila peserta mengakui tambahan laba yang lebih kecil (190) dan menjelaskan cara menghindari pertentangan posisi; memilih D dengan pendanaan tambahan di luar batas hanya mendapat nilai sebagian bila tidak membahas imbal hasil yang rendah (18,3%) dan risiko integrasi; (c) C3: istilah penyedia biaya terbaik untuk menjawab segmen reguler dinilai setara bila tidak memotong harga besar-besaran. (d) C1: skenario tarif lain dapat dipakai bila dinyatakan dan strategi tetap layak tanpa bergantung pada penurunan tarif; (d) C2: program ESG lain seperti sertifikasi kelompok petani atau kerja sama dengan pemerintah daerah dapat diterima. (e) C2: urutan berbeda dapat diterima bila ketertelusuran mendahului klaim premium; (e) C3: indikator lain seperti porsi ekspor ke pasar selain AS, pertumbuhan penjualan kemasan kecil, atau pengurangan plastik per ton produk dapat menggantikan salah satu dari tiga indikator bila dimensinya tetap tercakup; indikator di luar tiga tidak menambah nilai; target berbeda dinilai benar bila terukur dan beralasan.",
+      "references": [
+        "Strategi generik dan risiko terjebak di tengah",
+        "Strategi internasional dan diversifikasi pasar ekspor",
+        "Kerangka VRIO",
+        "Strategi data dan digital",
+        "Keberlanjutan rantai pasok dan perlindungan anak"
+      ],
+      "lifecycle": {
+        "status": "LIVE",
+        "contentHash": "92dcdcbf14de6b2a6b23dd1b70a9024482c0dfa10193ecf4d194ecddbaf02f12",
+        "review": {
+          "batchId": "MSK-RV006",
+          "reviewerModel": "GPT-6",
+          "reviewedAt": "2026-10-24T07:38:00+07:00",
+          "result": {
+            "reviewKey": "R01",
+            "contentHash": "92dcdcbf14de6b2a6b23dd1b70a9024482c0dfa10193ecf4d194ecddbaf02f12",
+            "independentAnswer": "a) Laba kotor 2024 = 1.200 × 45% + 2.400 × 30% + 900 × 35% + 500 × 32% = Rp1.735 miliar, margin kotor 34,7%. Laba kotor 2026 = 1.140 × 42% + 2.280 × 24% + 540 × 22% + 640 × 32% = Rp1.349,6 miliar, margin kotor 29,34%. Margin operasi 2024 = 535/5.000 = 10,7%; 2026 = 169,6/4.600 = 3,69%. Perubahan laba kotor per segmen: domestik premium -61,2; domestik reguler -172,8; ekspor AS -196,2; ekspor pasar lain +44,8; total -385,4. Penurunan terbesar berasal dari ekspor AS, diikuti domestik reguler. b) Tekanan eksternal yang bertentangan mencakup kebutuhan harga terjangkau versus kenaikan biaya input dolar dan biaya ketertelusuran; peluang ekspor akibat rupiah melemah versus tarif AS; serta pertumbuhan kanal digital versus keterbatasan kapabilitas digital KRN. Berdasarkan VRIO, resep dan fermentasi khas serta jaringan 150.000 toko tradisional berpotensi menjadi sumber keunggulan. Hubungan dengan petani dapat mendukung diferensiasi apabila ketertelusuran dan pengorganisasiannya diperkuat. KRN belum memiliki kapabilitas digital yang memadai. c) Imbal hasil tambahan laba operasi terhadap investasi: A 80%, B 60%, C 60%, D 18,33%. Kombinasi B+C memerlukan Rp400 miliar, menghasilkan tambahan laba operasi Rp240 miliar dan proyeksi laba operasi 2028 Rp360 miliar. Periode pengembalian sederhana = 400/240 = 1,67 tahun sejak 1 Januari 2028, sekitar Agustus–September 2029. C mendukung klaim ketertelusuran pada B. Opsi A berisiko mengaburkan posisi diferensiasi jika penurunan harga besar dilakukan tanpa keunggulan biaya. d) Strategi ekspor dapat memprioritaskan ASEAN, Timur Tengah, dan India sambil mempertahankan pilihan pasar AS dalam beberapa skenario tarif. Program ESG mencakup ketertelusuran pasokan, perlindungan anak melalui pendampingan, pengurangan plastik, dan verifikasi klaim. e) Strategi terintegrasi dapat memprioritaskan B+C, membangun kapabilitas digital, dan menjalankan ketertelusuran sebelum klaim premium diperluas. Tiga KPI yang sesuai ialah laba operasi 2028, persentase pasokan tertelusur, dan porsi penjualan online domestik KRN.",
+            "keyAgreement": "setuju",
+            "dimensionScores": {
+              "keyCorrectness": 5,
+              "singleBestAnswer": null,
+              "stemClarity": 5,
+              "distractorQuality": null,
+              "rubricQuality": 5,
+              "dataConsistency": 5,
+              "alignment": 5,
+              "timeEstimate": 4,
+              "originality": 5,
+              "fairness": 5
+            },
+            "findings": [],
+            "suggestedDifficulty": "sangat_sulit",
+            "verdict": "APPROVE",
+            "confidence": "tinggi",
+            "summary": "Perhitungan keuangan, analisis VRIO, evaluasi kombinasi investasi, strategi ekspor, dan rekomendasi terintegrasi konsisten dengan data kasus. Revisi jawaban ideal telah menyelaraskan tiga KPI dengan prompt dan rubrik; tidak ditemukan masalah substantif yang menghalangi penggunaan soal."
+          }
+        },
+        "approvedBy": "mal",
+        "approvedAt": "2026-10-24T00:40:04.541Z",
+        "history": [
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T10:57:21.960Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV001 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-23T11:02:44.236Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T11:04:17.999Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV002 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-23T11:08:52.306Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "NEEDS_REVISION",
+            "at": "2026-10-23T11:28:07.198Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV005 oleh GPT-6: REVISE"
+          },
+          {
+            "from": "NEEDS_REVISION",
+            "to": "DRAFT",
+            "at": "2026-10-24T00:36:42.679Z",
+            "reason": "isi berubah lewat impor batch MSK-B24"
+          },
+          {
+            "from": "DRAFT",
+            "to": "AI_REVIEWED",
+            "at": "2026-10-24T00:39:26.825Z",
+            "by": "GPT-6",
+            "reason": "review MSK-RV006 oleh GPT-6: APPROVE"
+          },
+          {
+            "from": "AI_REVIEWED",
+            "to": "APPROVED",
+            "at": "2026-10-24T00:40:04.541Z",
+            "by": "mal"
+          },
+          {
+            "from": "APPROVED",
+            "to": "LIVE",
+            "at": "2026-10-24T00:40:26.715Z",
+            "by": "mal",
+            "reason": "dipublikasikan"
+          }
+        ]
+      },
+      "authoring": {
+        "createdBy": "AI",
+        "model": "claude-opus-5-5",
+        "createdAt": "2026-10-23",
+        "revision": 4,
+        "notes": "Revisi 4: model jawaban (e) dibatasi menjadi tepat tiga indikator kinerja utama (laba operasi 2028 Rp360 miliar; pasokan tertelusur 30% menjadi 100%; porsi penjualan online domestik 4% menjadi sedikitnya 10%, target diasumsikan) sesuai prompt dan rubrik; acceptableAlternatives (e) C3 disesuaikan. Revisi 3: narasi menetapkan konvensi periode pengembalian (investasi dianggap dikeluarkan pada awal 2026, arus kas diterima merata, periode dihitung sejak manfaat penuh 1 Januari 2028); prompt (c) menyebut titik awal tersebut; model jawaban mengganti 'sekitar pertengahan 2029' dengan 1,67 tahun atau sekitar akhir Agustus 2029 (kuartal ketiga 2029) dan menambahkan 3,7 tahun bila dihitung sejak awal 2026; rubrik (c) C1 dan acceptableAlternatives (c) C1 disesuaikan. Revisi 2: narasi menjelaskan bahwa proyeksi laba operasi 2028 tanpa tindakan Rp120 miliar diasumsikan turun dari Rp169,6 miliar karena tekanan margin berlanjut, serta menambahkan asumsi waktu investasi 2026-2027, manfaat penuh mulai 2028 yang bertahan, dan tambahan laba operasi diperlakukan setara arus kas untuk perkiraan kasar. Sub (c) kini meminta perkiraan pengembalian sederhana beserta keterbatasannya; model jawaban menyatakan 400 / 240 = 1,7 tahun sejak 2028 dan keterbatasannya; rubrik (c) C1 dan acceptableAlternatives (c) C1 disesuaikan; estimatedMinutes dinaikkan dari 60 ke 80. Revisi 1: Tema 2, 3, 7, 9, dan 10. Fakta nyata: pengumuman tarif resiprokal AS pada 2 April 2025 (Gedung Putih). Besaran tarif 19% dan periodenya, kurs, porsi biaya dalam dolar, data pasar, dan syarat pembeli adalah asumsi soal; tidak merujuk perjanjian dagang tertentu. Dibedakan dari MCQ-036, MCQ-053, ESA-021, dan KAS-011 karena memadukan tekanan ekspor, kurs, daya beli, digital, dan ESG pada produsen cokelat dengan batas investasi. Perhitungan: laba kotor 2024 540 + 720 + 315 + 160 = 1.735 (34,7%); 2026 478,8 + 547,2 + 118,8 + 204,8 = 1.349,6 (29,3%); 535 / 5.000 = 10,7%; 169,6 / 4.600 = 3,7%; perubahan -61,2; -172,8; -196,2; +44,8; total -385,4; A 80%, B 60%, C 60%, D 18,3%; B + C = 400, 240; 120 + 240 = 360; 400 / 240 = 1,7; 360 / 4.600 = 7,8%; 540 / 4.600 = 11,7%."
+      }
     }
   ],
   "changelog": [
@@ -7349,6 +8240,11 @@
       "version": "1.4.2",
       "date": "2026-10-23",
       "notes": "Nama paket SIM menjadi \"Simulasi Ujian (Advanced Level)\" sesuai jenjang Tingkat Lanjutan (Advanced Level) pada pathway CA Indonesia IAI (D-95). Soal, blueprint, dan contentHash tidak berubah."
+    },
+    {
+      "version": "1.5.0",
+      "date": "2026-10-24",
+      "notes": "2 soal tayang: MSK-KAS-015, MSK-KAS-016."
     }
   ]
 }
