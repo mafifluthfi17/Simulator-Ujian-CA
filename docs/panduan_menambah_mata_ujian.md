@@ -57,29 +57,29 @@ Setiap paket (`packages[]`) menjadi satu kartu di beranda:
 
 ```json
 {
-  "id": "T1",
-  "name": "Training 1",
-  "durationMinutes": 60,
+  "id": "L1",
+  "name": "Level 1 — Mudah",
+  "durationMinutes": 45,
   "strictMode": false,
   "sections": [
-    { "type": "mcq", "count": 10, "weight": 20 },
-    { "type": "essay", "count": 4, "weight": 40 },
-    { "type": "case", "count": 2, "caseSize": "mini", "weight": 40 }
+    { "type": "mcq", "count": 10, "difficulty": "mudah", "weight": 20 },
+    { "type": "essay", "count": 3, "difficulty": "mudah", "weight": 40 },
+    { "type": "case", "count": 1, "caseSize": "mini", "difficulty": "mudah", "weight": 40 }
   ],
-  "suggestedMinutes": { "mcq": 15, "essay": 20, "case": 25 },
-  "difficultyTarget": { "levels": ["mudah", "sedang"], "minScoreShare": 0.6 },
-  "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.25 }
+  "difficultyTarget": { "levels": ["mudah"], "minScoreShare": 1 },
+  "coverage": { "minTopics": 6, "maxTopicScoreShare": 0.4 }
 }
 ```
 
 | Field | Arti |
 |---|---|
-| `id` | Huruf besar/angka (mis. `T1`, `SIM`) |
-| `durationMinutes` | Durasi ujian (menit) |
+| `id` | Huruf besar/angka (mis. `L1`, `SIM`) |
+| `durationMinutes` | Durasi ujian (menit). Hitung dari standar waktu SPEC 6.2: jumlah soal × menit standar, dibulatkan ke 5 menit |
 | `strictMode` | `true` = mode ketat tanpa jeda (Simulasi) |
 | `sections[].type` | `mcq`, `numeric`, `essay`, atau `case` |
 | `sections[].count` | Jumlah soal bagian itu |
 | `sections[].caseSize` | Wajib untuk `case`: `mini` atau `komprehensif` |
+| `sections[].difficulty` | Opsional: bagian hanya memakai soal tingkat ini (`mudah`, `sedang`, `sulit`, `sangat_sulit`). Satu tipe boleh dipecah menjadi beberapa bagian per tingkat, seperti Simulasi |
 | `sections[].weight` | Total skor bagian (skala 100). Jumlah semua bagian **tepat 100** |
 | `sections[].itemScores` | Opsional, skor per butir bila tidak dibagi rata (mis. `[16, 17]`); jumlahnya = `weight` |
 | `difficultyTarget` | Bobot skor minimal (`minScoreShare`, 0-1) dari soal ber-`levels` tertentu |
@@ -90,7 +90,7 @@ Setiap paket (`packages[]`) menjadi satu kartu di beranda:
   paket ÷ skor asli soal.
 - Soal diambil acak dari status **LIVE**. Bila jumlah atau aturan kesulitan dan
   cakupan tidak terpenuhi, paket tidak dapat dimulai dan aplikasi menyebut
-  kekurangannya (mis. "butuh 17 PG, tersedia 12 yang sesuai").
+  kekurangannya (mis. "butuh 10 PG mudah, tersedia 5 yang sesuai").
 - Mode **Kustom** selalu tersedia tanpa perlu ditulis di pack.
 
 ## 4. Tipe soal

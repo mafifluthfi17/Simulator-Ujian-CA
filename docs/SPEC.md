@@ -205,8 +205,9 @@ dengan tingkat kesulitan tertentu.
   Faktor skala per soal = skor paket / skor asli, disimpan di sesi.
 - Porsi skor sulit-sangat sulit Simulasi = 82% (PG 11,3 + esai 37,5 +
   kasus 33).
-- Cakupan: minimal 6 topik per paket (Simulasi 9); satu topik maksimal 25%
-  skor.
+- Cakupan: minimal 6 topik per paket (Simulasi 9). Satu topik maksimal 25%
+  skor pada Simulasi dan 40% pada Level 1-4, karena satu kasus Level bernilai
+  40 dan kasus mini dapat bertopik tunggal (D-100).
 - Mode ketat (tanpa jeda) untuk Simulasi; Level 1-4 mode latihan (boleh jeda).
 - Soal diambil acak dari status LIVE sesuai tipe, ukuran kasus, dan tingkat
   kesulitan bagian. Bila kurang, paket tidak dapat dimulai dan aplikasi

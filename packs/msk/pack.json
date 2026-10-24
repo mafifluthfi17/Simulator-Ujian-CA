@@ -2,7 +2,7 @@
   "schemaVersion": "4.1",
   "subjectId": "msk",
   "subjectName": "Manajemen Stratejik dan Kepemimpinan",
-  "packVersion": "1.5.0",
+  "packVersion": "1.5.1",
   "language": "id",
   "passingGrade": 70,
   "topics": [
@@ -83,83 +83,151 @@
   ],
   "packages": [
     {
-      "id": "T1",
-      "name": "Training 1 — Latihan Dasar",
-      "durationMinutes": 60,
+      "id": "L1",
+      "name": "Level 1 — Mudah",
+      "durationMinutes": 45,
       "strictMode": false,
       "sections": [
         {
           "type": "mcq",
           "count": 10,
+          "difficulty": "mudah",
           "weight": 20
         },
         {
           "type": "essay",
-          "count": 4,
+          "count": 3,
+          "difficulty": "mudah",
           "weight": 40
         },
         {
           "type": "case",
-          "count": 2,
+          "count": 1,
           "caseSize": "mini",
+          "difficulty": "mudah",
           "weight": 40
         }
       ],
-      "suggestedMinutes": {
-        "mcq": 15,
-        "essay": 20,
-        "case": 25
-      },
       "difficultyTarget": {
         "levels": [
-          "mudah",
-          "sedang"
+          "mudah"
         ],
-        "minScoreShare": 0.6
+        "minScoreShare": 1
       },
       "coverage": {
         "minTopics": 6,
-        "maxTopicScoreShare": 0.25
+        "maxTopicScoreShare": 0.4
       }
     },
     {
-      "id": "T2",
-      "name": "Training 2 — Latihan Lanjutan",
-      "durationMinutes": 120,
+      "id": "L2",
+      "name": "Level 2 — Sedang",
+      "durationMinutes": 65,
       "strictMode": false,
       "sections": [
         {
           "type": "mcq",
           "count": 10,
+          "difficulty": "sedang",
           "weight": 20
         },
         {
           "type": "essay",
-          "count": 4,
+          "count": 3,
+          "difficulty": "sedang",
           "weight": 40
         },
         {
           "type": "case",
-          "count": 2,
-          "caseSize": "komprehensif",
+          "count": 1,
+          "caseSize": "mini",
+          "difficulty": "sedang",
           "weight": 40
         }
       ],
-      "suggestedMinutes": {
-        "mcq": 20,
-        "essay": 40,
-        "case": 60
-      },
       "difficultyTarget": {
         "levels": [
-          "sedang",
-          "sulit"
+          "sedang"
         ],
-        "minScoreShare": 0.5
+        "minScoreShare": 1
       },
       "coverage": {
         "minTopics": 6,
-        "maxTopicScoreShare": 0.25
+        "maxTopicScoreShare": 0.4
+      }
+    },
+    {
+      "id": "L3",
+      "name": "Level 3 — Sulit",
+      "durationMinutes": 110,
+      "strictMode": false,
+      "sections": [
+        {
+          "type": "mcq",
+          "count": 10,
+          "difficulty": "sulit",
+          "weight": 20
+        },
+        {
+          "type": "essay",
+          "count": 3,
+          "difficulty": "sulit",
+          "weight": 40
+        },
+        {
+          "type": "case",
+          "count": 1,
+          "caseSize": "komprehensif",
+          "difficulty": "sulit",
+          "weight": 40
+        }
+      ],
+      "difficultyTarget": {
+        "levels": [
+          "sulit"
+        ],
+        "minScoreShare": 1
+      },
+      "coverage": {
+        "minTopics": 6,
+        "maxTopicScoreShare": 0.4
+      }
+    },
+    {
+      "id": "L4",
+      "name": "Level 4 — Sangat Sulit",
+      "durationMinutes": 140,
+      "strictMode": false,
+      "sections": [
+        {
+          "type": "mcq",
+          "count": 10,
+          "difficulty": "sangat_sulit",
+          "weight": 20
+        },
+        {
+          "type": "essay",
+          "count": 3,
+          "difficulty": "sangat_sulit",
+          "weight": 40
+        },
+        {
+          "type": "case",
+          "count": 1,
+          "caseSize": "komprehensif",
+          "difficulty": "sangat_sulit",
+          "weight": 40
+        }
+      ],
+      "difficultyTarget": {
+        "levels": [
+          "sangat_sulit"
+        ],
+        "minScoreShare": 1
+      },
+      "coverage": {
+        "minTopics": 6,
+        "maxTopicScoreShare": 0.4
       }
     },
     {
@@ -170,36 +238,67 @@
       "sections": [
         {
           "type": "mcq",
-          "count": 17,
-          "weight": 17
+          "count": 2,
+          "difficulty": "mudah",
+          "weight": 2.28
+        },
+        {
+          "type": "mcq",
+          "count": 3,
+          "difficulty": "sedang",
+          "weight": 3.42
+        },
+        {
+          "type": "mcq",
+          "count": 6,
+          "difficulty": "sulit",
+          "weight": 6.78
+        },
+        {
+          "type": "mcq",
+          "count": 4,
+          "difficulty": "sangat_sulit",
+          "weight": 4.52
         },
         {
           "type": "essay",
-          "count": 5,
-          "weight": 50
+          "count": 1,
+          "difficulty": "sedang",
+          "weight": 12.5
+        },
+        {
+          "type": "essay",
+          "count": 2,
+          "difficulty": "sulit",
+          "weight": 25
+        },
+        {
+          "type": "essay",
+          "count": 1,
+          "difficulty": "sangat_sulit",
+          "weight": 12.5
         },
         {
           "type": "case",
-          "count": 2,
+          "count": 1,
           "caseSize": "komprehensif",
-          "weight": 33,
-          "itemScores": [
-            16,
-            17
-          ]
+          "difficulty": "sulit",
+          "weight": 16.5
+        },
+        {
+          "type": "case",
+          "count": 1,
+          "caseSize": "komprehensif",
+          "difficulty": "sangat_sulit",
+          "weight": 16.5
         }
       ],
-      "suggestedMinutes": {
-        "mcq": 25,
-        "essay": 90,
-        "case": 65
-      },
       "difficultyTarget": {
         "levels": [
           "sulit",
           "sangat_sulit"
         ],
-        "minScoreShare": 0.7
+        "minScoreShare": 0.8
       },
       "coverage": {
         "minTopics": 9,
@@ -8245,6 +8344,11 @@
       "version": "1.5.0",
       "date": "2026-10-24",
       "notes": "2 soal tayang: MSK-KAS-015, MSK-KAS-016."
+    },
+    {
+      "version": "1.5.1",
+      "date": "2026-10-24",
+      "notes": "Paket T1/T2/SIM diganti Level 1-4 (mudah/sedang/sulit/sangat sulit; 10 PG, 3 esai, 1 kasus; 45/65/110/140 menit) dan Simulasi Ujian (Advanced Level) 180 menit (15 PG, 4 esai, 2 kasus komprehensif) sesuai standar waktu D-99. Soal tidak berubah."
     }
   ]
 }

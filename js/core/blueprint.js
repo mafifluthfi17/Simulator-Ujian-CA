@@ -29,9 +29,18 @@ export function isLive(q) {
   return q.lifecycle && q.lifecycle.status === 'LIVE';
 }
 
+const DIFFICULTY_NAMES = { mudah: 'mudah', sedang: 'sedang', sulit: 'sulit', sangat_sulit: 'sangat sulit' };
+
 function sectionLabel(section) {
   const base = TYPE_NAMES[section.type] || section.type;
-  return section.caseSize ? `${base} ${CASE_SIZE_NAMES[section.caseSize]}` : base;
+  return [base, CASE_SIZE_NAMES[section.caseSize], DIFFICULTY_NAMES[section.difficulty]].filter(Boolean).join(' ');
+}
+
+// Soal memenuhi bagian paket: tipe, ukuran kasus, dan tingkat kesulitan (D-100) bila ditetapkan.
+function inSection(q, section) {
+  return q.type === section.type
+    && (!section.caseSize || q.caseSize === section.caseSize)
+    && (!section.difficulty || q.difficulty === section.difficulty);
 }
 
 export function shortageMessage(label, needed, available) {
@@ -48,7 +57,7 @@ export function packageQuestionCount(pkg) {
 // durationMinutes, over, incomplete }. minutes bagian null bila tidak ada soal.
 export function packageTimeEstimate(questions, pkg) {
   const sections = pkg.sections.map((s) => {
-    const pool = questions.filter((q) => q.type === s.type && (!s.caseSize || q.caseSize === s.caseSize));
+    const pool = questions.filter((q) => inSection(q, s));
     const avg = pool.length ? pool.reduce((n, q) => n + q.estimatedMinutes, 0) / pool.length : null;
     return {
       label: sectionLabel(s),
@@ -75,7 +84,7 @@ export function buildFromPackage(pack, pkg, rng, { attempts = DEFAULT_ATTEMPTS }
   const sections = pkg.sections.map((s) => ({
     ...s,
     points: s.itemScores ? s.itemScores.slice() : allocatePoints(s.weight, s.count),
-    pool: live.filter((q) => q.type === s.type && (!s.caseSize || q.caseSize === s.caseSize)),
+    pool: live.filter((q) => inSection(q, s)),
   }));
 
   const problems = sections

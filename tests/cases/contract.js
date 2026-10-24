@@ -7,6 +7,7 @@ import { validateDocument } from '../../js/core/contract.js';
 import { validatePack } from '../../js/core/pack-loader.js';
 import { contentHash } from '../../js/core/hash.js';
 import { buildFromPackage } from '../../js/core/blueprint.js';
+import { standardMinutes } from '../../js/core/time-standard.js';
 import { createRng } from '../../js/core/random.js';
 import { makeSyntheticPack } from '../fixtures/make-pack.js';
 import { packScript, packIndexJson, promptsModule } from '../../tools/generate.mjs';
@@ -134,19 +135,30 @@ export default {
         assert.ok(result.ok, result.errors && result.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
         assert.equal(pack.topics.length, 12);
         assert.equal(pack.competencies.length, 6);
-        assert.deepEqual(pack.packages.map((p) => [p.id, p.durationMinutes, p.sections.map((s) => `${s.type}${s.count}:${s.weight}`).join(' ')]), [
-          ['T1', 60, 'mcq10:20 essay4:40 case2:40'],
-          ['T2', 120, 'mcq10:20 essay4:40 case2:40'],
-          ['SIM', 180, 'mcq17:17 essay5:50 case2:33'],
+        const short = { mudah: 'm', sedang: 's', sulit: 'su', sangat_sulit: 'ss' };
+        assert.deepEqual(pack.packages.map((p) => [p.id, p.durationMinutes, p.strictMode,
+          p.sections.map((s) => `${s.type}${s.count}${s.caseSize ? `/${s.caseSize}` : ''}/${short[s.difficulty]}:${s.weight}`).join(' ')]), [
+          ['L1', 45, false, 'mcq10/m:20 essay3/m:40 case1/mini/m:40'],
+          ['L2', 65, false, 'mcq10/s:20 essay3/s:40 case1/mini/s:40'],
+          ['L3', 110, false, 'mcq10/su:20 essay3/su:40 case1/komprehensif/su:40'],
+          ['L4', 140, false, 'mcq10/ss:20 essay3/ss:40 case1/komprehensif/ss:40'],
+          ['SIM', 180, true, 'mcq2/m:2.28 mcq3/s:3.42 mcq6/su:6.78 mcq4/ss:4.52 essay1/s:12.5 essay2/su:25 essay1/ss:12.5 case1/komprehensif/su:16.5 case1/komprehensif/ss:16.5'],
         ]);
+        // Durasi = jumlah standar waktu soal (SPEC 6.2), dibulatkan ke 5 menit terdekat (D-99).
+        for (const p of pack.packages) {
+          const minutes = p.sections.reduce((n, s) => n + s.count * standardMinutes({ type: s.type, caseSize: s.caseSize, difficulty: s.difficulty }), 0);
+          assert.equal(p.durationMinutes, Math.round(minutes / 5) * 5, `${p.id}: durasi ${p.durationMinutes}, standar ${minutes}`);
+        }
         // Soal MSK hanya berasal dari Ekspor Pack bank soal (D-89), bukan ditulis Claude Code.
         for (const q of pack.questions) {
           assert.ok(q.id.startsWith('MSK-'), `${q.id}: prefiks ID harus MSK-`);
           assert.ok(!q.stem.startsWith('[DEMO]') && !q.stem.startsWith('[UJI'), `${q.id}: soal demo/uji hanya di packs/demo/ dan tests/`);
         }
+        // Paket boleh belum dapat dimulai karena stok per tingkat kurang (SPEC 7),
+        // tetapi tidak boleh gagal karena aturan paket.
         for (const p of pack.packages) {
           const built = buildFromPackage(pack, p, createRng(1));
-          assert.ok(built.ok, `${p.id}: ${built.problems && built.problems.join('; ')}`);
+          if (!built.ok) assert.ok(built.problems.every((m) => m.startsWith('butuh ')), `${p.id}: ${built.problems.join('; ')}`);
         }
       },
     },

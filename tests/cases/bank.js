@@ -539,6 +539,36 @@ export default {
         assert.deepEqual(updated.topics, source.topics);
         assert.deepEqual(updated.questions, pack.questions);
         assert.ok(validatePack(updated).ok);
+        // Paket ujian ikut diperbarui (D-100).
+        const repackaged = clone(source);
+        repackaged.packages = repackaged.packages.map((p) => ({ ...p, name: `${p.name} baru`, durationMinutes: p.durationMinutes + 5 }));
+        const d3 = taxonomyDiff(bank, repackaged);
+        assert.ok(d3 && d3.packages && !d3.topics && !d3.competencies, JSON.stringify(d3));
+        updateTaxonomy(bank, repackaged, T);
+        assert.deepEqual(bank.pack.packages, repackaged.packages);
+        assert.deepEqual(withTaxonomy(pack, repackaged).packages, repackaged.packages);
+        assert.equal(taxonomyDiff(bank, repackaged), null);
+      },
+    },
+    {
+      name: 'lint standar waktu (D-100): peringatan per soal, batch tetap diimpor',
+      run: async () => {
+        const { pack, bank } = await freshBank();
+        const ok = draftFrom(pack, 'mcq', 1);
+        ok.difficulty = 'sedang';
+        ok.estimatedMinutes = 1.5;
+        const slow = draftFrom(pack, 'mcq', 2);
+        slow.difficulty = 'mudah';
+        slow.estimatedMinutes = 2;
+        slow.stem = `${slow.stem} ${'kata '.repeat(120)}`;
+        const plan = await planBatchImport(bank, makeBatch(pack, [ok, slow]));
+        assert.ok(plan.ok, plan.errors && messages(plan.errors));
+        assert.deepEqual(plan.entries[0].warnings, []);
+        assert.equal(plan.entries[1].warnings.length, 2);
+        assert.ok(plan.entries[1].warnings[0].includes('perkiraan waktu 2 menit, standar mudah 1 menit'), plan.entries[1].warnings[0]);
+        assert.ok(/stem dan opsi \d+ kata, batas mudah 90/.test(plan.entries[1].warnings[1]), plan.entries[1].warnings[1]);
+        applyBatchImport(bank, plan, T);
+        assert.equal(findQuestion(bank, slow.id).lifecycle.status, 'DRAFT');
       },
     },
     {

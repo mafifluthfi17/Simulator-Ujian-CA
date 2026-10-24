@@ -806,6 +806,10 @@ export const SCHEMAS = {
           "caseSize": {
             "$ref": "common.schema.json#/$defs/caseSize"
           },
+          "difficulty": {
+            "$ref": "common.schema.json#/$defs/difficulty",
+            "description": "Opsional: bagian hanya memakai soal dengan tingkat kesulitan ini (SPEC 6, D-100)."
+          },
           "weight": {
             "type": "number",
             "minimum": 0,

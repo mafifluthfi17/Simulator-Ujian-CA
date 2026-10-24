@@ -1,6 +1,6 @@
 // Dibuat otomatis oleh tools/build-sw.mjs. Jangan diedit langsung.
 // Service worker Simulator Ujian CA: cache berversi, aplikasi berjalan offline setelah kunjungan pertama.
-const VERSION = "casim-0.1.0-6ed5a0785f27";
+const VERSION = "casim-0.1.0-2c4bb2ab4bba";
 const ASSETS = [
   "./",
   "index.html",
@@ -40,6 +40,7 @@ const ASSETS = [
   "js/core/session-store.js",
   "js/core/session.js",
   "js/core/storage.js",
+  "js/core/time-standard.js",
   "js/core/timer.js",
   "js/core/version.js",
   "js/export/csv.js",

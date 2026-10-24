@@ -37,8 +37,11 @@ Alamat aplikasi: **https://tryoutca.github.io/**
 
 ## 2. Mengerjakan ujian
 
-1. Di beranda pilih paket: **Training 1**, **Training 2**, **Simulasi Ujian**,
-   atau **Kustom**. Kartu paket menyebut durasi, jumlah soal, dan passing grade.
+1. Di beranda pilih paket: **Level 1** (soal mudah, 45 menit), **Level 2**
+   (sedang, 65 menit), **Level 3** (sulit, 110 menit), **Level 4** (sangat
+   sulit, 140 menit), **Simulasi Ujian** (campuran, 180 menit, tanpa jeda), atau
+   **Kustom**. Kartu paket menyebut durasi, jumlah soal, dan passing grade.
+   Paket yang soalnya belum cukup menampilkan pesan kekurangan saat MULAI.
 2. Ketuk **MULAI**. Waktu berjalan sejak saat itu.
 3. Di ruang ujian:
    - Bilah atas berisi nama paket, sisa waktu, **Daftar Soal**, dan **KUMPULKAN**.

@@ -11,6 +11,7 @@ import {
   createSession, pause, recoverOnOpen, remainingMs, resume, setAnswer, submit, toggleFlag, SessionLockedError,
 } from '../../js/core/session.js';
 import { ClockWatch, dueWarning } from '../../js/core/timer.js';
+import { measureWords, standardMinutes, timeStandardIssues } from '../../js/core/time-standard.js';
 import { isPass } from '../../js/core/scoring.js';
 import { getType } from '../../js/types/registry.js';
 import { originalKeyForDisplay, displayLetterForKey } from '../../js/types/mcq.js';
@@ -71,6 +72,54 @@ export default {
       run: () => {
         const cases = [['47,8', 47.8], ['47.8', 47.8], ['1.200', 1200], ['1.200,5', 1200.5], ['-3,25', -3.25], ['12', 12], ['abc', null], ['1,2,3', null], ['', null]];
         for (const [input, expected] of cases) assert.equal(parseDecimalInput(input), expected, `"${input}"`);
+      },
+    },
+    {
+      name: 'bagian paket dengan tingkat kesulitan (D-100): hanya soal tingkat itu, pesan kekurangan menyebut tingkat',
+      run: async () => {
+        const pack = await loadJson('packs/demo/pack.json');
+        const base = pack.questions.find((q) => q.type === 'mcq');
+        const levels = ['mudah', 'mudah', 'sedang', 'sulit', 'sulit', 'sulit'];
+        pack.questions = levels.map((difficulty, i) => ({ ...base, id: `DEMO-MCQ-${300 + i}`, difficulty }));
+        const pkg = {
+          id: 'X', name: 'Uji', durationMinutes: 10, strictMode: false,
+          sections: [{ type: 'mcq', count: 2, difficulty: 'mudah', weight: 40 }, { type: 'mcq', count: 3, difficulty: 'sulit', weight: 60 }],
+          difficultyTarget: { levels: ['mudah', 'sulit'], minScoreShare: 1 },
+          coverage: { minTopics: 1, maxTopicScoreShare: 1 },
+        };
+        for (let seed = 1; seed <= 20; seed++) {
+          const built = buildFromPackage(pack, pkg, createRng(seed));
+          assert.ok(built.ok, built.problems && built.problems.join('; '));
+          assert.deepEqual(built.items.map((it) => it.question.difficulty), ['mudah', 'mudah', 'sulit', 'sulit', 'sulit']);
+          assert.deepEqual(built.items.map((it) => it.points), [20, 20, 20, 20, 20]);
+        }
+        const short = buildFromPackage(pack, { ...pkg, sections: [{ type: 'mcq', count: 2, difficulty: 'sedang', weight: 100 }] }, createRng(1));
+        assert.deepEqual(short.problems, ['butuh 2 PG sedang, tersedia 1 yang sesuai']);
+        const t = packageTimeEstimate(pack.questions, pkg);
+        assert.deepEqual(t.sections.map((s) => [s.label, s.available]), [['PG mudah', 2], ['PG sulit', 3]]);
+      },
+    },
+    {
+      name: 'standar waktu (SPEC 6.2): menit standar, ukuran kasus per tingkat, batas kata',
+      run: () => {
+        assert.equal(standardMinutes({ type: 'mcq', difficulty: 'sulit' }), 2.5);
+        assert.equal(standardMinutes({ type: 'essay', difficulty: 'sangat_sulit' }), 20);
+        assert.equal(standardMinutes({ type: 'case', caseSize: 'komprehensif', difficulty: 'sulit' }), 40);
+        assert.equal(standardMinutes({ type: 'case', caseSize: 'mini', difficulty: 'sulit' }), null);
+        const words = (n) => Array.from({ length: n }, () => 'kata').join(' ');
+        const essay = { type: 'essay', difficulty: 'sedang', estimatedMinutes: 10, stem: words(150), modelAnswer: words(170) };
+        assert.deepEqual(timeStandardIssues(essay), []);
+        assert.deepEqual(timeStandardIssues({ ...essay, modelAnswer: words(171), estimatedMinutes: 18 }), [
+          'perkiraan waktu 18 menit, standar sedang 10 menit',
+          'jawaban ideal 171 kata, batas sedang 170',
+        ]);
+        const kasus = {
+          type: 'case', caseSize: 'mini', difficulty: 'sulit', estimatedMinutes: 40, stem: words(10), caseNarrative: words(100),
+          subQuestions: [{ modelAnswer: words(50) }],
+        };
+        assert.deepEqual(timeStandardIssues(kasus), ['kasus sulit harus berukuran komprehensif, bukan mini']);
+        assert.deepEqual(timeStandardIssues({ ...kasus, lifecycle: { status: 'CALIBRATION' } }), [], 'soal kalibrasi tidak diperiksa');
+        assert.deepEqual(measureWords({ ...kasus, caseData: { columns: ['A', 'B'], rows: [['x', 1]] } }), { reading: 114, answer: 50 });
       },
     },
     {

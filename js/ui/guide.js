@@ -6,7 +6,7 @@ import { APP_VERSION } from '../core/version.js';
 import { LIMITATIONS } from '../core/report.js';
 
 const STEPS = [
-  'Pilih paket di beranda (Training 1, Training 2, Simulasi Ujian, atau Kustom), lalu ketuk MULAI.',
+  'Pilih paket di beranda (Level 1 sampai Level 4, Simulasi Ujian, atau Kustom), lalu ketuk MULAI. Level 1 berisi soal mudah, Level 4 soal sangat sulit.',
   'Timer berjalan sejak MULAI. Jawaban tersimpan otomatis; lihat tulisan "Tersimpan" di bawah soal.',
   'Gunakan Daftar Soal untuk berpindah soal dan melihat soal yang belum dijawab atau ditandai.',
   'Mode latihan boleh dijeda. Mode ketat (Simulasi Ujian) tidak dapat dijeda.',

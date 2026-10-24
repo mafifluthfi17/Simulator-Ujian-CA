@@ -9,6 +9,7 @@
 //   log: [{ at, message }] }
 
 import { canonicalize, contentHash } from './hash.js';
+import { timeStandardIssues } from './time-standard.js';
 import { loadDocument, validateDocument } from './contract.js';
 import { keys } from './storage.js';
 import { SCHEMA_VERSION } from './version.js';
@@ -129,15 +130,17 @@ export function previewNeighbors(ids, id) {
 
 const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
-// Bank menyimpan salinan pack sendiri, sehingga daftar topik/kompetensi yang
-// diperbarui di pack bawaan tidak ikut berubah. Hasil: null bila sama atau mata
-// ujian berbeda; selain itu { topics, competencies, missing } dengan missing =
-// kode yang dipakai soal bank tetapi tidak ada di pack sumber.
+// Bank menyimpan salinan pack sendiri, sehingga daftar topik/kompetensi dan
+// paket ujian yang diperbarui di pack bawaan tidak ikut berubah. Hasil: null bila
+// sama atau mata ujian berbeda; selain itu { topics, competencies, packages,
+// missing } dengan missing = kode yang dipakai soal bank tetapi tidak ada di pack
+// sumber. Paket ikut diperbarui sejak D-100.
 export function taxonomyDiff(bank, sourcePack) {
   if (!sourcePack || sourcePack.subjectId !== bank.subjectId) return null;
   const topics = !sameList(bank.pack.topics, sourcePack.topics);
   const competencies = !sameList(bank.pack.competencies, sourcePack.competencies);
-  if (!topics && !competencies) return null;
+  const packages = !sameList(bank.pack.packages, sourcePack.packages);
+  if (!topics && !competencies && !packages) return null;
   const topicIds = new Set(sourcePack.topics.map((t) => t.id));
   const competencyIds = new Set(sourcePack.competencies.map((k) => k.id));
   const missing = [];
@@ -145,23 +148,28 @@ export function taxonomyDiff(bank, sourcePack) {
     for (const id of q.topicIds) if (!topicIds.has(id)) missing.push({ questionId: q.id, code: id });
     for (const id of q.competencyIds) if (!competencyIds.has(id)) missing.push({ questionId: q.id, code: id });
   }
-  return { topics, competencies, missing };
+  return { topics, competencies, packages, missing };
 }
 
-// Salinan pack dengan topik dan kompetensi dari pack sumber; soal, blueprint,
+// Salinan pack dengan topik, kompetensi, dan paket ujian dari pack sumber; soal,
 // versi, dan changelog tidak berubah (contentHash tidak mencakup topik).
 export function withTaxonomy(pack, sourcePack) {
-  return { ...clone(pack), topics: clone(sourcePack.topics), competencies: clone(sourcePack.competencies) };
+  return {
+    ...clone(pack),
+    topics: clone(sourcePack.topics),
+    competencies: clone(sourcePack.competencies),
+    packages: clone(sourcePack.packages),
+  };
 }
 
 export function updateTaxonomy(bank, sourcePack, now) {
   const diff = taxonomyDiff(bank, sourcePack);
-  if (!diff) throw new BankError('Daftar topik dan kompetensi bank sudah sama dengan pack bawaan.');
+  if (!diff) throw new BankError('Daftar topik, kompetensi, dan paket bank sudah sama dengan pack bawaan.');
   if (diff.missing.length) {
     throw new BankError(`Kode berikut dipakai soal tetapi tidak ada di pack bawaan: ${diff.missing.map((m) => `${m.questionId} (${m.code})`).join(', ')}.`);
   }
   bank.pack = withTaxonomy(bank.pack, sourcePack);
-  log(bank, now, `Topik dan kompetensi diperbarui dari pack bawaan versi ${sourcePack.packVersion} (${sourcePack.topics.length} topik, ${sourcePack.competencies.length} kompetensi).`);
+  log(bank, now, `Topik, kompetensi, dan paket diperbarui dari pack bawaan versi ${sourcePack.packVersion} (${sourcePack.topics.length} topik, ${sourcePack.competencies.length} kompetensi, paket ${sourcePack.packages.map((p) => p.id).join('/')}).`);
   return diff;
 }
 
@@ -279,7 +287,8 @@ function bodyChanged(existing, incoming) {
 }
 
 // Rencana impor tanpa mengubah bank. Hasil:
-// { ok, errors, notes, batch, calibration, entries: [{ question, hash, action: 'baru'|'revisi'|'sama', previousStatus }] }
+// { ok, errors, notes, batch, calibration, entries: [{ question, hash, action: 'baru'|'revisi'|'sama', previousStatus, warnings }] }
+// warnings = peringatan standar waktu (D-100); tidak menolak batch.
 export async function planBatchImport(bank, text) {
   const parsed = typeof text === 'string' ? extractJson(text) : { ok: true, data: text, notes: '' };
   if (!parsed.ok) return { ok: false, errors: parsed.errors };
@@ -318,7 +327,7 @@ export async function planBatchImport(bank, text) {
     const action = !existing ? 'baru'
       : existing.lifecycle.contentHash !== hash || (existing.lifecycle.status === 'NEEDS_REVISION' && bodyChanged(existing, question)) ? 'revisi'
       : 'sama';
-    entries.push({ question, hash, action, previousStatus: existing ? existing.lifecycle.status : null });
+    entries.push({ question, hash, action, previousStatus: existing ? existing.lifecycle.status : null, warnings: timeStandardIssues(question) });
   }
   if (errors.length) return { ok: false, errors };
   return { ok: true, errors: [], notes: parsed.notes, batch, calibration: calibrationCount > 0, entries };

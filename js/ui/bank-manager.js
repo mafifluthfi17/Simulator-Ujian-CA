@@ -17,6 +17,7 @@ import {
 } from '../core/review-io.js';
 import { DIFFICULTY_LABELS } from '../core/report.js';
 import { packageTimeEstimate } from '../core/blueprint.js';
+import { timeStandardIssues } from '../core/time-standard.js';
 import { formatErrors, loadActiveSession } from '../core/session-store.js';
 import { saveImportedPack } from '../core/pack-loader.js';
 import { sha256Hex } from '../core/hash.js';
@@ -177,9 +178,9 @@ export function renderBank(app) {
     const source = app.builtInPacks && app.builtInPacks[bank.subjectId];
     const diff = taxonomyDiff(bank, source);
     if (!diff) return null;
-    const what = [diff.topics ? 'topik' : null, diff.competencies ? 'kompetensi' : null].filter(Boolean).join(' dan ');
+    const what = [diff.topics ? 'topik' : null, diff.competencies ? 'kompetensi' : null, diff.packages ? 'paket ujian' : null].filter(Boolean).join(', ').replace(/, ([^,]*)$/, ' dan $1');
     return h('div', { class: 'notice' },
-      h('p', { text: `Daftar ${what} di bank soal berbeda dengan versi terbaru aplikasi (${source.topics.length} topik, ${source.competencies.length} kompetensi). Nama topik di daftar soal, statistik, dan laporan memakai daftar lama sampai diperbarui.` }),
+      h('p', { text: `Daftar ${what} di bank soal berbeda dengan versi terbaru aplikasi (${source.topics.length} topik, ${source.competencies.length} kompetensi, paket ${source.packages.map((p) => p.name).join(', ')}). Bank, statistik, dan ujian di perangkat ini memakai daftar lama sampai diperbarui.` }),
       h('button', { type: 'button', class: 'btn', onclick: () => doUpdateTaxonomy(source) }, `Perbarui daftar ${what}`));
   }
 
@@ -198,9 +199,9 @@ export function renderBank(app) {
       return;
     }
     const ok = await confirmDialog({
-      title: 'Perbarui daftar topik dan kompetensi?',
+      title: 'Perbarui topik, kompetensi, dan paket?',
       body: [
-        `Bank soal dan pack ujian di perangkat ini memakai ${source.topics.length} topik dan ${source.competencies.length} kompetensi dari versi terbaru aplikasi.`,
+        `Bank soal dan pack ujian di perangkat ini memakai ${source.topics.length} topik, ${source.competencies.length} kompetensi, dan paket ${source.packages.map((p) => p.name).join(', ')} dari versi terbaru aplikasi.`,
         'Soal, status, kode topik soal, dan versi pack tidak berubah.',
       ],
       confirmLabel: 'Perbarui',
@@ -216,7 +217,7 @@ export function renderBank(app) {
     }
     persist();
     await app.reloadPacks();
-    toast('Daftar topik dan kompetensi diperbarui.');
+    toast('Topik, kompetensi, dan paket diperbarui.');
     render();
   }
 
@@ -358,6 +359,7 @@ export function renderBank(app) {
       h('div', { class: 'row' }, h('h2', { style: 'margin:0;flex:1', text: `Pratinjau ${q.id}` }), statusBadge(s),
         h('button', { type: 'button', class: 'btn btn-icon', 'aria-label': 'Tutup pratinjau', onclick: () => { state.preview = null; render(); } }, '×')),
       h('p', { class: 'hint', text: `${TYPE_LABELS[q.type]} · ${q.topicIds.join(', ')} · ${q.competencyIds.join(', ')} · ${DIFFICULTY_LABELS[q.difficulty]} · ${q.cognitiveLevel} · ${formatNumber(q.estimatedMinutes)} menit` }),
+      timeStandardNotice(q),
       h('div', { class: 'preview-view' }, view),
       h('details', { open: true }, h('summary', { text: 'Kunci, pembahasan, dan rubrik' }), answerKeyView(q)),
       review ? h('details', {}, h('summary', { text: `Hasil review terakhir: ${review.result.verdict} (${review.reviewerModel})` }), reviewView(review.result)) : null,
@@ -490,8 +492,23 @@ export function renderBank(app) {
             h('td', { text: e.question.id }), h('td', { text: TYPE_LABELS[e.question.type] }),
             h('td', { text: e.action === 'baru' ? 'Soal baru' : e.action === 'revisi' ? `Revisi (isi berubah; sebelumnya ${STATUS_LABELS[e.previousStatus]})` : e.previousStatus === 'NEEDS_REVISION' ? 'Tidak ada perubahan (tetap Perlu revisi)' : 'Isi sama (status tetap)' }),
             h('td', { text: STATUS_LABELS[e.action === 'sama' ? e.previousStatus : plan.calibration ? 'CALIBRATION' : 'DRAFT'] })))))),
+        timeWarningsNotice(plan.entries),
         plan.notes ? h('p', { class: 'prose hint', text: plan.notes }) : null,
         h('button', { type: 'button', class: 'btn btn-primary', onclick: doImportBatch }, 'Impor ke bank')) : null);
+  }
+
+  function timeStandardNotice(q) {
+    const issues = timeStandardIssues(q);
+    return issues.length ? h('p', { class: 'notice', text: `Tidak sesuai standar waktu: ${issues.join('; ')}.` }) : null;
+  }
+
+  // Peringatan standar waktu (SPEC 6.2, D-100): batch tetap dapat diimpor.
+  function timeWarningsNotice(entries) {
+    const flagged = entries.filter((e) => e.warnings && e.warnings.length);
+    if (!flagged.length) return h('p', { class: 'hint', text: 'Semua soal sesuai standar waktu dan batas panjang tingkat kesulitannya.' });
+    return h('div', { class: 'notice' },
+      h('p', { text: `${flagged.length} soal tidak sesuai standar waktu (batch tetap dapat diimpor). Kirim daftar ini ke penyusun bila perlu diperbaiki:` }),
+      h('ul', {}, flagged.map((e) => h('li', { text: `${e.question.id}: ${e.warnings.join('; ')}` }))));
   }
 
   async function checkBatch() {

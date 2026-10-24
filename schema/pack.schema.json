@@ -111,6 +111,10 @@
         "type": { "$ref": "common.schema.json#/$defs/questionType" },
         "count": { "type": "integer", "minimum": 1 },
         "caseSize": { "$ref": "common.schema.json#/$defs/caseSize" },
+        "difficulty": {
+          "$ref": "common.schema.json#/$defs/difficulty",
+          "description": "Opsional: bagian hanya memakai soal dengan tingkat kesulitan ini (SPEC 6, D-100)."
+        },
         "weight": {
           "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 0.01,
           "description": "Total skor bagian dalam paket (skala 100)."
