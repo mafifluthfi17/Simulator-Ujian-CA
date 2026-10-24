@@ -186,21 +186,33 @@ Hasil: {"gradingVersion": "4.1", "sessionId": "...", "answersChecksum": "...",
    "note": "..."}],
  "overallFeedback": "..."}
 
-## 6. PAKET UJIAN (PACK MSK)
-| Paket | Durasi | PG | Esai | Kasus | Bobot PG/Esai/Kasus | Skor per butir |
-| T1 Latihan Dasar | 60 | 10 | 4 | 2 mini | 20/40/40 | 2 / 10 / 20 |
-| T2 Latihan Lanjutan | 120 | 10 | 4 | 2 komprehensif | 20/40/40 | 2 / 10 / 20 |
-| SIM Simulasi Ujian | 180 | 17 | 5 | 2 komprehensif | 17/50/33 | 1 / 10 / 16 dan 17 |
-- Waktu disarankan (PG/esai/kasus): T1 15/20/25; T2 20/40/60; SIM 25/90/65.
-- Kesulitan dihitung berdasarkan bobot skor: T1 >= 60% mudah-sedang;
-  T2 >= 50% sedang-sulit; SIM >= 70% sulit-sangat sulit.
-- Cakupan: minimal 6 topik per paket (SIM 9); satu topik maksimal 25% skor.
-- SIM memakai mode ketat (tanpa jeda) secara default.
-- Faktor skala per soal = skor paket / skor asli, disimpan di sesi.
-  Contoh: PG asli 1 di T1 bernilai 2; kasus asli 20 di SIM bernilai 16 atau 17.
-- Soal diambil acak dari status LIVE sesuai filter. Bila kurang, paket tidak
-  dapat dimulai dan aplikasi menyebut kekurangannya
-  (contoh: "butuh 17 PG, tersedia 12 yang sesuai").
+## 6. PAKET UJIAN (SEMUA MATA UJIAN)
+Paket disusun dari standar waktu 6.2 sehingga durasi = jumlah waktu standar
+soal di dalamnya, dibulatkan ke 5 menit (D-99). Setiap bagian memilih soal
+dengan tingkat kesulitan tertentu.
+
+| Paket | Durasi | PG (m/s/su/ss) | Esai (m/s/su/ss) | Kasus | Bobot PG/Esai/Kasus | Mode |
+| Level 1 | 45 | 10 mudah | 3 mudah | 1 mini mudah | 20/40/40 | latihan |
+| Level 2 | 65 | 10 sedang | 3 sedang | 1 mini sedang | 20/40/40 | latihan |
+| Level 3 | 110 | 10 sulit | 3 sulit | 1 komprehensif sulit | 20/40/40 | latihan |
+| Level 4 | 140 | 10 sangat sulit | 3 sangat sulit | 1 komprehensif sangat sulit | 20/40/40 | latihan |
+| Simulasi Ujian (Advanced Level) | 180 | 15 (2/3/6/4) | 4 (0/1/2/1) | 2 komprehensif (sulit 1, sangat sulit 1) | 17/50/33 | ketat |
+- Perhitungan durasi: Level 1 = 10×1 + 3×6 + 15 = 43; Level 2 = 15 + 30 + 20
+  = 65; Level 3 = 25 + 45 + 40 = 110; Level 4 = 35 + 60 + 45 = 140;
+  Simulasi = 35,5 + 60 + 85 = 180,5.
+- Skor per butir dibagi rata (largest remainder): Level 1-4 PG 2, esai
+  13,34/13,33/13,33, kasus 40; Simulasi PG 1,14/1,13, esai 12,5, kasus 16,5.
+  Faktor skala per soal = skor paket / skor asli, disimpan di sesi.
+- Porsi skor sulit-sangat sulit Simulasi = 82% (PG 11,3 + esai 37,5 +
+  kasus 33).
+- Cakupan: minimal 6 topik per paket (Simulasi 9); satu topik maksimal 25%
+  skor.
+- Mode ketat (tanpa jeda) untuk Simulasi; Level 1-4 mode latihan (boleh jeda).
+- Soal diambil acak dari status LIVE sesuai tipe, ukuran kasus, dan tingkat
+  kesulitan bagian. Bila kurang, paket tidak dapat dimulai dan aplikasi
+  menyebut kekurangannya (contoh: "butuh 10 PG mudah, tersedia 6 yang
+  sesuai").
+- Paket T1, T2, dan SIM lama (60/120/180 menit) diganti paket di atas.
 
 ### 6.1 Mode Kustom
 - Pengaturan: durasi 15-240 menit; jumlah PG/esai/kasus; filter kesulitan dan
@@ -212,9 +224,40 @@ Hasil: {"gradingVersion": "4.1", "sessionId": "...", "answersChecksum": "...",
 - Estimasi waktu = jumlah estimatedMinutes; peringatan bila durasi < 80% atau
   > 200% estimasi.
 
+### 6.2 Standar waktu dan kriteria tingkat kesulitan (D-99)
+- `estimatedMinutes` WAJIB sama dengan standar waktu untuk tipe, ukuran
+  kasus, dan tingkat kesulitan soal. Penyusun tidak menebak waktu.
+
+| Tipe | Mudah | Sedang | Sulit | Sangat sulit |
+| PG | 1 | 1,5 | 2,5 | 3,5 |
+| Esai | 6 | 10 | 15 | 20 |
+| Kasus mini | 15 | 20 | — | — |
+| Kasus komprehensif | — | — | 40 | 45 |
+
+- Ukuran kasus mengikuti tingkat kesulitan: mini hanya mudah atau sedang;
+  komprehensif hanya sulit atau sangat sulit.
+- Tingkat kesulitan dipilih dari kriteria berikut. Semua batas adalah batas
+  atas; soal yang melebihinya dipendekkan atau dinaikkan tingkatnya.
+
+| Tipe | Mudah | Sedang | Sulit | Sangat sulit |
+| PG | C2-C3, satu konsep, stem+opsi ≤ 90 kata, tanpa hitungan | C3, penerapan pada situasi, ≤ 120 kata, maks 1 langkah hitung | C4, analisis, ≤ 160 kata atau tabel kecil, 2-3 langkah | C5-C6, integrasi ≥ 2 konsep, ≤ 200 kata, ≥ 3 langkah atau data kuantitatif |
+| Esai | 1 perintah (jelaskan/identifikasi), stem ≤ 120 kata, jawaban ideal ≤ 100 kata | 2 perintah, penerapan, stem ≤ 150 kata, jawaban ideal ≤ 170 kata | 2-3 perintah, analisis + rekomendasi, stem ≤ 200 kata, jawaban ideal ≤ 250 kata | 3 perintah, evaluasi alternatif/sintesis, stem ≤ 250 kata, jawaban ideal ≤ 330 kata |
+| Kasus | Mini: narasi+data ≤ 300 kata, 2 sub, jawaban ideal total ≤ 230 kata | Mini: narasi+data ≤ 400 kata, 2-3 sub, jawaban ideal total ≤ 320 kata | Komprehensif: narasi+data ≤ 700 kata, 4 sub, jawaban ideal total ≤ 600 kata, hitung ≤ 5 menit | Komprehensif: narasi+data ≤ 900 kata, 4 sub, jawaban ideal total ≤ 650 kata, hitung ≤ 5 menit |
+
+- Jawaban ideal = jawaban yang cukup untuk nilai penuh. Uraian tambahan untuk
+  peserta ditaruh di pembahasan (explanation), yang tidak dihitung.
+- Rumus pemeriksa: waktu ≈ kata bacaan ÷ 150 + kata jawaban ideal ÷ 20 +
+  menit hitung (baca teks teknis 150 kata/menit; menulis jawaban termasuk
+  berpikir 20 kata/menit). Standar di atas memenuhi rumus ini pada batas
+  atas kriterianya.
+- Numerik (belum dipakai paket): standar mengikuti PG.
+
 ## 7. TARGET BANK SOAL MSK v1.0 (DIBUAT DI LUAR CLAUDE CODE)
 - >= 60 PG (>= 20 sulit/sangat sulit); >= 15 esai (>= 8 sulit/sangat sulit);
   >= 10 kasus (>= 4 mini, >= 6 komprehensif).
+- Sasaran stok per mata ujian per tingkat kesulitan (D-99) agar paket Level
+  1-4 bervariasi: >= 30 PG, >= 9 esai, >= 3 kasus (mini untuk mudah/sedang,
+  komprehensif untuk sulit/sangat sulit).
 - 12 topik masing-masing >= 4 PG dan >= 1 esai atau kasus.
 - Posisi kunci PG maksimal 35% di satu huruf pada seluruh bank.
 - Claude Code tidak membuat soal MSK. Untuk pengujian, buat packs/demo/
@@ -232,6 +275,10 @@ Hasil: {"gradingVersion": "4.1", "sessionId": "...", "answersChecksum": "...",
 - Lint sebelum review: field wajib; ID unik; jumlah rubrik; tepat 4 opsi;
   answerKey A-D; distractorRationale lengkap; topik/kompetensi ada di pack;
   skor kelipatan 0,5. Pesan lint menyebut ID dan field.
+- Peringatan lint standar waktu (6.2, D-99): estimatedMinutes tidak sama
+  dengan standar, ukuran kasus tidak sesuai tingkat kesulitan, atau panjang
+  stem/narasi/jawaban ideal melebihi batas kriteria. Peringatan tidak menolak
+  batch; reviewer menilai dimensi timeEstimate terhadap standar yang sama.
 - Pengelola Bank Soal: Impor Batch; daftar soal dengan filter status/topik/tipe;
   pratinjau soal seperti tampilan peserta; Ekspor Paket Review (maks 10 soal
   PG, 5 esai, atau 2 kasus per batch) dengan tombol Salin Prompt + Data.

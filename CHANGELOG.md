@@ -3,6 +3,41 @@
 Catatan perubahan prompt (`prompts/*.md`) dan kontrak data. Setiap
 perubahan prompt dirujuk ke docs/PROMPT_ALIGNMENT.md.
 
+## 2026-10-24 — Prompt B v4.3 dan Prompt C v4.3: standar waktu per tingkat kesulitan
+Disetujui pemilik (usulan `docs/usulan_estimasi_waktu.md`). Kontrak data
+tidak berubah: tidak ada field baru, `schemaVersion` tetap "4.1", dan format
+output kedua prompt sama. Rujukan: D-99, PROMPT_ALIGNMENT B-14 dan C-6.
+
+### prompts/prompt_penyusun_soal.md (Prompt B)
+- Bagian baru "Standar waktu dan tingkat kesulitan": tabel `estimatedMinutes`
+  per tipe dan tingkat, kriteria per tingkat (level kognitif, batas kata stem
+  atau narasi, batas kata jawaban ideal, jumlah perintah/sub, langkah hitung),
+  dan rumus pemeriksa.
+- `estimatedMinutes` wajib sama dengan standar; cognitiveLevel sesuai
+  kriteria, dan C2 hanya untuk PG mudah (sebelumnya: hanya bila diminta
+  formulir).
+- Pemeriksaan formulir: ukuran kasus harus sesuai tingkat kesulitan (mini =
+  mudah/sedang, komprehensif = sulit/sangat sulit).
+- Langkah periksa diri: hitung kata terhadap batas, dan pastikan
+  `estimatedMinutes` = standar.
+
+### prompts/prompt_reviewer_soal.md (Prompt C)
+- Langkah 6: dimensi timeEstimate dinilai terhadap standar dan rumus
+  pemeriksa.
+- Bagian baru "Standar waktu dan batas per tingkat kesulitan" (tabel ringkas).
+- Tingkat temuan: melebihi batas panjang atau ukuran kasus tidak sesuai
+  tingkat = mayor; `estimatedMinutes` berbeda dari standar padahal panjang
+  sesuai = minor.
+
+### schema/CONTRACT.md
+- Bagian C: tabel standar `estimatedMinutes` dan aturan ukuran kasus;
+  pelanggaran menjadi peringatan lint, bukan penolakan skema.
+
+### Tindakan di luar repositori
+- Ganti instruksi Project Claude (penyusun) dengan Prompt B v4.3, dan
+  instruksi Project ChatGPT (reviewer) dengan Prompt C v4.3. Unggah ulang
+  `schema/CONTRACT.md` ke kedua Project.
+
 ## 2026-10-23 — Prompt D v1.0: penyusun soal kalibrasi
 Disetujui pemilik. Prompt baru; prompt lain tidak berubah. Format output = batch soal biasa
 (schemaVersion "4.1") dengan status CALIBRATION dan objek `calibration`.

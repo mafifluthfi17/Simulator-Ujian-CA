@@ -57,3 +57,10 @@ data), jadi bentuk keluarannya harus lengkap di dalam prompt itu sendiri.
 | No | Prompt | Bagian | Perubahan | Dampak pada kontrak |
 |---|---|---|---|---|
 | C-5 | Reviewer | Langkah 8 baru dan Tingkat temuan | Pemeriksaan fakta ekonomi dan regulasi; temuan dipetakan ke dimensi keyCorrectness, fairness, stemClarity | Tidak ada. Tidak ada field baru; enum dimension dan reviewVersion "4.1" tetap |
+
+## Prompt B v4.3 dan Prompt C v4.3 (2026-10-24, disetujui pemilik)
+
+| No | Prompt | Bagian | Perubahan | Dampak pada kontrak |
+|---|---|---|---|---|
+| B-14 | Penyusun | Aturan wajib, bagian baru "Standar waktu dan tingkat kesulitan", pemeriksaan formulir, langkah 3 | `estimatedMinutes` = standar per tipe dan tingkat; kriteria tingkat (batas kata dan langkah); ukuran kasus mengikuti tingkat; C2 hanya PG mudah | Tidak ada field baru. `estimatedMinutes` tetap number > 0 di skema; kesesuaian dengan standar diperiksa lint aplikasi (peringatan, D-99), bukan skema |
+| C-6 | Reviewer | Langkah 6, bagian baru tabel standar, Tingkat temuan | timeEstimate dinilai terhadap standar; pelanggaran batas = mayor, angka berbeda = minor | Tidak ada. Enum dimension dan reviewVersion "4.1" tetap |

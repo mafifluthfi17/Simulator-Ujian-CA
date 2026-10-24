@@ -37,6 +37,20 @@ Wajib untuk semua tipe: `id`, `type`, `topicIds` (min 1), `competencyIds`
 `maxScore`, `stem`, `lifecycle`, `authoring`. Opsional: `references`
 (daftar konsep/teori; jangan mengarang judul buku atau nomor halaman).
 
+`estimatedMinutes` WAJIB sama dengan standar waktu (SPEC 6.2, D-99); tipe
+kasus memakai ukuran kasus sesuai tingkat kesulitan:
+
+| Tipe | mudah | sedang | sulit | sangat_sulit |
+|---|---|---|---|---|
+| mcq, numeric | 1 | 1.5 | 2.5 | 3.5 |
+| essay | 6 | 10 | 15 | 20 |
+| case `mini` | 15 | 20 | — | — |
+| case `komprehensif` | — | — | 40 | 45 |
+
+Kriteria tingkat kesulitan (batas panjang bacaan dan jawaban ideal) ada di
+SPEC 6.2 dan Prompt B. Pelanggaran standar ini menjadi peringatan lint saat
+impor, bukan penolakan skema.
+
 | Field | mcq | numeric | essay | case |
 |---|---|---|---|---|
 | maxScore | 1 | 1 | 10 | 20 |
